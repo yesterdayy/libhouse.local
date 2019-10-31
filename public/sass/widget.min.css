@@ -1,0 +1,1 @@
+body:before{white-space:pre;font-family:monospace;content:"Error: Undefined variable: \"$dark-navy-blue\".\A         on line 5 of widget.sass\A \A 1: .widget-title\A 2:     font-size: 22px\A 3:     font-weight: bold\A 4:     line-height: 20px\A 5:     color: $dark-navy-blue\A 6:     margin: 50px 0 20px 0"}

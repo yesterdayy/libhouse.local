@@ -1,0 +1,78 @@
+.btn
+    padding: 11px 20px
+    color: $lightish-blue
+    vertical-align: middle
+    line-height: 16px
+    border: solid 1px $lightish-blue
+    background: transparent
+    cursor: pointer
+    display: inline-block
+    margin: 10px
+    font-family: "AvenirNextCyr", sans-serif
+    transition: .4s
+    @include border-radius(4px)
+
+.btn:hover
+    text-decoration: none
+
+.btn-primary, .btn.active
+    background: $lightish-blue
+    padding: 12px 21px
+    border: 0
+    color: $white-two
+
+.btn.active:hover
+    background: $warm-blue
+
+.btn-disabled
+    @extend .btn
+    color: $pinkish-grey
+    border: 1px solid $pinkish-grey
+    cursor: default
+
+.btn-group-toggle>.btn, .btn-group-toggle>.btn-group>.btn-disabled
+    margin-bottom: 0
+
+.btn-group-toggle>.btn input[type="radio"], .btn-group-toggle>.btn input[type="checkbox"], .btn-group-toggle>.btn-group>.btn input[type="radio"], .btn-group-toggle>.btn-group>.btn input[type="checkbox"]
+    position: absolute
+    clip: rect(0,0,0,0)
+    pointer-events: none
+
+.btn.btn-simple
+    color: $dark-navy-blue
+    border: 0
+    padding: 11px 0
+    margin: 0
+
+.btn.btn-lg
+    padding: 20px
+    font-size: 15px
+    line-height: 20px
+
+/* Material Ripple */
+
+.btn
+    position: relative
+    overflow: hidden
+    transform: translate3d(0, 0, 0)
+
+.btn:after
+    content: ""
+    display: block
+    position: absolute
+    width: 100%
+    height: 100%
+    top: 0
+    left: 0
+    pointer-events: none
+    background-image: radial-gradient(circle, $white 10%, transparent 10.001%)
+    background-repeat: no-repeat
+    background-position: 50%
+    transform: scale(0, 0)
+    opacity: 0
+    transition: transform .5s, opacity 1s
+
+.btn:focus:after
+    transform: scale(10, 10)
+    @include opacity(0.15)
+    transition: 0s

@@ -1,0 +1,14 @@
+@if ($ajax)
+    @if ($comments)
+        @each('/shortcodes/comment/list_comment', $comments, 'comment');
+    @endif
+@else
+    <div class="widget-block {{ $widget_class }}-wrap" {!! $shortcode_string_args !!}>
+        <div class="widget-title {{ $widget_class }}-title">{{ $widget_title }}</div>
+        <div class="{{ $widget_class }}-content d-inline-block w-100">
+            @yield('widget-content')
+        </div>
+
+        @yield('after-widget')
+    </div>
+@endif

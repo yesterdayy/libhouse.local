@@ -1,0 +1,18 @@
+<component name="libraryTable">
+  <library name="Generated files" type="javaScript">
+    <properties>
+      <sourceFilesUrls>
+        <item url="file://$PROJECT_DIR$/public/js/scripts.min.js" />
+        <item url="file://$PROJECT_DIR$/public/plugins/dropzone/dropzone.min.js" />
+        <item url="file://$PROJECT_DIR$/public/plugins/jquery/jquery.cookie.min.js" />
+      </sourceFilesUrls>
+    </properties>
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/public/js/scripts.min.js" />
+      <root url="file://$PROJECT_DIR$/public/plugins/dropzone/dropzone.min.js" />
+      <root url="file://$PROJECT_DIR$/public/plugins/jquery/jquery.cookie.min.js" />
+      <root url="file://$PROJECT_DIR$/public/plugins/select2/single_select2.fix.min.js" />
+    </CLASSES>
+    <SOURCES />
+  </library>
+</component>

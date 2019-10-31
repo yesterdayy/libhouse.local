@@ -1,0 +1,18 @@
+@mixin border-radius($radius)
+  border-radius: $radius
+  -webkit-border-radius: $radius
+  -moz-border-radius: $radius
+
+@mixin opacity($opacity)
+    opacity: $opacity
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=" + ($opacity * 100) + ")"
+    -moz-opacity: $opacity
+    -khtml-opacity: $opacity
+
+@mixin gradient($param)
+    background: -moz-radial-gradient($param)
+    background: -webkit-gradient($param)
+    background: -webkit-radial-gradient($param)
+    background: -o-radial-gradient($param)
+    background: -ms-radial-gradient($param)
+    background: radial-gradient($param)

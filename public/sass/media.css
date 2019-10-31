@@ -1,0 +1,145 @@
+@media screen and (max-width: 1100px) {
+  body {
+    background-position-x: -70px;
+  }
+  .landing-header .contact-form {
+    width: 80%;
+    right: 5%;
+  }
+  form:not(.send_immediatly) .form-contact-btn .icon {
+    display: none;
+  }
+  .landing-wrap {
+    padding: 0 14px;
+  }
+  .footer-gift-book {
+    right: 74px;
+  }
+  .footer-text .footer-col-2 .right {
+    float: none;
+    margin-top: 12px;
+  }
+}
+
+@media screen and (max-width: 840px) {
+  body {
+    background-size: contain;
+    background-position-y: 128px;
+  }
+  .col-3 {
+    width: 100%;
+  }
+  .landing-header .contact-form {
+    bottom: 0;
+  }
+  .advantages .row .col-3 {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  .advantage-block {
+    margin: 0;
+    float: none;
+    width: 80%;
+  }
+  .advantages .row:not(:nth-of-type(1)) {
+    margin-top: 0;
+  }
+  .landing-title {
+    margin: 40px 0;
+    font-size: 28px;
+  }
+  .landing-margin-1 {
+    margin: 0 0 40px 0;
+  }
+  .blur-image {
+    background: none;
+  }
+  .card {
+    max-width: 100%;
+    max-height: initial !important;
+  }
+  .cards .card:last-child:before {
+    content: none;
+  }
+  .cards .card:last-child {
+    margin-top: 40px;
+  }
+  .cards-block-title {
+    position: initial;
+    margin-top: 0;
+  }
+  .footer-gift-desc.landing-wrap {
+    width: 50%;
+  }
+  .footer-gift-book {
+    right: 20px;
+    top: -67px;
+  }
+  .footer-gift #email-subscribe input[type="email"] {
+    width: 90%;
+    padding-right: 41%;
+  }
+  .footer-gift #email-subscribe input[type="submit"] {
+    left: 51%;
+  }
+  .footer {
+    padding: 0 14px;
+    height: initial;
+  }
+  .footer-menu {
+    margin: 0;
+  }
+  .footer-col-1 {
+    margin-bottom: 18px;
+  }
+  .footer-col-2 p.right {
+    float: none;
+    margin: 12px 0;
+  }
+  .review-comma {
+    margin-bottom: 20px;
+  }
+}
+
+@media screen and (max-width: 840px) {
+  body {
+    background-position-x: left;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  body {
+    background: url("../img/background_mobile.png") no-repeat 0 128px;
+  }
+  .landing-header .contact-form {
+    bottom: 36px;
+  }
+  .footer-gift #email-subscribe input[type="submit"] {
+    right: 14px;
+    width: 122px;
+    left: initial;
+  }
+  .footer-gift #email-subscribe input[type="email"] {
+    width: 90%;
+    padding-right: 100px;
+  }
+}
+
+@media screen and (max-width: 380px) {
+  .reviews {
+    padding: 0 14px;
+  }
+  .review-prev {
+    left: -10px;
+  }
+  .review-next {
+    right: -10px;
+  }
+  .form-pay-btn .btn-group .yandex-money i:before {
+    font-size: 18px;
+  }
+  .form-pay-btn .btn-group .webmoney i:before {
+    font-size: 18px;
+  }
+}
+/*# sourceMappingURL=media.css.map */

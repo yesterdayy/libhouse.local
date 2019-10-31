@@ -1,0 +1,1 @@
+body:before{white-space:pre;font-family:monospace;content:"Error: Undefined variable: \"$lightish-blue\".\A         on line 4 of realty.sass\A \A 1: div.realty-title\A 2:     font-size: 22px\A 3:     font-weight: bold\A 4:     color: $lightish-blue\A 5: \A 6: .realty-square span\A 7:     font-size: 12px\A 8:     color: $warm-grey\A 9:     padding-right: 8px"}

@@ -1,0 +1,28 @@
+body {
+  background: url("/img/background.png") no-repeat center -52px;
+  max-width: 1280px;
+  width: 100%;
+  margin: 0 auto; }
+
+a {
+  text-decoration: none; }
+
+.left {
+  float: left; }
+
+.right {
+  float: right; }
+
+.text-left {
+  text-align: left; }
+
+.text-center {
+  text-align: center; }
+
+.text-right {
+  text-align: right; }
+
+.inline-block {
+  display: inline-block; }
+
+/*# sourceMappingURL=core.css.map */

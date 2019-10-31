@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAAA,YAAY;EACR,MAAM,EAAE,OAAO;;AAEnB,qBAAqB;EACjB,SAAS,EAAE,CAAC",
+"sources": ["slick.sass"],
+"names": [],
+"file": "slick.css"
+}
