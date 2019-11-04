@@ -1,0 +1,19 @@
+<?php
+
+namespace DummyNamespace;
+
+use Orchid\Screen\Field;
+use Orchid\Screen\Layouts\Rows;
+
+class DummyClass extends Rows
+{
+    /**
+     * Views.
+     *
+     * @return Field[]
+     */
+    public function fields(): array
+    {
+        return [];
+    }
+}
