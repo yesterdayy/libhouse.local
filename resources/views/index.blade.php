@@ -34,6 +34,8 @@
     {{ Html::script('plugins/slick/slick.min.js') }}
     {{ Html::style('plugins/slick/slick.min.css') }}
 
+    {{ Html::script('plugins/autocomplete/jquery.autocomplete.min.js') }}
+
     {{ Html::style('sass/style.min.css') }}
     {{ Html::style('plugins/bootstrap/bootstrap.min.css') }}
     {{ Html::style('plugins/bootstrap/bootstrap.min.js') }}

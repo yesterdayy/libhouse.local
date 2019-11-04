@@ -71,11 +71,29 @@ div.realty-title
 .realty-favorite span
     border-bottom: 1px dotted $warm-grey
 
-.realty-single-photo-nav .realty-img:not(:last-child)
-    margin-right: 20px
+.realty-single-photo-nav .realty-img
+    margin: 0 10px
+    cursor: pointer
+    @include opacity(1)
+    transition: .4s
 
-.realty-single-photo-nav .realty-img:last-child
-    margin-right: 0
+.realty-single-photo-nav .realty-img:hover
+    @include opacity(0.8)
+
+.realty-single-photo-nav .slick-list
+    margin: 0 -10px
 
 .realty-single-photo img
     width: 100%
+
+.realty-single-photo
+    margin-bottom: 20px
+
+.realty-single-photo-prev
+    left: 50px
+
+.realty-single-photo-next
+    right: 50px
+
+.realty-single-photo-nav
+    margin-bottom: 50px

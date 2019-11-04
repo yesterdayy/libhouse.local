@@ -22,6 +22,7 @@ Route::get('/user/{id}/edit', 'UserController@edit');
 Route::get('/kladr/city', 'KladrController@city');
 Route::get('/kladr/street', 'KladrController@street');
 Route::get('/kladr/city_and_street', 'KladrController@city_and_street');
+Route::get('/kladr/street_with_city', 'KladrController@street_with_city');
 
 Route::get('/realty/activate/{id}', 'RealtyController@activate');
 Route::get('/realty/deactivate/{id}', 'RealtyController@deactivate');

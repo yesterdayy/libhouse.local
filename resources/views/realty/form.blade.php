@@ -68,6 +68,7 @@
         <script>
             $('input[name=rent_type]').change(function () {
                 $('.rent-type').addClass('d-none');
+                $('.rent-type').prop('checked', false);
                 $('.rent-type-' + $(this).val()).removeClass('d-none');
                 $('.rent-type-' + $(this).val()).find('input[type="radio"]').eq(0).prop('checked', true);
             });
@@ -80,7 +81,9 @@
 <div class="realty-create-form-block">
     <div class="form-group row">
         {!! Form::rawLabel('address', 'Адрес<span>*</span>') !!}
-        {{ Form::text('address', null, ['class' => 'form-control address-input', 'placeholder' => 'Город, улица']) }}
+        {{ Form::text('address', null, ['class' => 'form-control address-select', 'placeholder' => 'Город, улица']) }}
+        {{ Form::hidden('address_city') }}
+        {{ Form::hidden('address_street') }}
     </div>
 
     @if ($room_types->count() > 0)
@@ -99,28 +102,28 @@
     @endif
 
     <div class="form-group row">
-        {!! Form::rawLabel('floor', 'Этаж<span>*</span>') !!}
-        {{ Form::text('floor', null, ['class' => 'form-control', 'style' => 'max-width: 300px;', 'placeholder' => 'Укажите свой этаж']) }}
+        {!! Form::rawLabel('info[floor]', 'Этаж<span>*</span>') !!}
+        {{ Form::text('info[floor]', null, ['class' => 'form-control', 'style' => 'max-width: 300px;', 'placeholder' => 'Укажите свой этаж']) }}
     </div>
 
     <div class="form-group row">
-        {!! Form::rawLabel('floors', 'Этажей в доме<span>*</span>') !!}
-        {{ Form::text('floors', null, ['class' => 'form-control', 'style' => 'max-width: 300px;', 'placeholder' => 'Укажите этажность дома']) }}
+        {!! Form::rawLabel('info[floors]', 'Этажей в доме<span>*</span>') !!}
+        {{ Form::text('info[floors]', null, ['class' => 'form-control', 'style' => 'max-width: 300px;', 'placeholder' => 'Укажите этажность дома']) }}
     </div>
 
     <div class="form-group row">
-        {{ Form::label('common_square', 'Общая площадь') }}
-        {{ Form::text('common_square', null, ['class' => 'form-control', 'style' => 'max-width: 87px;']) }}
+        {{ Form::label('info[common_square]', 'Общая площадь') }}
+        {{ Form::text('info[common_square]', null, ['class' => 'form-control', 'style' => 'max-width: 87px;']) }}
     </div>
 
     <div class="form-group row">
-        {{ Form::label('living_square', 'Жилая площадь') }}
-        {{ Form::text('living_square', null, ['class' => 'form-control', 'style' => 'max-width: 87px;']) }}
+        {{ Form::label('info[living_square]', 'Жилая площадь') }}
+        {{ Form::text('info[living_square]', null, ['class' => 'form-control', 'style' => 'max-width: 87px;']) }}
     </div>
 
     <div class="form-group row">
-        {{ Form::label('kitchen_square', 'Площадь кухни') }}
-        {{ Form::text('kitchen_square', null, ['class' => 'form-control', 'style' => 'max-width: 87px;']) }}
+        {{ Form::label('info[kitchen_square]', 'Площадь кухни') }}
+        {{ Form::text('info[kitchen_square]', null, ['class' => 'form-control', 'style' => 'max-width: 87px;']) }}
     </div>
 </div>
 
@@ -173,7 +176,7 @@
 
     <div class="form-group row">
         {{ Form::label('', '') }}
-        {{ Form::checkbox('with_communal', null, null, ['id' => 'with_communal', 'class' => 'checkbox blue']) }}
+        {{ Form::checkbox('info[with_communal]', null, null, ['id' => 'with_communal', 'class' => 'checkbox blue']) }}
         {{ Form::label('with_communal', 'Коммунальные услуги включены') }}
     </div>
 </div>
@@ -288,21 +291,24 @@
         },
     });
 
-    $('.select2-city').select2({
-        ajax: {
-            url: '/kladr/city',
-            dataType: 'json',
+    $('.address-select').autocomplete({
+        serviceUrl: '/kladr/street_with_city',
+        dataType: 'json',
+        paramName: 'term',
+        onSearchStart: function (params) {
+            params.city = $('input[name=address_city]').val();
+        },
+        onSelect: function (suggestion) {
+            $('input[name=address_city]').val(suggestion.data.city_kladr);
+            if ('street_kladr' in suggestion.data) {
+                $('input[name=address_street]').val(suggestion.data.street_kladr);
+            }
         }
     });
 
-    $('.select2-street').select2({
-        ajax: {
-            url: '/kladr/street',
-            dataType: 'json',
-            data: function(params){
-                params.city_code = $('.select2-city').val()
-                return params;
-            },
-        }
+    $(document).on('click', '.set-main-photo', function () {
+        let index = $(this).closest('.dz-preview').index();
+        $(this).closest('.dropzone-wrap').prepend($(this).closest('.dz-preview'));
+        $(this).closest('.dropzone-wrap').find('.dz-default.dz-message').after($(this).closest('.dropzone-wrap').find('input[type=hidden]').eq(index));
     });
 </script>

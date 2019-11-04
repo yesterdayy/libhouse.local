@@ -26,7 +26,21 @@ class Realty extends Model
 
     protected $table = 'realty_entry';
     protected $fillable = [
-        'title', 'type', 'content', 'price', 'with_communal', 'rend_duration', 'slug', 'author_id', 'is_active', 'is_moderated', 'is_blocked', 'expired_at'
+        'title',
+        'type_id',
+        'dop_type_id',
+        'room_type_id',
+        'trade_type_id',
+        'rent_duration_id',
+        'city',
+        'street',
+        'content',
+        'price',
+        'slug',
+        'author_id',
+        'status',
+        'is_moderated',
+        'expired_at',
     ];
 
     public static function realty_list_widget($shortcode_args) {
@@ -51,17 +65,17 @@ class Realty extends Model
 
         $city_kladrs = [];
         foreach ($realtys as $realty) {
-            $realty->info_arr = $realty->info->pluck('value', 'field');
-            if (isset($realty->info_arr['city'])) {
-                $city_kladrs[] = $realty->info_arr['city'];
+            if (isset($realty->city)) {
+                $city_kladrs[] = $realty->city;
             }
         }
 
         if (!empty($city_kladrs)) {
             $city_kladrs = Kladr::city_by_kladrs($city_kladrs);
             foreach ($realtys as $realty) {
-                if (isset($city_kladrs[$realty->info_arr['city']]))
-                $realty->city = $city_kladrs[$realty->info_arr['city']];
+                if (isset($city_kladrs[$realty->city])) {
+                    $realty->city = $city_kladrs[$realty->city];
+                }
             }
         }
 
@@ -72,7 +86,7 @@ class Realty extends Model
             'ajax_url'
         );
 
-        return view('/shortcodes/realty/' . $template, $data)->render();
+        return view('/realty/' . $template, $data)->render();
     }
 
     /*

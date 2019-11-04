@@ -35,7 +35,7 @@ function init_header_filters() {
                         url: '/kladr/city_and_street?term=' + $(that).val(),
                         data: {
                             bold: 1,
-                            li_view: 1,
+                            view: 'li',
                         },
                         dataType: "json",
                         success: function (result) {

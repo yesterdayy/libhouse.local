@@ -29,6 +29,49 @@ class KladrController extends Controller
         }
     }
 
+    public function street_with_city(Request $request) {
+        $result = [];
+
+        if (!empty($request->get('term'))) {
+            $limit = 4;
+            $city_term = null;
+
+            $city_codes = null;
+            if (strpos($request->get('term'), ',') !== false && !empty($request->get('city'))) {
+                $term = explode(',', $request->get('term'));
+                $term = last($term);
+                $term = explode('.', $term, 2);
+                $term = trim(last($term));
+                $data = Kladr::street_alternative($term, $request->get('city'), [91, 92], $limit, true)['results'];
+
+                foreach ($data as $item) {
+                    $result[] = [
+                        'value' => $item['text'],
+                        'data' => [
+                            'city_kladr' => $request->get('city'),
+                            'street_kladr' => $item['id'],
+                        ]
+                    ];
+                }
+            } else {
+                $data = Kladr::city($request->get('term'), 91, $limit, false)['results'];
+
+                foreach ($data as $item) {
+                    $result[] = [
+                        'value' => $item['text'],
+                        'data' => [
+                            'city_kladr' => $item['id'],
+                        ]
+                    ];
+                }
+            }
+
+            $result = ['suggestions' => $result];
+        }
+
+        return response()->json($result);
+    }
+
     public function city_and_street(Request $request) {
         if (!empty($request->get('term'))) {
             $limit = 4;
@@ -65,27 +108,32 @@ class KladrController extends Controller
                 }
             }
 
-            if ($request->has('li_view')) {
-                if (!empty($result['city'])) {
-                    $city_html = [];
-                    foreach ($result['city'] as $item) {
-                        $city_html[] = "<li data-val='{$item['id']}'>{$item['text']}</li>";
-                    }
-                    $result['city'] = implode(' ', $city_html);
-                } else {
-                    $result['city'] = '<li>ничего не найдено</li>';
-                }
+            if ($request->has('view')) {
+                switch ($request['view']) {
+                    case 'li':
+                        if (!empty($result['city'])) {
+                            $city_html = [];
+                            foreach ($result['city'] as $item) {
+                                $city_html[] = "<li data-val='{$item['id']}'>{$item['text']}</li>";
+                            }
+                            $result['city'] = implode(' ', $city_html);
+                        } else {
+                            $result['city'] = '<li>ничего не найдено</li>';
+                        }
 
-                if (!empty($result['street'])) {
-                    $street_html = [];
-                    foreach ($result['street'] as $item) {
-                        $street_html[] = "<li data-val='{$item['id']}'>{$item['text']}</li>";
-                    }
-                    $result['street'] = implode(' ', $street_html);
-                } else {
-                    $result['street'] = '<li>ничего не найдено</li>';
+                        if (!empty($result['street'])) {
+                            $street_html = [];
+                            foreach ($result['street'] as $item) {
+                                $street_html[] = "<li data-val='{$item['id']}'>{$item['text']}</li>";
+                            }
+                            $result['street'] = implode(' ', $street_html);
+                        } else {
+                            $result['street'] = '<li>ничего не найдено</li>';
+                        }
+                        break;
                 }
             }
+
             return response()->json($result);
         }
     }

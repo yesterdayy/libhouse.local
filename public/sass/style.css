@@ -19,8 +19,8 @@
   src: url("../fonts/Lorabold.woff2") format("woff2"); }
 @font-face {
   font-family: "libhouse-icons";
-  src: url("../fonts/libhouse-icons.eot?cvvopd");
-  src: url("../fonts/libhouse-icons.eot?cvvopd#iefix") format("embedded-opentype"), url("../fonts/libhouse-icons.ttf?cvvopd") format("truetype"), url("../fonts/libhouse-icons.woff?cvvopd") format("woff"), url("../fonts/libhouse-icons.svg?cvvopd#libhouse-icons") format("svg");
+  src: url("../fonts/libhouse-icons.eot?lpzgnu");
+  src: url("../fonts/libhouse-icons.eot?lpzgnu#iefix") format("embedded-opentype"), url("../fonts/libhouse-icons.ttf?lpzgnu") format("truetype"), url("../fonts/libhouse-icons.woff?lpzgnu") format("woff"), url("../fonts/libhouse-icons.svg?lpzgnu#libhouse-icons") format("svg");
   font-weight: normal;
   font-style: normal;
   font-display: block; }
@@ -43,19 +43,25 @@
   margin-left: 7px; }
 
 .lh-icon-camera:before {
-  content: "";
+  content: "";
   color: #c4c4c4; }
 
 .lh-icon-select-arrow:before {
   content: "";
   color: #bdbdbd; }
 
+.lh-icon-arrow-left:before {
+  content: "";
+  color: #f6f6f6;
+  transform: rotate(180deg);
+  display: inline-block; }
+
 .lh-icon-arrow-right:before {
-  content: "";
+  content: "";
   color: #f6f6f6; }
 
 .lh-icon-checker:before {
-  content: "";
+  content: "";
   color: #49c628; }
 
 .lh-icon-eye:before {
@@ -120,7 +126,8 @@ b {
   font-weight: 600; }
 
 .wrap-content {
-  padding: 0 60px; }
+  padding: 0 60px;
+  max-width: 100%; }
 
 h1 {
   font-size: 22px;
@@ -261,7 +268,7 @@ textarea.form-control {
   font-weight: 300; }
 
 .checkbox + label:before {
-  content: "";
+  content: "";
   display: inline-block;
   font-family: "libhouse-icons";
   text-align: center;
@@ -314,7 +321,7 @@ span.select2-selection.select2-selection--single, .select2-container--default .s
 .select2-container--default .select2-selection--single .select2-selection__arrow b {
   display: none; }
 
-.select2-results__option {
+.select2-container--default .select2-results__option .select2-results__option {
   font-size: 15px;
   color: #000b28;
   padding: 6px 30px;
@@ -448,7 +455,7 @@ label span {
   height: 150px; }
 
 .dropzone-wrap .dz-default.dz-message:before {
-  content: "";
+  content: "";
   display: block;
   font-family: "libhouse-icons";
   color: #c4c4c4;
@@ -537,6 +544,32 @@ label span {
 
 h1 + form.realty-create-form {
   margin-top: 0; }
+
+.autocomplete-suggestions {
+  background: #ffffff;
+  font-size: 15px;
+  color: #000b28;
+  line-height: 19px;
+  margin-top: -3px;
+  border: 1px solid #dfdfdf;
+  border-top: 0;
+  border-radius: 0 0 4px 4px;
+  -webkit-border-radius: 0 0 4px 4px;
+  -moz-border-radius: 0 0 4px 4px; }
+
+.autocomplete-suggestion {
+  padding: 6px 30px; }
+
+.autocomplete-group {
+  font-size: 12px;
+  color: #a1a1a1;
+  padding: 5px 0;
+  clear: both;
+  font-weight: 300; }
+
+.address-select:focus {
+  outline: 0 !important;
+  box-shadow: none !important; }
 
 .widget-title {
   font-size: 22px;
@@ -808,11 +841,15 @@ h1 + form.realty-create-form {
   background: #f6f6f6;
   cursor: pointer; }
 
-.header-filter-label-popup {
+.header-filter-label-popup, .select2-results__group {
   font-size: 12px;
   color: #a1a1a1;
   padding: 5px 0;
-  clear: both; }
+  clear: both;
+  font-weight: 300; }
+
+.select2-container--default .select2-results__group {
+  padding: 6px 30px; }
 
 .header-filter-simple-list.with-checkboxes {
   padding: 5px 0; }
@@ -920,6 +957,28 @@ h1 + form.realty-create-form {
 .slick-single-silde .slick-dots li.slick-active:before {
   background: #495aff; }
 
+.slick-arrow {
+  position: absolute;
+  top: 45.7%;
+  width: 60px;
+  height: 60px;
+  background: #fff;
+  border-radius: 50%;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  font-size: 10px;
+  z-index: 1;
+  text-align: center;
+  line-height: 60px;
+  cursor: pointer; }
+
+.slick-arrow .lh-icon {
+  margin: 0;
+  line-height: 60px; }
+
+.slick-arrow i:before {
+  color: #000b28; }
+
 .realty-cats-list-content label {
   line-height: 20px;
   color: #a1a1a1;
@@ -1011,14 +1070,38 @@ div.realty-title {
 .realty-favorite span {
   border-bottom: 1px dotted #a1a1a1; }
 
-.realty-single-photo-nav .realty-img:not(:last-child) {
-  margin-right: 20px; }
+.realty-single-photo-nav .realty-img {
+  margin: 0 10px;
+  cursor: pointer;
+  opacity: 1;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+  -moz-opacity: 1;
+  -khtml-opacity: 1;
+  transition: 0.4s; }
 
-.realty-single-photo-nav .realty-img:last-child {
-  margin-right: 0; }
+.realty-single-photo-nav .realty-img:hover {
+  opacity: 0.8;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+  -moz-opacity: 0.8;
+  -khtml-opacity: 0.8; }
+
+.realty-single-photo-nav .slick-list {
+  margin: 0 -10px; }
 
 .realty-single-photo img {
   width: 100%; }
+
+.realty-single-photo {
+  margin-bottom: 20px; }
+
+.realty-single-photo-prev {
+  left: 50px; }
+
+.realty-single-photo-next {
+  right: 50px; }
+
+.realty-single-photo-nav {
+  margin-bottom: 50px; }
 
 .toasts-wrap {
   position: fixed;

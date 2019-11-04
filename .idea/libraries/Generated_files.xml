@@ -3,12 +3,15 @@
     <properties>
       <sourceFilesUrls>
         <item url="file://$PROJECT_DIR$/public/js/scripts.min.js" />
+        <item url="file://$PROJECT_DIR$/public/plugins/autocomplete/jquery.autocomplete.min.js" />
         <item url="file://$PROJECT_DIR$/public/plugins/dropzone/dropzone.min.js" />
         <item url="file://$PROJECT_DIR$/public/plugins/jquery/jquery.cookie.min.js" />
+        <item url="file://$PROJECT_DIR$/public/plugins/select2/single_select2.fix.min.js" />
       </sourceFilesUrls>
     </properties>
     <CLASSES>
       <root url="file://$PROJECT_DIR$/public/js/scripts.min.js" />
+      <root url="file://$PROJECT_DIR$/public/plugins/autocomplete/jquery.autocomplete.min.js" />
       <root url="file://$PROJECT_DIR$/public/plugins/dropzone/dropzone.min.js" />
       <root url="file://$PROJECT_DIR$/public/plugins/jquery/jquery.cookie.min.js" />
       <root url="file://$PROJECT_DIR$/public/plugins/select2/single_select2.fix.min.js" />

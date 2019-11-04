@@ -1,16 +1,16 @@
-@extends('shortcodes/widget')
+@extends('shortcodes.widget')
 
 @if ($ajax)
     @section('widget-content')
         @if ($realtys)
-            @each('/shortcodes/realty/list_realty', $realtys, 'realty')
+            @each('/realty/list_realty', $realtys, 'realty')
         @endif
     @endsection
 @else
     @section('widget-content')
         @if ($realtys)
             <div class="{{ $widget_class }} slick-single-silde row">
-                @each('/shortcodes/realty/list_realty', $realtys, 'realty')
+                @each('/realty/list_realty', $realtys, 'realty')
             </div>
         @else
             <p class="{{ $widget_class }}-ajax-load text-warning">Нет объявлений</p>

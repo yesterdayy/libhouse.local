@@ -12,6 +12,7 @@ use App\Models\Realty\RealtyRoomType;
 use App\Models\Realty\RealtyTradeType;
 use App\Models\Realty\RealtyType;
 use App\Models\Kladr\Kladr;
+use App\Models\User\User;
 use App\Models\User\UserRealtyType;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -89,26 +90,37 @@ class RealtyController extends Controller
     public function store(Request $request, $slug = null) {
         $input = $request->all();
 
+        if (isset($input['user_realty_type'])) {
+            $user = Auth::user();
+            $user->realty_type = $input['user_realty_type'];
+            $user->save();
+        }
+
         if ($slug) {
             $realty = Realty::whereSlug($slug)->firstOrFail();
             if ($realty->count() > 0) {
                 $this->authorize('edit', $realty);
             }
         } else {
-            $this->authorize('create', Realty::class);
+            // $this->authorize('create', Realty::class);
             $realty = new Realty();
         }
-        $realty->title = $input['title'];
-        $realty->type = $input['type'];
+
+        $realty->title = $input['trade_type'] . ' на ' . $input['duration'] . ' ' . $input['type'] . ' ' . $input['address_street'];
+        $realty->type_id = $input['type'];
+        $realty->dop_type_id = $input['type'];
+        $realty->room_type_id = $input['room_type'];
+        $realty->trade_type_id = $input['trade_type'];
+        $realty->rent_duration_id = $input['duration'];
+        $realty->city = $input['address_city'];
+        $realty->street = $input['address_street'];
         $realty->content = $input['content'];
         $realty->price = $input['price'];
-        if ($input['type'] == RealtyType::ARENDA_ID) {
-            $realty->rent_duration = $input['rent_duration'];
-        } else {
-            $realty->rent_duration = RealtyRentDuration::EMPTY_DURATION_ID;
-        }
-        $realty->slug = $realty->slug ?? Str::slug($input['title']) . '-' . Str::random(6);
+        $realty->slug = $realty->slug ?? Str::slug($realty->title . '-' . Str::random(6));
+        $realty->status = 'published';
         $realty->save();
+
+        dd($input);
 
         if (isset($input['info'])) {
             $insert_info = [];
@@ -139,11 +151,16 @@ class RealtyController extends Controller
         if (isset($input['photos'])) {
             $insert_photos= [];
             foreach ($input['photos'] as $k => $photo) {
-                $insert_photos[] = $photo;
+                $insert_photos[] = [
+                    'type' => 'photo',
+                    'attachment_id' => $photo,
+                ];
             }
             unset($k, $photo);
-            $realty->photos()->attach($insert_photos);
+            $realty->attachments()->attach($insert_photos);
         }
+
+        dd('realty add. id - ' . $realty->id);
 
     }
 

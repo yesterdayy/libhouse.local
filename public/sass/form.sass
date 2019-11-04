@@ -44,7 +44,7 @@ textarea.form-control
     font-weight: 300
 
 .checkbox + label:before
-    content: '\e909'
+    content: '\e90b'
     display: inline-block
     font-family: 'libhouse-icons'
     text-align: center
@@ -95,7 +95,7 @@ span.select2-selection.select2-selection--single, .select2-container--default .s
 .select2-container--default .select2-selection--single .select2-selection__arrow b
     display: none
 
-.select2-results__option
+.select2-container--default .select2-results__option .select2-results__option
     font-size: 15px
     color: $dark-navy-blue
     padding: 6px 30px
@@ -213,7 +213,7 @@ label span
     height: 150px
 
 .dropzone-wrap .dz-default.dz-message:before
-    content: '\e90c'
+    content: '\e90d'
     display: block
     font-family: 'libhouse-icons'
     color: $pinkish-grey
@@ -296,3 +296,27 @@ label span
 
 h1 + form.realty-create-form
     margin-top: 0
+
+.autocomplete-suggestions
+    background: $white
+    font-size: 15px
+    color: $dark-navy-blue
+    line-height: 19px
+    margin-top: -3px
+    border: 1px solid $white-three
+    border-top: 0
+    @include border-radius(0 0 4px 4px)
+
+.autocomplete-suggestion
+    padding: 6px 30px
+
+.autocomplete-group
+    font-size: 12px
+    color: $warm-grey
+    padding: 5px 0
+    clear: both
+    font-weight: 300
+
+.address-select:focus
+    outline: 0 !important
+    box-shadow: none !important

@@ -1,4 +1,4 @@
-@extends('shortcodes/widget')
+@extends('shortcodes.widget')
 
 @section('widget-content')
     <div class="row" {!! $args !!}>
