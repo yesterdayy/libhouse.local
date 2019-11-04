@@ -1,51 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="27bcb396-6b2f-4644-8924-ac3003dcf7db" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/plugins/autocomplete/jquery.autocomplete.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/plugins/autocomplete/jquery.autocomplete.min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Generated_files.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Generated_files.xml" afterDir="false" />
+    <list default="true" id="27bcb396-6b2f-4644-8924-ac3003dcf7db" name="Default Changelist" comment="update">
+      <change afterPath="$PROJECT_DIR$/adv.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Auth/LoginController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Auth/LoginController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Controller.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Controller.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/KladrController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/KladrController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/RealtyController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/RealtyController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Kladr/Kladr.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Kladr/Kladr.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Realty/Realty.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Realty/Realty.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/User/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/User/User.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bootstrap/cache/routes.php" beforeDir="false" afterPath="$PROJECT_DIR$/bootstrap/cache/routes.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/fonts/libhouse-icons.eot" beforeDir="false" afterPath="$PROJECT_DIR$/public/fonts/libhouse-icons.eot" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/fonts/libhouse-icons.svg" beforeDir="false" afterPath="$PROJECT_DIR$/public/fonts/libhouse-icons.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/fonts/libhouse-icons.ttf" beforeDir="false" afterPath="$PROJECT_DIR$/public/fonts/libhouse-icons.ttf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/fonts/libhouse-icons.woff" beforeDir="false" afterPath="$PROJECT_DIR$/public/fonts/libhouse-icons.woff" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/js/scripts.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/scripts.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/js/scripts.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/scripts.min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/sass/.sass-cache/168bfacbcd72fb765c1ba076c9e5bec71d37a3e7/slick.sassc" beforeDir="false" afterPath="$PROJECT_DIR$/public/sass/.sass-cache/168bfacbcd72fb765c1ba076c9e5bec71d37a3e7/slick.sassc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/sass/.sass-cache/dec43f64f671e9ccd185729737947ae68f1c1776/core.sassc" beforeDir="false" afterPath="$PROJECT_DIR$/public/sass/.sass-cache/dec43f64f671e9ccd185729737947ae68f1c1776/core.sassc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/sass/.sass-cache/dec43f64f671e9ccd185729737947ae68f1c1776/form.sassc" beforeDir="false" afterPath="$PROJECT_DIR$/public/sass/.sass-cache/dec43f64f671e9ccd185729737947ae68f1c1776/form.sassc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/sass/.sass-cache/dec43f64f671e9ccd185729737947ae68f1c1776/header.sassc" beforeDir="false" afterPath="$PROJECT_DIR$/public/sass/.sass-cache/dec43f64f671e9ccd185729737947ae68f1c1776/header.sassc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/sass/.sass-cache/dec43f64f671e9ccd185729737947ae68f1c1776/icons.sassc" beforeDir="false" afterPath="$PROJECT_DIR$/public/sass/.sass-cache/dec43f64f671e9ccd185729737947ae68f1c1776/icons.sassc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/sass/.sass-cache/e34746b0e8dabcab943ec3fd1576febebb808831/realty.sassc" beforeDir="false" afterPath="$PROJECT_DIR$/public/sass/.sass-cache/e34746b0e8dabcab943ec3fd1576febebb808831/realty.sassc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/sass/core.sass" beforeDir="false" afterPath="$PROJECT_DIR$/public/sass/core.sass" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/sass/entries/realty.sass" beforeDir="false" afterPath="$PROJECT_DIR$/public/sass/entries/realty.sass" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/sass/form.sass" beforeDir="false" afterPath="$PROJECT_DIR$/public/sass/form.sass" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/sass/header.sass" beforeDir="false" afterPath="$PROJECT_DIR$/public/sass/header.sass" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/sass/icons.sass" beforeDir="false" afterPath="$PROJECT_DIR$/public/sass/icons.sass" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/sass/plugins/slick.sass" beforeDir="false" afterPath="$PROJECT_DIR$/public/sass/plugins/slick.sass" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/sass/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/sass/style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/sass/style.css.map" beforeDir="false" afterPath="$PROJECT_DIR$/public/sass/style.css.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/sass/style.min.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/sass/style.min.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/index_no_sidebar.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/index_no_sidebar.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/realty/components/radio_grid.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/realty/components/radio_grid.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/realty/form.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/realty/form.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/realty/single.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/realty/single.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/shortcodes/realty/list.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/realty/list.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/shortcodes/realty/list_realty.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/realty/list_realty.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/shortcodes/realty/realty_cats_list.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/shortcodes/realty/realty_cats_list.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vendor/laravel/framework/src/Illuminate/Foundation/Auth/AuthenticatesUsers.php" beforeDir="false" afterPath="$PROJECT_DIR$/vendor/laravel/framework/src/Illuminate/Foundation/Auth/AuthenticatesUsers.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -180,7 +138,7 @@
     <property name="NewWatcherDialog.advanced.open" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/public/fonts" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
@@ -189,11 +147,11 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\OSPanel\domains\libhouse.local" />
       <recent name="C:\OSPanel\domains\libhouse.local\public\fonts" />
       <recent name="C:\OSPanel\domains\libhouse.local\public\plugins\autocomplete" />
       <recent name="C:\OSPanel\domains\libhouse.local\public\plugins\typeahead" />
       <recent name="C:\OSPanel\domains\libhouse.local\resources\views\realty\components" />
-      <recent name="C:\OSPanel\domains\libhouse.local\resources" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\OSPanel\domains\libhouse.local\resources\views\shortcodes\realty" />
@@ -248,5 +206,9 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="update" />
+    <option name="LAST_COMMIT_MESSAGE" value="update" />
   </component>
 </project>
