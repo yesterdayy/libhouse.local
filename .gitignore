@@ -1,7 +1,6 @@
 node_modules/
 .storage/*.key
 .idea/*
-.git/*
 .env
 .phpunit.result.cache
 Homestead.json
