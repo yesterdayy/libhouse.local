@@ -30,8 +30,29 @@ class RealtyController extends Controller
     }
 
     public function show($slug) {
-        $realty = Realty::with('info', 'comfort', 'attachments')->whereSlug($slug)->firstOrFail();
-        return view('realty/single', compact('realty'));
+        $realty = Realty::with('info', 'comfort', 'attachments', 'dop_type')->whereSlug($slug)->firstOrFail();
+        $realty_info = Realty::info_format($realty);
+
+        $comforts_cats = RealtyComfortCat::all()->pluck('name', 'id');
+        $comforts_tmp = RealtyComfort::all();
+        $comforts = [];
+        foreach ($comforts_tmp as $comfort) {
+            $comforts[$comforts_cats[$comfort->cat_id]][] = $comfort;
+        }
+        unset($comforts_cats, $comforts_tmp);
+
+        if ($realty->comfort->count() > 0) {
+            $selected_comforts = $realty->comfort->pluck('name', 'id');
+            foreach ($comforts as $comfort) {
+                foreach ($comfort as $item) {
+                    if (isset($selected_comforts[$item->id])) {
+                        $item->selected = true;
+                    }
+                }
+            }
+        }
+
+        return view('realty/single', compact('realty', 'realty_info', 'comforts'));
     }
 
     public function create() {
@@ -108,7 +129,7 @@ class RealtyController extends Controller
 
         $realty->title = $input['trade_type'] . ' на ' . $input['duration'] . ' ' . $input['type'] . ' ' . $input['address_street'];
         $realty->type_id = $input['type'];
-        $realty->dop_type_id = $input['type'];
+        $realty->dop_type_id = $input['dop_type'];
         $realty->room_type_id = $input['room_type'];
         $realty->trade_type_id = $input['trade_type'];
         $realty->rent_duration_id = $input['duration'];

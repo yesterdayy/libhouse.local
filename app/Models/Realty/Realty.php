@@ -89,6 +89,63 @@ class Realty extends Model
         return view('/realty/' . $template, $data)->render();
     }
 
+    public static function info_format (Realty $realty) {
+        $result = [];
+        $info = $realty->info->pluck('value', 'field');
+
+        $result[]['Количество комнат'] = $realty->type->name;
+
+        if (isset($info['floor'])) {
+            $result[]['Этаж'] = $info['floor'];
+        }
+
+        if (isset($info['floors'])) {
+            $result[]['Этажей в доме'] = $info['floors'];
+        }
+
+        if (isset($info['square_common'])) {
+            $result[]['Общая площадь'] = $info['square_common'];
+        }
+
+        if (isset($info['square_living'])) {
+            $result[]['Жилая площадь'] = $info['square_living'];
+        }
+
+        if (isset($info['square_kitchen'])) {
+            $result[]['Площадь кухни'] = $info['square_kitchen'];
+        }
+
+        $result[]['Категория'] = $realty->dop_type->name;
+
+        // Строим структуру для таблицы
+
+        $result_table = [];
+        if (count($result) > 0) {
+            if (count($result) > 3) {
+                $cols = ceil(count($result) / 3);
+
+                for ($i = 0; $i < 3; $i++) {
+                    $result_table[$i][key($result[$i])] = head($result[$i]);
+                    for ($j = 1; $j <= $cols; $j++) {
+                        $k = $i + ($j * 3);
+                        if (isset($result[$k])) {
+                            $result_table[$i][key($result[$k])] = head($result[$k]);
+                        }
+                    }
+                }
+            }
+            else {
+                $tmp = [];
+                foreach ($result as $res) {
+                    $tmp[key($res)] = current($res);
+                }
+                $result_table[0] = $tmp;
+            }
+        }
+
+        return collect($result_table);
+    }
+
     /*
      * *******************************************************
      * RelationShips

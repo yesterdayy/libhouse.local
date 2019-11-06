@@ -1,7 +1,6 @@
 @extends(!Request::ajax() ? 'index' : 'ajax')
 
 @section('content')
-
     <div class="row">
         <div class="col-md-6">
             {!! get_breadcrumbs($realty) !!}
@@ -13,8 +12,20 @@
     </div>
 
     <article class="realty-single">
-        <h1>{{ $realty->title }}</h1>
-        <div class="realty-favorite text-right"><i class="lh-icon lh-icon-heart"></i><span>в избранное</span></div>
+        <div class="row">
+            <div class="col-md-9">
+                <h1 class="realty-title">{{ $realty->title }}</h1>
+            </div>
+
+            <div class="col-md-3">
+                <ul class="realty-info pull-right">
+                    <li class="realty-counter"><i class="lh-icon lh-icon-eye"></i>1569</li>
+                    <li class="realty-date float-right">{{ get_locale_date($realty->created_at, 'd F') }}</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="realty-favorite single"><i class="lh-icon lh-icon-heart"></i><span>Добавить в избранное</span></div>
 
         @if (get_realty_photos($realty)->count() > 0)
             <div class="realty-single-photo">
@@ -51,7 +62,45 @@
                 });
             </script>
         @endif
-    </article>
 
-    [comments id="{{ $realty->id }}" type="realty" rating_comments="1"]
+        @if ($realty_info->count() > 0)
+            <div class="realty-margin-btm">
+                @include('realty.components.realty_info', ['realty_info' => $realty_info])
+            </div>
+        @endif
+
+        <div class="realty-address realty-margin-btm">
+            <b>Адрес:</b> Республика Крым, г. Симферополь, ул. Симферопольская 10
+        </div>
+
+        <div class="realty-comfort realty-margin-btm">
+            @if (count($comforts) > 0)
+                <div class="row checkbox-grid-wrap">
+                    @foreach ($comforts as $cat_name => $comfort_cat)
+                        <div class="checkbox-grid row no-gutters col-md-3">
+                            {{ Form::label('comfort', $cat_name) }}
+
+                            @foreach ($comfort_cat as $comfort)
+                                <div>
+                                    {{ Form::checkbox('comfort['.$comfort->id.']', null, isset($comfort->selected), ['id' => 'comfort-'.$comfort->id, 'class' => 'checkbox blue']) }}
+                                    {{ Form::label(null, $comfort->name) }}
+                                </div>
+                            @endforeach
+                        </div>
+                    @endforeach
+                </div>
+            @endif
+        </div>
+
+        <div class="realty-content realty-margin-btm">
+            Сдаю однокомнатную квартиру-студию, для женщины-девушки студентки, проживание без животных. К посредникам просьба не беспокоить. Мебель, быт. техника, газовая колонка, бойлер, новые радиаторы отопления.
+        </div>
+    </article>
+@endsection
+
+@section('sidebar')
+    <div class="realty-sidebar-info">
+        <div class="realty-sidebar-price">{{ $realty->price }} ₽/мес.</div>
+        <div class="realty-sidebar-communal">Коммунальные услуги включены</div>
+    </div>
 @endsection
