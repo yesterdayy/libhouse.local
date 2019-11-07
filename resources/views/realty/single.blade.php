@@ -1,13 +1,13 @@
 @extends(!Request::ajax() ? 'index' : 'ajax')
 
 @section('content')
-    <div class="row">
-        <div class="col-md-6">
+    <div class="realty-breadcrumbs-wrap row">
+        <div class="col-md-9">
             {!! get_breadcrumbs($realty) !!}
         </div>
 
-        <div class="col-md-6">
-            @include('components.realty_nav')
+        <div class="col-md-3">
+            {!! get_realty_nav($realty_next) !!}
         </div>
     </div>
 
@@ -18,8 +18,8 @@
             </div>
 
             <div class="col-md-3">
-                <ul class="realty-info pull-right">
-                    <li class="realty-counter"><i class="lh-icon lh-icon-eye"></i>1569</li>
+                <ul class="realty-info float-right">
+                    <li class="realty-counter"><i class="lh-icon lh-icon-eye"></i>{{ $realty->counters->counter }}</li>
                     <li class="realty-date float-right">{{ get_locale_date($realty->created_at, 'd F') }}</li>
                 </ul>
             </div>
@@ -60,12 +60,27 @@
                     draggable: false,
                     swipe: false,
                 });
+
+                $(function () {
+                    $('.show-user-number').click(function () {
+                        var that = this;
+                        $.ajax({
+                            url: '/user/phone?id=' + $(this).attr('data-id'),
+                            dataType: "json",
+                            success: function (result) {
+                                if ('phone' in result) {
+                                    that.outerHTML = result.phone;
+                                }
+                            }
+                        });
+                    });
+                })
             </script>
         @endif
 
-        @if ($realty_info->count() > 0)
+        @if ($realty_info_table->count() > 0)
             <div class="realty-margin-btm">
-                @include('realty.components.realty_info', ['realty_info' => $realty_info])
+                @include('realty.components.realty_info_table', ['realty_info_table' => $realty_info_table])
             </div>
         @endif
 
@@ -100,7 +115,17 @@
 
 @section('sidebar')
     <div class="realty-sidebar-info">
-        <div class="realty-sidebar-price">{{ $realty->price }} ₽/мес.</div>
-        <div class="realty-sidebar-communal">Коммунальные услуги включены</div>
+        <div class="realty-sidebar-price">{{ $realty->price }} {{ $realty->trade_type_id == 1 ? '₽/мес.' : '₽' }}</div>
+        @if (isset($realty_info['with_communal']))
+            <div class="realty-sidebar-communal">Коммунальные услуги включены</div>
+        @endif
+
+        <div class="realty-sidebar-user-info">
+            <div class="realty-sidebar-user-name"><i class="lh-icon lh-icon-user"></i> <a href="{{ route('cabinet', ['id' => $realty->author->id]) }}">{{ $realty->author->first_name }}</a></div>
+            <div class="realty-sidebar-user-type">{{ $realty->author->realty_type_info->name }}</div>
+            <div class="realty-sidebar-user-created">На LIBHouse с {{ get_locale_date($realty->author->created_at, 'd.m.Y') }}</div>
+
+            <div class="btn btn-default show-user-number" data-id="{{ $realty->author->id }}">Показать телефон</div>
+        </div>
     </div>
 @endsection

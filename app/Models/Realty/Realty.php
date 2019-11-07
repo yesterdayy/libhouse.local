@@ -104,15 +104,15 @@ class Realty extends Model
         }
 
         if (isset($info['square_common'])) {
-            $result[]['Общая площадь'] = $info['square_common'];
+            $result[]['Общая площадь'] = $info['square_common'] . ' м2';
         }
 
         if (isset($info['square_living'])) {
-            $result[]['Жилая площадь'] = $info['square_living'];
+            $result[]['Жилая площадь'] = $info['square_living'] . ' м2';
         }
 
         if (isset($info['square_kitchen'])) {
-            $result[]['Площадь кухни'] = $info['square_kitchen'];
+            $result[]['Площадь кухни'] = $info['square_kitchen'] . ' м2';
         }
 
         $result[]['Категория'] = $realty->dop_type->name;
@@ -180,8 +180,16 @@ class Realty extends Model
         return $this->belongsToMany('App\Models\Realty\RealtyComfort', 'realty_entry_comfort', 'realty_id', 'comfort_id');
     }
 
+    public function author() {
+        return $this->hasOne('App\Models\User\User', 'id', 'author_id');
+    }
+
     public function attachments() {
         return $this->belongsToMany('App\Models\Blog\Attachments', 'realty_entry_attachments', 'entry_id', 'attachment_id')->orderBy('realty_entry_attachments.sort', 'asc')->withPivot('type');
+    }
+
+    public function counters() {
+        return $this->hasOne('App\Models\Realty\RealtyCounters', 'realty_id', 'id');
     }
 
     /*

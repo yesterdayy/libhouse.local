@@ -16,6 +16,7 @@ Route::get('/', 'IndexController@index');
 Auth::routes();
 Route::get('/logout', '\App\Http\Controllers\Auth\LoginController@logout')->name('logout');
 
+Route::get('/user/phone', 'UserController@get_phone');
 Route::get('/user/{id}', 'UserController@show')->name('cabinet');
 Route::get('/user/{id}/edit', 'UserController@edit');
 

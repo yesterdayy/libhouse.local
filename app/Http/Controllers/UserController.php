@@ -40,4 +40,15 @@ class UserController extends Controller
         return view('user.edit', $return);
     }
 
+    public function get_phone(Request $request) {
+        $user_id = addslashes(strip_tags($request->get('id')));
+
+        if (!empty($user_id)) {
+            $user = User::findOrFail($user_id);
+            return response()->json(['phone' => $user->phone]);
+        } else {
+            return response()->json([]);
+        }
+    }
+
 }

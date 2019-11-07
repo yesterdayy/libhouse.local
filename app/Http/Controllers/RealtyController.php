@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Realty\Realty;
 use App\Models\Realty\RealtyComfort;
 use App\Models\Realty\RealtyComfortCat;
+use App\Models\Realty\RealtyCounters;
 use App\Models\Realty\RealtyDopType;
 use App\Models\Realty\RealtyInfo;
 use App\Models\Realty\RealtyRentDuration;
@@ -25,13 +26,29 @@ class RealtyController extends Controller
 {
 
     public function index() {
-        $realtys = Realty::with('info', 'photos')->where('is_moderated', '1')->orderBy('id', 'desc')->take(20)->get();
+        $realtys = Realty::with('info', 'photos', 'counters')->where('status', 'published')->orderBy('id', 'desc')->take(20)->get();
         return view('realty/list', compact('realtys'));
     }
 
     public function show($slug) {
-        $realty = Realty::with('info', 'comfort', 'attachments', 'dop_type')->whereSlug($slug)->firstOrFail();
-        $realty_info = Realty::info_format($realty);
+        $realty = Realty::with('info', 'comfort', 'attachments', 'dop_type', 'author', 'counters')->whereSlug($slug)->where('status', 'published')->firstOrFail();
+
+        if ($realty->counters) {
+            $realty->counters->increment('counter');
+            $realty->counters->save();
+        } else {
+            $counters = new RealtyCounters(['realty_id' => $realty->id, 'counter' => 1]);
+            $realty->counters()->save($counters);
+            $realty->counters = $counters;
+        }
+
+        $realty_next = Realty::select('slug')->where('id', '>', $realty->id)->where('status', 'published')->first();
+        if ($realty_next) {
+            $realty_next = $realty_next->slug;
+        }
+
+        $realty_info = $realty->info->pluck('value', 'field');
+        $realty_info_table = Realty::info_format($realty);
 
         $comforts_cats = RealtyComfortCat::all()->pluck('name', 'id');
         $comforts_tmp = RealtyComfort::all();
@@ -52,7 +69,13 @@ class RealtyController extends Controller
             }
         }
 
-        return view('realty/single', compact('realty', 'realty_info', 'comforts'));
+        return view('realty/single', compact(
+            'realty',
+            'realty_next',
+            'realty_info',
+            'realty_info_table',
+            'comforts'
+        ));
     }
 
     public function create() {

@@ -405,9 +405,17 @@ if (! function_exists('get_breadcrumbs')) {
     function get_breadcrumbs($realty) {
         return view('components.breadcrumbs', [
             'realty_type' => $realty->type,
-            'realty_rent_type' => $realty->type,
-            'realty_floors' => $realty->type,
-            'realty_dop_type' => $realty->type,
+            'realty_trade_type' => $realty->trade_type,
+            'realty_room_type' => $realty->room_type,
+            'realty_dop_type' => $realty->dop_type,
+        ])->render();
+    }
+}
+
+if (! function_exists('get_realty_nav')) {
+    function get_realty_nav($realty_next) {
+        return view('components.realty_nav', [
+            'realty_next' => isset($realty_next) ? $realty_next : null,
         ])->render();
     }
 }
