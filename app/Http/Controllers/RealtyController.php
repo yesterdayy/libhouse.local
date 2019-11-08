@@ -167,7 +167,7 @@ class RealtyController extends Controller
         $realty->rent_duration_id = $input['duration'];
         $realty->city = $input['address_city'];
         $realty->street = $input['address_street'];
-        $realty->content = $input['content'];
+        $realty->content = strip_tags($input['content']);
         $realty->price = $input['price'];
         $realty->slug = $realty->slug ?? Str::slug($realty->title . '-' . Str::random(6));
         $realty->status = 'published';
@@ -178,7 +178,7 @@ class RealtyController extends Controller
             foreach ($input['info'] as $k => $info) {
                 if (!empty($info)) {
                     if (is_array($info)) {
-                        $info = implode('||', $info);
+                        $info = implode('||', strip_tags($info));
                     }
 
                     $insert_info[] = [

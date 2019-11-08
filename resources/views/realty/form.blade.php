@@ -1,6 +1,6 @@
 @csrf
 
-{{ Html::script('js/edit.min.js') }}
+{{ Html::script('js/edit.js') }}
 
 <div class="realty-create-form-block">
     <div class="form-group row">
