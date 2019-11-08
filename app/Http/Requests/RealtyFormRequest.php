@@ -33,14 +33,14 @@ class RealtyFormRequest extends FormRequest
             'room_type' => 'required|integer',
             'address_city' => 'required|numeric',
             'address_street' => 'numeric',
-            'youtube' => 'max:535',
+            'youtube.*' => 'max:535|nullable',
             'content' => 'max:3000',
             'price' => 'numeric',
-            'info[floor]' => 'required|integer',
-            'info[floors]' => 'required|integer',
-            'info[common_square]' => 'integer',
-            'info[living_square]' => 'integer',
-            'info[kitchen_square]' => 'integer',
+            'info.floor' => 'required|integer',
+            'info.floors' => 'required|integer',
+            'info.common_square' => 'integer|nullable',
+            'info.living_square' => 'integer|nullable',
+            'info.kitchen_square' => 'integer|nullable',
         ];
     }
 }

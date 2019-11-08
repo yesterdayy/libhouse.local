@@ -1,5 +1,7 @@
 @csrf
 
+{{ var_dump($errors) }}
+
 {{ Html::script('js/edit.js') }}
 
 <div class="realty-create-form-block">
