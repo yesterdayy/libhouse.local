@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\RealtyFormRequest;
 use App\Models\Realty\Realty;
 use App\Models\Realty\RealtyComfort;
 use App\Models\Realty\RealtyComfortCat;
@@ -137,8 +138,10 @@ class RealtyController extends Controller
         return view('realty/edit', compact('realty', 'comforts', 'type', 'rent_duration'));
     }
 
-    public function store(Request $request, $slug = null) {
+    public function store(RealtyFormRequest $request, $slug = null) {
         $input = $request->all();
+
+        dd($input);
 
         if (isset($input['user_realty_type'])) {
             $user = Auth::user();
