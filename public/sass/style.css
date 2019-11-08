@@ -144,7 +144,7 @@ h1 {
   margin-top: 110px; }
 
 .btn, .btn-disabled {
-  padding: 11px 20px;
+  padding: 12px 21px;
   color: #495aff;
   vertical-align: middle;
   line-height: 16px;
@@ -165,7 +165,6 @@ h1 {
 .btn-primary, .btn.active, .active.btn-disabled {
   background: #495aff;
   padding: 12px 21px;
-  border: 0;
   color: #f6f6f6; }
 
 .btn.active:hover, .active.btn-disabled:hover {
@@ -191,7 +190,7 @@ h1 {
   margin: 0; }
 
 .btn.btn-lg, .btn-lg.btn-disabled {
-  padding: 20px;
+  padding: 19px 20px;
   font-size: 15px;
   line-height: 20px; }
 
@@ -224,6 +223,9 @@ h1 {
   -moz-opacity: 0.15;
   -khtml-opacity: 0.15;
   transition: 0s; }
+
+.btn.no-pointer, .no-pointer.btn-disabled {
+  cursor: initial; }
 
 input:not([type=checkbox]).form-control::placeholder {
   color: #000b28; }
@@ -1199,6 +1201,18 @@ h1.realty-title {
 
 .realty-paginate-nav li:not(:first-child) {
   margin-left: 20px; }
+
+.add-video-cell {
+  width: 109px;
+  padding-left: 20px;
+  vertical-align: top; }
+
+.add-video {
+  margin: 0; }
+
+.realty-added-videos label {
+  max-width: 560px;
+  width: 100%; }
 
 .toasts-wrap {
   position: fixed;

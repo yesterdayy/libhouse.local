@@ -1,6 +1,9 @@
 @extends(!Request::ajax() ? 'index' : 'ajax')
 
 @section('content')
+    <script> window.realty_slides = '{{ get_realty_photos($realty)->count() }}'; </script>
+    {{ Html::script('js/single.min.js') }}
+
     <div class="realty-breadcrumbs-wrap row">
         <div class="col-md-9">
             {!! get_breadcrumbs($realty) !!}
@@ -39,43 +42,6 @@
                     <div class="realty-img"><img data-lazy="/storage/{{ $photo->path }}{{ $photo->name . '.' . $photo->extension }}" /></div>
                 @endforeach
             </div>
-
-            <script>
-                $('.realty-single-photo').slick({
-                    slidesToShow: 1,
-                    slidesToScroll: 1,
-                    draggable: false,
-                    swipe: false,
-                    prevArrow: '<div class="realty-single-photo-prev"><i class="lh-icon lh-icon-arrow-left"></i></div>',
-                    nextArrow: '<div class="realty-single-photo-next"><i class="lh-icon lh-icon-arrow-right"></i></div>',
-                });
-
-                $('.realty-single-photo-nav').slick({
-                    slidesToShow: {{ get_realty_photos($realty)->count() }},
-                    slidesToScroll: 1,
-                    arrows: false,
-                    asNavFor: '.realty-single-photo',
-                    respondTo: 'slide',
-                    focusOnSelect: true,
-                    draggable: false,
-                    swipe: false,
-                });
-
-                $(function () {
-                    $('.show-user-number').click(function () {
-                        var that = this;
-                        $.ajax({
-                            url: '/user/phone?id=' + $(this).attr('data-id'),
-                            dataType: "json",
-                            success: function (result) {
-                                if ('phone' in result) {
-                                    that.outerHTML = result.phone;
-                                }
-                            }
-                        });
-                    });
-                })
-            </script>
         @endif
 
         @if ($realty_info_table->count() > 0)
@@ -108,8 +74,20 @@
         </div>
 
         <div class="realty-content realty-margin-btm">
-            Сдаю однокомнатную квартиру-студию, для женщины-девушки студентки, проживание без животных. К посредникам просьба не беспокоить. Мебель, быт. техника, газовая колонка, бойлер, новые радиаторы отопления.
+            {{ $realty->content }}
         </div>
+
+        @if (isset($realty_info['youtube']))
+            <div class="realty-video realty-margin-btm">
+                @if (is_array($realty_info['youtube']))
+                    @foreach ($realty_info['youtube'] as $video)
+                        <div class="form-group"><iframe width="560" height="315" src="{{ $video }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
+                    @endforeach
+                @else
+                    <div class="form-group"><iframe width="560" height="315" src="{{ $realty_info['youtube'] }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
+                @endif
+            </div>
+        @endif
     </article>
 @endsection
 

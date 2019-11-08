@@ -50,6 +50,12 @@ class RealtyController extends Controller
         $realty_info = $realty->info->pluck('value', 'field');
         $realty_info_table = Realty::info_format($realty);
 
+        foreach ($realty_info as $k => $inf) {
+            if (strpos($inf, '||') !== false) {
+                $realty_info[$k] = explode('||', $inf);
+            }
+        }
+
         $comforts_cats = RealtyComfortCat::all()->pluck('name', 'id');
         $comforts_tmp = RealtyComfort::all();
         $comforts = [];
@@ -164,12 +170,14 @@ class RealtyController extends Controller
         $realty->status = 'published';
         $realty->save();
 
-        dd($input);
-
         if (isset($input['info'])) {
             $insert_info = [];
             foreach ($input['info'] as $k => $info) {
                 if (!empty($info)) {
+                    if (is_array($info)) {
+                        $info = implode('||', $info);
+                    }
+
                     $insert_info[] = [
                         'realty_id' => $realty->id,
                         'field' => $k,

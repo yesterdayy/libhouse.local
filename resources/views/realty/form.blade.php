@@ -1,5 +1,7 @@
 @csrf
 
+{{ Html::script('js/edit.min.js') }}
+
 <div class="realty-create-form-block">
     <div class="form-group row">
         {!! Form::rawLabel('user_realty_type', 'Тип аккаунта<span>*</span>') !!}
@@ -32,6 +34,21 @@
             @foreach ($rent_durations as $rent_duration)
                 <div class="@if ($loop->first) active @endif btn">
                     {{ Form::radio('duration', $rent_duration->id, $loop->first ? true : false) }} {{ $rent_duration->name }}
+                </div>
+            @endforeach
+                <div class="hidden">
+                    {{ Form::radio('duration', 0, false) }}
+                </div>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        {!! Form::rawLabel('dop_type', 'Категория недвижимости<span>*</span>') !!}
+
+        <div class="btn-group-toggle" data-toggle="buttons">
+            @foreach ($dop_types as $dop_type)
+                <div class="@if ($loop->first) active @endif btn">
+                    {{ Form::radio('dop_type', $dop_type->id, $loop->first ? true : false) }} {{ $dop_type->name }}
                 </div>
             @endforeach
         </div>
@@ -156,7 +173,18 @@
 
     <div class="form-group row">
         {!! Form::label('floor', 'Видео') !!}
-        {{ Form::text('floor', null, ['class' => 'form-control', 'placeholder' => 'Ссылка на Youtube']) }}
+        <div class="d-table w-100">
+            <div class="d-table-cell">
+                {{ Form::text('youtube', null, ['class' => 'form-control', 'placeholder' => 'Ссылка на Youtube']) }}
+            </div>
+
+            <div class="d-table-cell add-video-cell">
+                <div class="btn btn-lg btn-primary add-video">Добавить</div>
+            </div>
+    </div>
+
+    <div class="realty-added-videos">
+
     </div>
 </div>
 
@@ -184,131 +212,3 @@
 <div class="form-group row float-right">
     <button class="btn btn-lg active" style="margin-right: 0;">Опубликовать объявление</button>
 </div>
-
-<script>
-    var photo_upload_dropzone = $(".dropzone-wrap").dropzone({
-        thumbnailWidth: 400,
-        thumbnailHeight: 400,
-        dictDefaultMessage: 'Добавить фото',
-        previewTemplate: "<div class=\"dz-preview dz-file-preview\">\n  <div class=\"dz-image\"><img data-dz-thumbnail /></div>\n  <ul class=\"dz-details\"><li class=\"set-main-photo\">Сделать главной</li></ul>\n</div>",
-        url: "/upload/photo",
-        maxFiles: 8,
-        maxFilesize: 10,
-        acceptedFiles: '.jpg, .png, .gif',
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-        success: function(file) {
-            if (typeof file !== 'undefined' && file.hasOwnProperty('xhr')) {
-                let result = JSON.parse(file.xhr.response);
-                let file_id = result.id;
-
-                $(this.element).append('<input type="hidden" name="' + $(this.element).attr('data-name') + '" value="' + file_id + '" />');
-            }
-        },
-        addedfile: function addedfile(file) {
-            var _this2 = this;
-
-            if (this.element === this.previewsContainer) {
-                this.element.classList.add("dz-started");
-            }
-
-            if (this.previewsContainer) {
-                file.previewElement = Dropzone.createElement(this.options.previewTemplate.trim());
-                file.previewTemplate = file.previewElement; // Backwards compatibility
-
-                this.previewsContainer.prepend(file.previewElement);
-                $('.dz-message', this.element).css({display: 'inline-block', margin: '15px'});
-                for (var _iterator3 = file.previewElement.querySelectorAll("[data-dz-name]"), _isArray3 = true, _i3 = 0, _iterator3 = _isArray3 ? _iterator3 : _iterator3[Symbol.iterator]();;) {
-                    var _ref3;
-
-                    if (_isArray3) {
-                        if (_i3 >= _iterator3.length) break;
-                        _ref3 = _iterator3[_i3++];
-                    } else {
-                        _i3 = _iterator3.next();
-                        if (_i3.done) break;
-                        _ref3 = _i3.value;
-                    }
-
-                    var node = _ref3;
-
-                    node.textContent = file.name;
-                }
-                for (var _iterator4 = file.previewElement.querySelectorAll("[data-dz-size]"), _isArray4 = true, _i4 = 0, _iterator4 = _isArray4 ? _iterator4 : _iterator4[Symbol.iterator]();;) {
-                    if (_isArray4) {
-                        if (_i4 >= _iterator4.length) break;
-                        node = _iterator4[_i4++];
-                    } else {
-                        _i4 = _iterator4.next();
-                        if (_i4.done) break;
-                        node = _i4.value;
-                    }
-
-                    node.innerHTML = this.filesize(file.size);
-                }
-
-                if (this.options.addRemoveLinks) {
-                    file._removeLink = Dropzone.createElement("<a class=\"dz-remove\" href=\"javascript:undefined;\" data-dz-remove>" + this.options.dictRemoveFile + "</a>");
-                    file.previewElement.appendChild(file._removeLink);
-                }
-
-                var removeFileEvent = function removeFileEvent(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    if (file.status === Dropzone.UPLOADING) {
-                        return Dropzone.confirm(_this2.options.dictCancelUploadConfirmation, function () {
-                            return _this2.removeFile(file);
-                        });
-                    } else {
-                        if (_this2.options.dictRemoveFileConfirmation) {
-                            return Dropzone.confirm(_this2.options.dictRemoveFileConfirmation, function () {
-                                return _this2.removeFile(file);
-                            });
-                        } else {
-                            return _this2.removeFile(file);
-                        }
-                    }
-                };
-
-                for (var _iterator5 = file.previewElement.querySelectorAll("[data-dz-remove]"), _isArray5 = true, _i5 = 0, _iterator5 = _isArray5 ? _iterator5 : _iterator5[Symbol.iterator]();;) {
-                    var _ref4;
-
-                    if (_isArray5) {
-                        if (_i5 >= _iterator5.length) break;
-                        _ref4 = _iterator5[_i5++];
-                    } else {
-                        _i5 = _iterator5.next();
-                        if (_i5.done) break;
-                        _ref4 = _i5.value;
-                    }
-
-                    var removeLink = _ref4;
-
-                    removeLink.addEventListener("click", removeFileEvent);
-                }
-            }
-        },
-    });
-
-    $('.address-select').autocomplete({
-        serviceUrl: '/kladr/street_with_city',
-        dataType: 'json',
-        paramName: 'term',
-        onSearchStart: function (params) {
-            params.city = $('input[name=address_city]').val();
-        },
-        onSelect: function (suggestion) {
-            $('input[name=address_city]').val(suggestion.data.city_kladr);
-            if ('street_kladr' in suggestion.data) {
-                $('input[name=address_street]').val(suggestion.data.street_kladr);
-            }
-        }
-    });
-
-    $(document).on('click', '.set-main-photo', function () {
-        let index = $(this).closest('.dz-preview').index();
-        $(this).closest('.dropzone-wrap').prepend($(this).closest('.dz-preview'));
-        $(this).closest('.dropzone-wrap').find('.dz-default.dz-message').after($(this).closest('.dropzone-wrap').find('input[type=hidden]').eq(index));
-    });
-</script>
