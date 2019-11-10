@@ -37,6 +37,7 @@ $(function () {
         elem.val('');
     });
 
+    // Удаление видео
     $(document).on('click', '.realty-delete-video', function (e) {
         e.preventDefault();
         $(this).closest('.form-group').remove();
@@ -77,6 +78,24 @@ $(function () {
         acceptedFiles: '.jpg, .png, .gif',
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        init: function() {
+            if (typeof window.realty_photos !== 'undefined' && window.realty_photos.length > 0) {
+                var thisDropzone = this;
+                window.realty_photos.forEach(function (photo) {
+                    var mockFile = {name: photo.original_name, size: photo.size, type: photo.mime};
+                    thisDropzone.emit("addedfile", mockFile);
+                    thisDropzone.emit("success", mockFile);
+                    thisDropzone.emit("thumbnail", mockFile, photo.thumbnails['slide-thumb'])
+                    $(thisDropzone.element).append('<input type="hidden" name="photos[]" value="' + photo.id + '" />');
+                });
+
+                this.on("maxfilesexceeded", function (file) {
+                    this.removeFile(file);
+                });
+            } else {
+                console.log('test 2');
+            }
         },
         success: function(file) {
             if (typeof file !== 'undefined' && file.hasOwnProperty('xhr')) {

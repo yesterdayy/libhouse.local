@@ -489,7 +489,7 @@ if (! function_exists('get_image_thumbnail_url')) {
 
     function get_image_thumbnail_url($attachment, $size, $absolute_path = true) {
         $image = $attachment;
-        $size = Settings::getUnserialize('thumbnails_size')[$size]['value'];
+        $size = config('filesystems.thumbnails_size')[$size]['value'];
 
         if ($size) {
             $size = implode('_', $size);

@@ -5,7 +5,7 @@
                 @if (get_realty_photos($realty)->count() > 0)
                     @foreach (get_realty_photos($realty) as $photo)
                         @if ($loop->iteration > 5) @break @endif
-                        <div class="realty-img"><img data-lazy="/storage/{{ $photo->path }}{{ $photo->name . '.' . $photo->extension }}" width="435px" height="348px" /></div>
+                        <div class="realty-img"><img data-lazy="{{ get_image_thumbnail_url($photo, 'thumb') }}" width="435px" height="348px" /></div>
                     @endforeach
                 @endif
             </div>

@@ -13,7 +13,6 @@ $(function () {
         slidesToScroll: 1,
         arrows: false,
         asNavFor: '.realty-single-photo',
-        respondTo: 'slide',
         focusOnSelect: true,
         draggable: false,
         swipe: false,

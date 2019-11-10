@@ -9,6 +9,12 @@ input:not([type=checkbox]).form-control
     border: 1px solid $white-three
     @include border-radius(4px)
 
+input:not([type=checkbox]).form-control.is-valid
+    border: solid 1px $toxic-green
+
+input:not([type=checkbox]).form-control.is-invalid
+    border: solid 1px $red
+
 .price-input input:not([type=checkbox]).form-control
     padding: 0 90px 0 30px
 
@@ -242,6 +248,9 @@ label span
 .dropzone-wrap:hover
     border-color: $lightish-blue
 
+.dropzone-wrap .dz-preview.dz-processing:not(.dz-complete) .dz-image img
+    @include opacity(.4)
+
 .dropzone-wrap .dz-image img
     width: 150px
     height: 150px
@@ -269,7 +278,8 @@ label span
     transition: .4s
     @include border-radius(4px 4px 0 0)
 
-.dropzone-wrap .dz-preview:hover .dz-details
+.dropzone-wrap .dz-preview:not(.dz-processing):hover .dz-details,
+.dropzone-wrap .dz-preview.dz-processing.dz-complete:hover .dz-details
     top: 0
 
 .dropzone-wrap .dz-details li

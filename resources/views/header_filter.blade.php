@@ -1,4 +1,4 @@
-<form class="adv-form-header">
+<form class="adv-form-header" action="{{ route('realty.search') }}" method="get">
     <div class="row no-gutters mx-auto header-filter" rel='popover'>
         <div class="d-table w-100">
             <div class="d-table-row header-filters-wrap">

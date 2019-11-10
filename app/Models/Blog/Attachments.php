@@ -50,8 +50,6 @@ class Attachments extends Model
 
     public static function photoUpload($request, $without_thumbnails = false) {
         if (!$without_thumbnails) {
-            $image_sizes = unserialize(Settings::get('thumbnails_size'));
-
             if (empty($image_sizes)) {
                 $image_sizes = config('filesystems.thumbnails_size');
             }
@@ -132,7 +130,8 @@ class Attachments extends Model
 
         $thumbs = null;
 
-        $thumbs_urls = Settings::getUnserialize('thumbnails_size');
+        $thumbs_urls = config('filesystems.thumbnails_size');
+
         foreach ($thumbs_urls as $thumb) {
             if (Storage::disk($disk)->exists($this->physicalPath())) {
                 $thumbname = $thumb['value'][0] . '_' . $thumb['value'][1];

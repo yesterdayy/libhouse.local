@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\RealtyFormRequest;
+use App\Models\Blog\Attachments;
 use App\Models\Realty\Realty;
 use App\Models\Realty\RealtyComfort;
 use App\Models\Realty\RealtyComfortCat;
@@ -27,6 +28,11 @@ class RealtyController extends Controller
 {
 
     public function index() {
+        $realtys = Realty::with('info', 'photos', 'counters')->where('status', 'published')->orderBy('id', 'desc')->take(20)->get();
+        return view('realty/list', compact('realtys'));
+    }
+
+    public function search() {
         $realtys = Realty::with('info', 'photos', 'counters')->where('status', 'published')->orderBy('id', 'desc')->take(20)->get();
         return view('realty/list', compact('realtys'));
     }
@@ -85,7 +91,7 @@ class RealtyController extends Controller
         ));
     }
 
-    public function create() {
+    public function create(Request $request) {
         $comforts_cats = RealtyComfortCat::all()->pluck('name', 'id');
         $comforts_tmp = RealtyComfort::all();
         $comforts = [];
@@ -110,6 +116,15 @@ class RealtyController extends Controller
         $trade_types = RealtyTradeType::all();
         $rent_durations = RealtyRentDuration::all();
 
+        $photos = [];
+        if (!empty($request->old('photos'))) {
+            $photos = Attachments::whereIn('id', $request->old('photos'))->get();
+        } else {
+            $photos = collect($photos);
+        }
+
+        $old = $request->old();
+
         $user_realty_types = UserRealtyType::all();
         return view('realty/add', compact(
             'comforts',
@@ -119,7 +134,10 @@ class RealtyController extends Controller
             'room_types',
             'trade_types',
             'rent_durations',
-            'user_realty_types'
+            'user_realty_types',
+            'fields_ru',
+            'photos',
+            'old'
         ));
     }
 
@@ -141,8 +159,6 @@ class RealtyController extends Controller
     public function store(RealtyFormRequest $request, $slug = null) {
         $input = $request->all();
 
-        dd($input);
-
         if (isset($input['user_realty_type'])) {
             $user = Auth::user();
             $user->realty_type = $input['user_realty_type'];
@@ -159,7 +175,7 @@ class RealtyController extends Controller
             $realty = new Realty();
         }
 
-        $realty->title = $input['trade_type'] . ' на ' . $input['duration'] . ' ' . $input['type'] . ' ' . $input['address_street'];
+        $realty->title = Realty::get_title($input);
         $realty->type_id = $input['type'];
         $realty->dop_type_id = $input['dop_type'];
         $realty->room_type_id = $input['room_type'];

@@ -1,8 +1,16 @@
 @csrf
 
-{{ var_dump($errors) }}
+{{ Html::script('js/form.min.js') }}
 
-{{ Html::script('js/edit.js') }}
+@if ($errors->any())
+    <div class="alert form-errors">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 
 <div class="realty-create-form-block">
     <div class="form-group row">
@@ -100,7 +108,7 @@
 <div class="realty-create-form-block">
     <div class="form-group row">
         {!! Form::rawLabel('address', 'Адрес<span>*</span>') !!}
-        {{ Form::text('address', null, ['class' => 'form-control address-select', 'placeholder' => 'Город, улица']) }}
+        {{ Form::text('address', null, ['class' => 'form-control address-select ' . ($errors->has('address_city') || $errors->has('address_street') ? 'is-invalid' : (isset($old['address_city']) && !empty($old['address_city']) ? 'is-valid' : '')), 'placeholder' => 'Город, улица']) }}
         {{ Form::hidden('address_city') }}
         {{ Form::hidden('address_street') }}
     </div>
@@ -122,27 +130,27 @@
 
     <div class="form-group row">
         {!! Form::rawLabel('info[floor]', 'Этаж<span>*</span>') !!}
-        {{ Form::text('info[floor]', null, ['class' => 'form-control', 'style' => 'max-width: 300px;', 'placeholder' => 'Укажите свой этаж']) }}
+        {{ Form::text('info[floor]', null, ['class' => 'form-control ' . ($errors->has('info.floor') ? 'is-invalid' : (isset($old['info[floor]']) && !empty($old['info[floor]']) ? 'is-valid' : '')), 'style' => 'max-width: 300px;', 'placeholder' => 'Укажите свой этаж']) }}
     </div>
 
     <div class="form-group row">
         {!! Form::rawLabel('info[floors]', 'Этажей в доме<span>*</span>') !!}
-        {{ Form::text('info[floors]', null, ['class' => 'form-control', 'style' => 'max-width: 300px;', 'placeholder' => 'Укажите этажность дома']) }}
+        {{ Form::text('info[floors]', null, ['class' => 'form-control ' . ($errors->has('info.floors') ? 'is-invalid' : (isset($old['info[floors]']) && !empty($old['info[floors]']) ? 'is-valid' : '')), 'style' => 'max-width: 300px;', 'placeholder' => 'Укажите этажность дома']) }}
     </div>
 
     <div class="form-group row">
-        {{ Form::label('info[common_square]', 'Общая площадь') }}
-        {{ Form::text('info[common_square]', null, ['class' => 'form-control', 'style' => 'max-width: 87px;']) }}
+        {{ Form::label('info[square_common]', 'Общая площадь') }}
+        {{ Form::text('info[square_common]', null, ['class' => 'form-control ' . ($errors->has('info.square_common') ? 'is-invalid' : (isset($old['info[square_common]']) && !empty($old['info[square_common]']) ? 'is-valid' : '')), 'style' => 'max-width: 87px;']) }}
     </div>
 
     <div class="form-group row">
-        {{ Form::label('info[living_square]', 'Жилая площадь') }}
-        {{ Form::text('info[living_square]', null, ['class' => 'form-control', 'style' => 'max-width: 87px;']) }}
+        {{ Form::label('info[square_living]', 'Жилая площадь') }}
+        {{ Form::text('info[square_living]', null, ['class' => 'form-control ' . ($errors->has('info.square_living') ? 'is-invalid' : (isset($old['info[square_living]']) && !empty($old['info[square_living]']) ? 'is-valid' : '')), 'style' => 'max-width: 87px;']) }}
     </div>
 
     <div class="form-group row">
-        {{ Form::label('info[kitchen_square]', 'Площадь кухни') }}
-        {{ Form::text('info[kitchen_square]', null, ['class' => 'form-control', 'style' => 'max-width: 87px;']) }}
+        {{ Form::label('info[square_kitchen]', 'Площадь кухни') }}
+        {{ Form::text('info[square_kitchen]', null, ['class' => 'form-control ' . ($errors->has('info.square_kitchen') ? 'is-invalid' : (isset($old['info[square_kitchen]']) && !empty($old['info[square_kitchen]']) ? 'is-valid' : '')), 'style' => 'max-width: 87px;']) }}
     </div>
 </div>
 
@@ -171,6 +179,9 @@
         <div class="label-desc">Не допускаются к размещению фотографии с водяными знаками, чужих объектов и рекламные баннеры. JPG, PNG или GIF.<br>Максимальный размер файла 10 мб</div>
         <div class="dropzone-wrap" id="dropzoneupload" data-name="photos[]"></div>
         <div class="float-photo-info">Добавьте не менее 3-х фотографий интерьера, дающих полноценное представление об объекте. Допускается использование только реальных фотографий предлагаемого объекта, которые не должны нарушать чьи-либо интеллектуальные права. Правилами сайта запрещено использование картинок (кроме схемы объекта), 3D, коллажей, скриншотов, а также изображений, на которых присутствуют контактные данные, непрозрачные логотипы, посторонние визуальные элементы, чужие водяные знаки или следы их ликвидации. Запрещено прикреплять к объявлениям фотографии, содержащие изображения людей, животных, алкогольных напитков, табачных изделий, оружия или других подобных предметов.</div>
+        <script>
+            window.realty_photos = {!! $photos !!};
+        </script>
     </div>
 
     <div class="form-group row">
@@ -183,6 +194,7 @@
             <div class="d-table-cell add-video-cell">
                 <div class="btn btn-lg btn-primary add-video">Добавить</div>
             </div>
+        </div>
     </div>
 
     <div class="realty-added-videos">
@@ -193,13 +205,13 @@
 <div class="realty-create-form-block">
     <div class="form-group row">
         {!! Form::rawLabel('content', 'Описание объявления<span>*</span>') !!}
-        {{ Form::textarea('content', null, ['class' => 'form-control']) }}
+        {{ Form::textarea('content', null, ['class' => 'form-control ' . ($errors->has('content') ? 'is-invalid' : (isset($old['content']) && !empty($old['content']) ? 'is-valid' : ''))]) }}
     </div>
 
     <div class="form-group row">
         {{ Form::label('price', 'Стоимость') }}
         <div class="price-input">
-            {{ Form::text('price', null, ['class' => 'form-control', 'style' => 'max-width: 300px;', 'maxlength' => '16']) }}
+            {{ Form::text('price', null, ['class' => 'form-control ' . ($errors->has('price') ? 'is-invalid' : (isset($old['price']) && !empty($old['price']) ? 'is-valid' : '')), 'style' => 'max-width: 300px;', 'maxlength' => '16']) }}
             <span class="currency-price-input">руб.</span>
         </div>
     </div>

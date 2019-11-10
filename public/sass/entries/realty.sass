@@ -78,14 +78,25 @@ div.realty-title
 .realty-single-photo-nav .realty-img
     margin: 0 10px
     cursor: pointer
+    width: initial !important
     @include opacity(1)
     transition: .4s
 
 .realty-single-photo-nav .realty-img:hover
     @include opacity(0.8)
 
+.realty-single-photo-nav .realty-img:first-child
+    margin-left: 0
+
+.realty-single-photo-nav .realty-img:last-child
+    margin-right: 0
+
 .realty-single-photo-nav .slick-list
-    margin: 0 -10px
+    margin: 0
+
+.realty-single-photo-nav .slick-track
+    display: flex
+    max-width: 100%
 
 .realty-single-photo img
     width: 100%

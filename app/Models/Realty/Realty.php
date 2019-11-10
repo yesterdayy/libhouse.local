@@ -146,6 +146,26 @@ class Realty extends Model
         return collect($result_table);
     }
 
+    public static function get_title($request) {
+        $trade_type = RealtyTradeType::findOrFail($request['trade_type'])->name;
+        if ($trade_type == 1) {
+            $duration = RealtyRentDuration::withoutGlobalScopes()->findOrFail($request['duration'])->name;
+        }
+        $type = RealtyType::findOrFail($request['type'])->name;
+        $street = (!empty($request['address_street']) ? ' , ул. ' . Kladr::get_street_by_kladr($request['address_street']) : '');
+
+        // Если аренда
+        if ($trade_type == 1) {
+            $result = $trade_type . ' на ' . $duration . ' ' . $type . ' ' . $street;
+        }
+        // Если продажа
+        else {
+            $result = $trade_type . ' ' . $type . $street;
+        }
+
+        return $result;
+    }
+
     /*
      * *******************************************************
      * RelationShips

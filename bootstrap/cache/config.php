@@ -8,7 +8,7 @@
     'name' => 'Laravel',
     'env' => 'local',
     'debug' => true,
-    'url' => 'http://localhost',
+    'url' => 'http://libhouse.local/',
     'timezone' => 'Europe/Moscow',
     'locale' => 'ru',
     'fallback_locale' => 'en',
@@ -410,7 +410,7 @@
       array (
         'driver' => 'local',
         'root' => 'C:\\OSPanel\\domains\\libhouse.local\\storage\\app/public',
-        'url' => 'http://biz.derkach/storage',
+        'url' => 'http://libhouse.local//storage',
         'visibility' => 'public',
       ),
       's3' => 
@@ -431,28 +431,28 @@
         'slug' => 'thumb',
         'value' => 
         array (
-          0 => 360,
-          1 => 240,
+          0 => 435,
+          1 => 348,
         ),
       ),
-      'thumb-wide' => 
+      'slide-wide' => 
       array (
-        'name' => 'Широкая миниатюра',
-        'slug' => 'thumb-wide',
+        'name' => 'Картинка для слайда',
+        'slug' => 'slide-wide',
         'value' => 
         array (
-          0 => 740,
-          1 => 240,
+          0 => 1345,
+          1 => 700,
         ),
       ),
-      'post-wide' => 
+      'slide-thumb' => 
       array (
-        'name' => 'Широкая картинка поста',
-        'slug' => 'post-wide',
+        'name' => 'Миниатюра картинок для навигации по слайдам',
+        'slug' => 'slide-thumb',
         'value' => 
         array (
-          0 => 1280,
-          1 => 500,
+          0 => 150,
+          1 => 150,
         ),
       ),
     ),

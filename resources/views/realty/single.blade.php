@@ -33,13 +33,13 @@
         @if (get_realty_photos($realty)->count() > 0)
             <div class="realty-single-photo">
                 @foreach (get_realty_photos($realty) as $photo)
-                    <div class="realty-img"><img data-lazy="/storage/{{ $photo->path }}{{ $photo->name . '.' . $photo->extension }}" /></div>
+                    <div class="realty-img"><img data-lazy="{{ get_image_thumbnail_url($photo, 'slide-wide') }}" /></div>
                 @endforeach
             </div>
 
             <div class="realty-single-photo-nav">
                 @foreach (get_realty_photos($realty) as $photo)
-                    <div class="realty-img"><img data-lazy="/storage/{{ $photo->path }}{{ $photo->name . '.' . $photo->extension }}" /></div>
+                    <div class="realty-img"><img data-lazy="{{ get_image_thumbnail_url($photo, 'slide-thumb') }}" /></div>
                 @endforeach
             </div>
         @endif
