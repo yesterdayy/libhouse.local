@@ -6,6 +6,7 @@ use App\Models\Blog\Post;
 use Illuminate\Support\Facades\URL;
 use Jenssegers\Date\Date;
 use App\Models\Common\Settings;
+use function Sodium\add;
 
 /*
  * *******************************************************
@@ -623,15 +624,32 @@ if (! function_exists('toBoolean')) {
 
 }
 
-// Конверт в булеан
-if (! function_exists('toast_response')) {
+if (! function_exists('clear_string')) {
 
-    function toast_response($status, $message) {
-        $http_code = 200;
-        if ($status == 'error') {
-            $http_code = 401;
+    function clear_string($string) {
+        if (!isset($string) || is_bool($string)) {
+            return false;
         }
-        return response()->json(['status' => $status, 'message' => $message], $http_code);
+
+        $string = strip_tags($string);
+        $string = addslashes($string);
+        $string = trim($string);
+        return !empty($string) ? $string : false;
     }
 
 }
+
+if (! function_exists('clear_numeric')) {
+
+    function clear_numeric($numeric) {
+        if (!isset($numeric) || is_bool($numeric)) {
+            return false;
+        }
+
+        $numeric = preg_match('/[0-9,.]+/', $numeric, $matches);
+        $numeric = $matches[0];
+        return !empty($numeric) ? $numeric : false;
+    }
+
+}
+

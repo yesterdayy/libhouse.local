@@ -3,6 +3,7 @@
 namespace App\Http;
 
 use App\Http\Middleware\FormsMiddleware;
+use App\Http\Middleware\RealtyFilterMiddleware;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -41,6 +42,10 @@ class Kernel extends HttpKernel
 
         'forms' => [
             FormsMiddleware::class,
+        ],
+
+        'realty.search' => [
+            RealtyFilterMiddleware::class,
         ],
 
         'api' => [

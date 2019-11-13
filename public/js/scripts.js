@@ -64,6 +64,8 @@ function init_header_filters() {
     $(document).on('click', '.header-filter-simple-list:not(.with-checkboxes) li', function () {
         if (typeof $(this).attr('data-val') !== 'undefined') {
             $('.adv-form-header div[aria-describedby='+$(this).closest('.popover').attr('id')+']').find('input[type=hidden]').val($(this).attr('data-val'));
+            let text_elem = $('.adv-form-header div[aria-describedby='+$(this).closest('.popover').attr('id')+']').find('div[data-chars]');
+            text_elem.text($(this).attr('data-val').length > 0 ? $(this).text().trim().substr(0, text_elem.attr('data-chars')) : text_elem.attr('data-default-text'));
             $(this).toggleClass('active');
             $(this).closest('.popover').popover('hide');
         }
@@ -74,10 +76,14 @@ function init_header_filters() {
         $(this).toggleClass('active');
 
         var value = [];
+        var value_text = [];
         $('li.active', $(this).parent().parent()).each(function () {
-            value.push($(this).attr('data-val'))
+            value.push($(this).attr('data-val'));
+            value_text.push($(this).text().trim());
         });
         $('.adv-form-header div[aria-describedby='+$(this).closest('.popover').attr('id')+']').find('input[type=hidden]').val(value);
+        let text_elem = $('.adv-form-header div[aria-describedby='+$(this).closest('.popover').attr('id')+']').find('div[data-chars]');
+        text_elem.text(value.length > 0 ? value_text.join(',').substr(0, text_elem.attr('data-chars')) : text_elem.attr('data-default-text'));
     });
 
     $(document).on('click', '.header-filter-simple-list.with-checkboxes > li', function (e) {
@@ -86,13 +92,17 @@ function init_header_filters() {
         }
 
         var value = [];
+        var value_text = [];
         $('input[type=checkbox]', $(this).parent()).each(function () {
             if ($(this).prop('checked')) {
                 value.push($(this).closest('li').attr('data-val'))
+                value_text.push($(this).closest('li').text().trim());
             }
         });
 
         $('.adv-form-header div[aria-describedby='+$(this).closest('.popover').attr('id')+']').find('input[type=hidden]').val(value);
+        let text_elem = $('.adv-form-header div[aria-describedby='+$(this).closest('.popover').attr('id')+']').find('div[data-chars]');
+        text_elem.text(value.length > 0 ? value_text.join(',').substr(0, text_elem.attr('data-chars')) : text_elem.attr('data-default-text'));
     });
 
     $('.header-select2').select2({
@@ -147,13 +157,12 @@ function init_header_filters() {
         },
     });
 
+    // Выбор города пользователя
     $('.address-pick').on('select2:select', function () {
         $.cookie('city', $(this).val());
         $('.current-city').text($(this).val());
         show_toast('Сохранено');
     });
-
-    // Выбор города пользователя
 }
 
 function show_modal(modal) {

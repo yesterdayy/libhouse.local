@@ -11,7 +11,7 @@
                 </div>
 
                 <div class="adv-rent-type-popup header-filter-with-select" rel='popover'>
-                    <div>{{ $filter['trade_name'] ?? 'Купить' }}</div>
+                    <div data-chars="6" data-default-text="Купить">{{ $filter['trade_name'] ?? 'Купить' }}</div>
                     <i class="lh-icon lh-icon-select-arrow"></i>
 
                     <input type="hidden" name="trade_type">
@@ -26,10 +26,10 @@
                 </div>
 
                 <div class="adv-type-popup header-filter-with-select" rel='popover'>
-                    <div>{{ $filter['type_name'] ?? 'Квартиру' }}</div>
+                    <div data-chars="8" data-default-text="Квартиру">{{ $filter['type_name'] ?? 'Квартиру' }}</div>
                     <i class="lh-icon lh-icon-select-arrow"></i>
 
-                    <input type="hidden" name="type" value="{{ isset($filter['type']) ? implode(',', $filter['type']) : '' }}">
+                    <input type="hidden" name="type" value="{{ $filter['type'] ? implode(',', $filter['type']) : '' }}">
 
                     <div class="header-types d-none">
                         <div>
@@ -37,7 +37,7 @@
                             <ul class="header-filter-multi-list">
                                 @foreach ($realty_types as $adv_type)
                                     @if ($adv_type->commercy == 0)
-                                        <li data-val="{{ $adv_type->id }}" {!! isset($filter['type']) && in_array($adv_type->id, $filter['type']) ? 'class="active"' : '' !!}>{{ $adv_type->name }}</li>
+                                        <li data-val="{{ $adv_type->id }}" {!! $filter['type'] && in_array($adv_type->id, $filter['type']) ? 'class="active"' : '' !!}>{{ $adv_type->name }}</li>
                                     @endif
                                 @endforeach
                             </ul>
@@ -46,7 +46,7 @@
                             <ul class="header-filter-multi-list">
                                 @foreach ($realty_types as $adv_type)
                                     @if ($adv_type->commercy == 1)
-                                        <li data-val="{{ $adv_type->id }}" {!! isset($filter['type']) && in_array($adv_type->id, $filter['type']) ? 'class="active"' : '' !!}>{{ $adv_type->name }}</li>
+                                        <li data-val="{{ $adv_type->id }}" {!! $filter['type'] && in_array($adv_type->id, $filter['type']) ? 'class="active"' : '' !!}>{{ $adv_type->name }}</li>
                                     @endif
                                 @endforeach
                             </ul>
@@ -55,7 +55,7 @@
                 </div>
 
                 <div class="adv-floors-popup header-filter-with-select" rel='popover'>
-                    <div>{{ $filter['room_type_name'] ?? 'Комнат' }}</div>
+                    <div data-chars="6" data-default-text="Комнат">{{ $filter['room_type_name'] ?? 'Комнат' }}</div>
                     <i class="lh-icon lh-icon-select-arrow"></i>
 
                     <input type="hidden" name="room_type" value="{{ $filter['room_type'] ? implode(',', $filter['room_type']) : '' }}">
@@ -63,14 +63,14 @@
                     <div class="header-floors d-none">
                         <ul class="header-filter-simple-list with-checkboxes">
                             @foreach ($realty_room_types as $adv_room_type)
-                                <li data-val="{{ $adv_room_type->id }}"><input type="checkbox" class="checkbox" id="room-type-{{ $adv_room_type->id }}" {{ isset($filter['room_type']) && in_array($adv_room_type->id, $filter['room_type']) ? 'checked' : '' }}><label for="room-type-{{ $adv_room_type->id }}">{{ $adv_room_type->name }}</label></li>
+                                <li data-val="{{ $adv_room_type->id }}"><input type="checkbox" class="checkbox" id="room-type-{{ $adv_room_type->id }}" {{ $filter['room_type'] && in_array($adv_room_type->id, $filter['room_type']) ? 'checked' : '' }}><label for="room-type-{{ $adv_room_type->id }}">{{ $adv_room_type->name }}</label></li>
                             @endforeach
                         </ul>
                     </div>
                 </div>
 
                 <div class="adv-dop-type-popup header-filter-with-select" rel='popover'>
-                    <div>{{ $filter['dop_type_name'] ?? 'Новостройка или вторичка' }}</div>
+                    <div data-chars="24" data-default-text="Новостройка или вторичка">{{ $filter['dop_type_name'] ?? 'Новостройка или вторичка' }}</div>
                     <i class="lh-icon lh-icon-select-arrow"></i>
 
                     <input type="hidden" name="dop_type">

@@ -18,37 +18,35 @@ class RealtyFilter extends Model
         $join = [];
         $join_index = 1;
 
-        if (isset($request['header_address_city']) && !is_null($request['header_address_city'])) {
+        if ($request['header_address_city']) {
             $where[] = " `re`.`city` = {$request['header_address_city']} ";
         }
 
-        if (isset($request['header_address_street']) && !is_null($request['header_address_street'])) {
+        if ($request['header_address_street']) {
             $where[] = " `re`.`street` = {$request['header_address_street']} ";
         }
 
-        if (isset($request['type']) && !is_null($request['type'][0])) {
-            $request['type'] = explode(',', $request['type']);
+        if ($request['type']) {
             $where[] = " `re`.`type_id` IN (".implode(', ', $request['type']).") ";
         }
 
-        if (isset($request['trade_type']) && !is_null($request['trade_type'])) {
+        if ($request['trade_type']) {
             $where[] = " `re`.`trade_type_id` = {$request['trade_type']} ";
         }
 
-        if (isset($request['room_type'])) {
-            $request['room_type'] = explode(',', $request['room_type']);
+        if ($request['room_type']) {
             $where[] = " `re`.`room_type_id` IN (".implode(', ', $request['room_type']).") ";
         }
 
-        if (isset($request['dop_type']) && !is_null($request['dop_type'])) {
+        if ($request['dop_type']) {
             $where[] = " `re`.`dop_type_id` = {$request['dop_type']} ";
         }
 
-        if (isset($request['price_start']) && $request['price_start']) {
+        if ($request['price_start']) {
             $where[] = " `re`.`price` >= {$request['price_start']} ";
         }
 
-        if (isset($request['price_end']) && $request['price_end']) {
+        if ($request['price_end']) {
             $where[] = " `re`.`price` <= {$request['price_end']} ";
         }
 
