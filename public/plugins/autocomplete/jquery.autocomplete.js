@@ -78,6 +78,7 @@
         that.hint = null;
         that.hintValue = '';
         that.selection = null;
+        that.close_state = false;
 
         // Initialize and set options:
         that.initialize();
@@ -214,6 +215,7 @@
             that.el.on('focus.autocomplete', function () { that.onFocus(); });
             that.el.on('change.autocomplete', function (e) { that.onKeyUp(e); });
             that.el.on('input.autocomplete', function (e) { that.onKeyUp(e); });
+            that.el.on('close.autocomplete', function (e) { that.onClose(); });
         },
 
         onFocus: function () {
@@ -222,6 +224,17 @@
             that.fixPosition();
 
             if (that.el.val().length >= that.options.minChars) {
+                that.onValueChange();
+            }
+        },
+
+        onClose: function () {
+            var that = this;
+
+            that.fixPosition();
+
+            if (that.el.val().length >= that.options.minChars) {
+                that.options.close_state = true;
                 that.onValueChange();
             }
         },
@@ -689,7 +702,10 @@
             }
 
             that.fixPosition();
-            container.show();
+
+            if (!that.options.close_state) {
+                container.show();
+            }
 
             // Select first value by default:
             if (options.autoSelectFirst) {
@@ -698,7 +714,11 @@
                 container.children('.' + className).first().addClass(classSelected);
             }
 
-            that.visible = true;
+            if (!that.options.close_state) {
+                that.visible = true;
+            } else {
+                that.options.close_state = false;
+            }
             that.findBestHint();
         },
 
@@ -773,6 +793,7 @@
             if (suggestion) {
                 hintValue = that.currentValue + suggestion.value.substr(that.currentValue.length);
             }
+
             if (that.hintValue !== hintValue) {
                 that.hintValue = hintValue;
                 that.hint = suggestion;

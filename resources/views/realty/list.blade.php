@@ -18,11 +18,20 @@
     @endsection
 
     @section('after-widget')
-        @if ($ajax_url && $realtys && $realtys->count() === $limit)
+        <script>
+            $('.realty-photos').slick({
+                lazyLoad: 'ondemand',
+                arrows: false,
+                infinite: false,
+                dots: true,
+            });
+        </script>
+
+        @if (isset($ajax_url) && $realtys && $realtys->count() === $limit)
             <div class="{{ $widget_class }}-ajax-load text-danger">******* ЕЩЕ *******</div>
         @endif
 
-        @if ($ajax_url)
+        @if (isset($ajax_url))
             <script>
                 var realty_list_widget_ajax_params = {
                     start: 0,
@@ -48,13 +57,6 @@
                         error: function (result) {
                         },
                     });
-                });
-
-                $('.realty-photos').slick({
-                    lazyLoad: 'ondemand',
-                    arrows: false,
-                    infinite: false,
-                    dots: true,
                 });
             </script>
         @endif

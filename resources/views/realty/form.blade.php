@@ -108,7 +108,7 @@
 <div class="realty-create-form-block">
     <div class="form-group row">
         {!! Form::rawLabel('address', 'Адрес<span>*</span>') !!}
-        {{ Form::text('address', null, ['class' => 'form-control address-select ' . ($errors->has('address_city') || $errors->has('address_street') ? 'is-invalid' : (isset($old['address_city']) && !empty($old['address_city']) ? 'is-valid' : '')), 'placeholder' => 'Город, улица']) }}
+        {{ Form::text('address', null, ['class' => 'form-control address-select autocomplete-input ' . ($errors->has('address_city') || $errors->has('address_street') ? 'is-invalid' : (isset($old['address_city']) && !empty($old['address_city']) ? 'is-valid' : '')), 'placeholder' => 'Город, улица']) }}
         {{ Form::hidden('address_city') }}
         {{ Form::hidden('address_street') }}
     </div>

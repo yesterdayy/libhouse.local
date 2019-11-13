@@ -5,6 +5,7 @@ namespace App\Models\Realty;
 use App\Models\Kladr\Kladr;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Request;
 
 class Realty extends Model
 {
@@ -49,18 +50,20 @@ class Realty extends Model
         $limit = $shortcode_args['limit'] ?? 10;
         $author_id = $shortcode_args['author_id'] ?? null;
         $ajax_url = $shortcode_args['ajax_url'] ?? null;
+        $type = $shortcode_args['type'] ?? null;
 
         $realtys = null;
-        $realtys = Realty::with('info', 'attachments')->where('status', 'published');
 
-        if ($author_id) {
-            $realtys = $realtys->where('author_id', $author_id);
-        }
+        if ($type == 'search') {
+            $realtys = RealtyFilter::getRealty(Request::all());
+        } else {
+            $realtys = Realty::with('info', 'attachments')->where('status', 'published');
 
-        $realtys = $realtys->orderBy('id', 'desc')->offset($start)->take($limit)->get();
+            if ($author_id) {
+                $realtys = $realtys->where('author_id', $author_id);
+            }
 
-        if ($realtys->count() === 0) {
-            $realtys = null;
+            $realtys = $realtys->orderBy('id', 'desc')->offset($start)->take($limit)->get();
         }
 
         $city_kladrs = [];

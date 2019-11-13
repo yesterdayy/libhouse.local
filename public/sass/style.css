@@ -580,18 +580,30 @@ h1 + form.realty-create-form {
   -moz-border-radius: 0 0 4px 4px; }
 
 .autocomplete-suggestion {
-  padding: 6px 30px; }
+  padding: 6px 30px;
+  cursor: pointer; }
+
+.autocomplete-suggestion:hover, .autocomplete-suggestion.autocomplete-selected {
+  background-color: #f6f6f6; }
 
 .autocomplete-group {
   font-size: 12px;
   color: #a1a1a1;
-  padding: 5px 0;
+  padding: 5px 30px;
   clear: both;
   font-weight: 300; }
 
-.address-select:focus {
+.autocomplete-input:focus {
   outline: 0 !important;
   box-shadow: none !important; }
+
+.header-address-autocomplete {
+  max-width: 383px;
+  width: 100% !important;
+  margin: 15px 0 0 -30px;
+  border-radius: 4px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px; }
 
 .widget-title {
   font-size: 22px;

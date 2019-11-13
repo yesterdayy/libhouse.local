@@ -48,6 +48,7 @@ $(function () {
         serviceUrl: '/kladr/street_with_city',
         dataType: 'json',
         paramName: 'term',
+        minChars: 3,
         onSearchStart: function (params) {
             params.city = $('input[name=address_city]').val();
         },
@@ -55,9 +56,14 @@ $(function () {
             $('input[name=address_city]').val(suggestion.data.city_kladr);
             if ('street_kladr' in suggestion.data) {
                 $('input[name=address_street]').val(suggestion.data.street_kladr);
+            } else {
+                $('input[name=address_street]').val(null);
             }
-        }
+        },
     });
+
+    // Автовыбор 1-го результата, если его нет в выборке
+    autocomplete_close_listener('.address-select');
 
     // Сделать "Главным фото"
     $(document).on('click', '.set-main-photo', function () {
@@ -94,7 +100,7 @@ $(function () {
                     this.removeFile(file);
                 });
             } else {
-                console.log('test 2');
+
             }
         },
         success: function(file) {

@@ -30,7 +30,7 @@ class Controller extends BaseController
 
         view()->share('realty_types', RealtyType::all());
         view()->share('realty_dop_types', RealtyDopType::all());
-        view()->share('realty_service_types', RealtyTradeType::all());
+        view()->share('realty_trade_types', RealtyTradeType::all());
         view()->share('realty_room_types', RealtyRoomType::all());
 
         view()->share('popular_cities', Kladr::get_popular_cities(4));

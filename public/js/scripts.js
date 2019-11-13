@@ -24,49 +24,6 @@ $(function () {
 });
 
 function init_header_filters() {
-    $('.header-address-input').on('input', function () {
-        if ($(this).val().length > 2) {
-            var that = this;
-            var address_ajax_flag = $(this).val().length;
-
-            setTimeout(function () {
-                if ($(that).val().length == address_ajax_flag) {
-                    $.ajax({
-                        url: '/kladr/city_and_street?term=' + $(that).val(),
-                        data: {
-                            bold: 1,
-                            view: 'li',
-                        },
-                        dataType: "json",
-                        success: function (result) {
-                            $('.header-street').html(result.street);
-                            $('.header-city').html(result.city);
-
-                            setTimeout(function () {
-                                $('.adv-address-popup').popover('show');
-                            }, 100);
-                        }
-                    });
-                }
-            }, 300);
-        } else {
-            $('.adv-address-popup').popover('hide');
-        }
-    });
-
-    $('.adv-address-popup').popover({
-        content: function () {
-            return $('.header-address').html();
-        },
-        container: '.adv-form-header',
-        trigger: 'manual',
-        html: true,
-        placement: 'bottom',
-        offset: '8px 15px',
-        sanitize: false,
-        template: '<div class="popover address-popover" role="tooltip"><div class="arrow"></div><h3 class="popover-header"></h3><div class="popover-body"></div></div>',
-    });
-
     $('.adv-rent-type-popup').popover({
         content: $('.header-rent-types').html(),
         container: '.adv-form-header',
@@ -77,7 +34,7 @@ function init_header_filters() {
     });
 
     $('.adv-type-popup').popover({
-        content: $('.header-types').html(),
+        content: $('.header-types > div')[0],
         container: '.adv-form-header',
         html: true,
         placement: 'bottom',
@@ -143,35 +100,6 @@ function init_header_filters() {
         disabled: 'readonly',
     });
 
-    // select2 для выбора города
-    $('.address-pick').select2({
-        width: '100%',
-        minimumInputLength: 3,
-        minimumResultsForSearch: 1,
-        ajax: {
-            url: '/kladr/city?noid=1',
-            dataType: 'json',
-        },
-        language: {
-            inputTooShort: function() {
-                return 'Введите название населенного пункта';
-            },
-            "noResults": function(){
-                return "ничего не найдено";
-            }
-        },
-        dropdownParent: $('.city-pick-modal'),
-        selectionAdapter: $.fn.select2.amd.require("SearchableSingleSelection"),
-        dropdownAdapter: $.fn.select2.amd.require("UnsearchableDropdown")
-    });
-
-    // Выбор города при изменении select2
-    $('.address-pick').on('select2:select', function () {
-        $.cookie('city', $(this).val());
-        $('.current-city').text($(this).val());
-        show_toast('Сохранено');
-    });
-
     // Выбор города при выборе его в списке ниже
     $(document).on('click', '.popular-cities-pick li a', function (e) {
         e.preventDefault();
@@ -179,6 +107,53 @@ function init_header_filters() {
         $('.current-city').text($(this).closest('li').attr('data-val'));
         show_toast('Сохранено');
     });
+
+    // Инпута выбора адреса в фильтре
+    $('.header-address-input').autocomplete({
+        serviceUrl: '/kladr/city_and_street',
+        dataType: 'json',
+        paramName: 'term',
+        groupBy: 'cat',
+        minChars: 3,
+        containerClass: 'autocomplete-suggestions header-address-autocomplete',
+        onSearchStart: function (params) {
+            params.city = $('input[name=header_address_city]').val();
+        },
+        onSelect: function (suggestion) {
+            $('input[name=header_address_city]').val(suggestion.data.city_kladr);
+            if ('street_kladr' in suggestion.data) {
+                $('input[name=header_address_street]').val(suggestion.data.street_kladr);
+            } else {
+                $('input[name=header_address_street]').val(null);
+            }
+        },
+    });
+
+    // Автовыбор 1-го результата, если его нет в выборке в фильтре
+    autocomplete_close_listener('.header-address-input');
+
+    // Поле выбора города пользователя
+    $('.address-pick').autocomplete({
+        serviceUrl: '/kladr/city',
+        dataType: 'json',
+        paramName: 'term',
+        minChars: 3,
+        onSelect: function (suggestion) {
+            $('input[name=header_address_city]').val(suggestion.data.city_kladr);
+            $.cookie('city', suggestion.value);
+            $.cookie('city_kladr', suggestion.data.city_kladr);
+            $('.current-city').text(suggestion.value);
+            show_toast('Сохранено');
+        },
+    });
+
+    $('.address-pick').on('select2:select', function () {
+        $.cookie('city', $(this).val());
+        $('.current-city').text($(this).val());
+        show_toast('Сохранено');
+    });
+
+    // Выбор города пользователя
 }
 
 function show_modal(modal) {
@@ -215,4 +190,21 @@ function show_toast(html) {
     var toast = $('#default-toast').clone();
     toast.html(html);
     $('.toasts-wrap').append(toast.removeClass('d-none').toast('show'));
+}
+
+function autocomplete_close_listener(selector, with_clear) {
+    $(selector).blur(function () {
+        var that = this;
+        setTimeout(function () {
+            if ($(that).autocomplete().suggestions.length > 0 && $(that).val().length > 2 && $(that).autocomplete().selection == null) {
+                var val = $(that).val();
+                var flag = false;
+
+                if (!flag) {
+                    $(that).autocomplete().onSelect(0);
+                    $(that).trigger('close');
+                }
+            }
+        }, 300);
+    });
 }

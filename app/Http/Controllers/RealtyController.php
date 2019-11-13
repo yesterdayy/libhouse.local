@@ -15,26 +15,94 @@ use App\Models\Realty\RealtyRoomType;
 use App\Models\Realty\RealtyTradeType;
 use App\Models\Realty\RealtyType;
 use App\Models\Kladr\Kladr;
-use App\Models\User\User;
 use App\Models\User\UserRealtyType;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Str;
 
 class RealtyController extends Controller
 {
 
     public function index() {
-        $realtys = Realty::with('info', 'photos', 'counters')->where('status', 'published')->orderBy('id', 'desc')->take(20)->get();
-        return view('realty/list', compact('realtys'));
+        return view('home');
     }
 
     public function search() {
-        $realtys = Realty::with('info', 'photos', 'counters')->where('status', 'published')->orderBy('id', 'desc')->take(20)->get();
-        return view('realty/list', compact('realtys'));
+        $realtys = Realty::with('info', 'attachments', 'counters')->where('status', 'published')->orderBy('id', 'desc')->take(20)->get();
+
+        $filter = [];
+        $seach_params = Input::toArray();
+
+        if ($seach_params['address']) {
+            $filter['address'] = strip_tags($seach_params['address']);
+            $filter['address_city'] = strip_tags($seach_params['header_address_city']);
+            $filter['address_street'] = strip_tags($seach_params['header_address_city']);
+        }
+
+        if ($seach_params['trade_type']) {
+            $seach_params['trade_type'] = (int) strip_tags($seach_params['trade_type']);
+            $filter['trade_name'] = RealtyTradeType::select('name')->find($seach_params['trade_type']);
+            $filter['trade_name'] = $filter['trade_name'] ? mb_substr($filter['trade_name']->name, 0, 6) : null;
+        }
+
+        if ($seach_params['type']) {
+            $seach_params['type'] = explode(',', $seach_params['type']);
+            $filter['type'] = array_filter(
+                array_map(function ($type) {
+                    return (int) strip_tags($type); }, $seach_params['type']
+                )
+            );
+
+            if (!empty($filter['type'])) {
+                $names = [];
+                $types = RealtyType::select('name')->whereIn('id', $filter['type'])->get();
+                foreach ($types as $type) {
+                    $names[] = $type->name;
+                }
+
+                $filter['type_name'] = mb_substr(implode(',', $names), 0, 8);
+            }
+        }
+
+        if ($seach_params['room_type']) {
+            $seach_params['room_type'] = explode(',', $seach_params['room_type']);
+            $filter['room_type'] = array_filter(
+                array_map(function ($room_type) {
+                    return (int) strip_tags($room_type); }, $seach_params['room_type']
+                )
+            );
+
+            if (!empty($filter['type'])) {
+                $names = [];
+                $room_types = RealtyRoomType::select('name')->whereIn('id', $filter['room_type'])->get();
+                foreach ($room_types as $room_type) {
+                    $names[] = $room_type->name;
+                }
+
+                $filter['room_type_name'] = mb_substr(implode(',', $names), 0, 6);
+            }
+        }
+
+        if ($seach_params['dop_type']) {
+            $seach_params['dop_type'] = (int) strip_tags($seach_params['dop_type']);
+            $filter['dop_type_name'] = RealtyDopType::select('name')->find($seach_params['dop_type']);
+            $filter['dop_type_name'] = $filter['dop_type_name'] ? mb_substr($filter['dop_type_name']->name, 0, 24) : null;
+        }
+
+        if ($seach_params['price_start']) {
+            $filter['price_start'] = (int) strip_tags($seach_params['price_start']);
+        }
+
+        if ($seach_params['price_end']) {
+            $filter['price_end'] = (int) strip_tags($seach_params['price_end']);
+        }
+
+        return view('realty.search', compact(
+            'realtys',
+            'filter'
+        ));
     }
 
     public function show($slug) {

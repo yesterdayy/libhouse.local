@@ -21,7 +21,7 @@
 
         <div class="city-pick-modal d-none">
             <div class="form-group">
-                <select name="pick_address" class="form-control address-pick"><option value="">Введите регион или город</option> </select>
+                <input name="pick_address" type="text" class="form-control address-pick autocomplete-input" placeholder="Введите регион или город" />
             </div>
 
             @foreach($popular_cities as $popular_city_items)
