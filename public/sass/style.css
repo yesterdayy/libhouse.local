@@ -817,6 +817,11 @@ h1 + form.realty-create-form {
   max-width: 150px;
   width: 100%; }
 
+.header-filters-wrap > div:last-child input {
+  border-radius: 0 4px 4px 0;
+  -webkit-border-radius: 0 4px 4px 0;
+  -moz-border-radius: 0 4px 4px 0; }
+
 .header-filter-label {
   font-size: 12px;
   color: #a1a1a1;

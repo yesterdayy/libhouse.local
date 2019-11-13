@@ -628,13 +628,13 @@ if (! function_exists('clear_string')) {
 
     function clear_string($string) {
         if (!isset($string) || is_bool($string)) {
-            return false;
+            return null;
         }
 
         $string = strip_tags($string);
         $string = addslashes($string);
         $string = trim($string);
-        return !empty($string) ? $string : false;
+        return !empty($string) ? $string : null;
     }
 
 }
@@ -643,12 +643,12 @@ if (! function_exists('clear_numeric')) {
 
     function clear_numeric($numeric) {
         if (!isset($numeric) || is_bool($numeric)) {
-            return false;
+            return null;
         }
 
         $numeric = preg_match('/[0-9,.]+/', $numeric, $matches);
         $numeric = $matches[0];
-        return !empty($numeric) ? $numeric : false;
+        return !empty($numeric) ? $numeric : null;
     }
 
 }

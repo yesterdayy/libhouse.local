@@ -15,6 +15,9 @@ class RealtyFilterMiddleware
      */
     public function handle($request, Closure $next)
     {
+        $request['start'] = clear_string($request['start']);
+        $request['length'] = clear_string($request['length']);
+
         $request['address'] = clear_string($request['address']);
         $request['address_city'] = clear_numeric($request['header_address_city']);
         $request['address_street'] = clear_numeric($request['header_address_street']);
