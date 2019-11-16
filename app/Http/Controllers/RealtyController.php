@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Components\Shortcodes;
 use App\Http\Requests\RealtyFormRequest;
 use App\Models\Blog\Attachments;
 use App\Models\Realty\Realty;
@@ -29,13 +30,15 @@ class RealtyController extends Controller
         return view('home');
     }
 
-    public function search() {
+    public function search(Request $request) {
         $realtys = Realty::with('info', 'attachments', 'counters')->where('status', 'published')->orderBy('id', 'desc')->take(20)->get();
 
         $filter = Input::toArray();
+        $pick_filters = [];
 
         if ($filter['trade_type']) {
             $filter['trade_name'] = RealtyTradeType::select('name')->find($filter['trade_type']);
+            $pick_filters[] = $filter['trade_name']->name;
             $filter['trade_name'] = $filter['trade_name'] ? mb_substr($filter['trade_name']->name, 0, 6) : null;
         }
 
@@ -47,6 +50,8 @@ class RealtyController extends Controller
             }
 
             $filter['type_name'] = mb_substr(implode(',', $names), 0, 8);
+            $pick_filters[] = $names;
+            unset($names);
         }
 
         if ($filter['room_type']) {
@@ -57,17 +62,40 @@ class RealtyController extends Controller
             }
 
             $filter['room_type_name'] = mb_substr(implode(',', $names), 0, 6);
+            $pick_filters[] = $names;
+            unset($names);
         }
 
         if ($filter['dop_type']) {
             $filter['dop_type_name'] = RealtyDopType::select('name')->find($filter['dop_type']);
+            $pick_filters[] = $filter['dop_type_name']->name;
             $filter['dop_type_name'] = $filter['dop_type_name'] ? mb_substr($filter['dop_type_name']->name, 0, 24) : null;
         }
 
-        return view('realty.search', compact(
-            'realtys',
-            'filter'
-        ));
+        if ($filter['price_start']) {
+            $pick_filters[] = 'от ' . $filter['price_start'] . ' руб.';
+        }
+
+        if ($filter['price_end']) {
+            $pick_filters[] = 'до ' . $filter['price_end'] . ' руб.';
+        }
+
+        if ($request->ajax()) {
+            $result = [];
+            $result['html'] = shortcodes_parse(view('realty.search', compact(
+                'realtys',
+                'filter',
+                'pick_filters'
+            ))->render());
+
+            return response()->json($result);
+        } else {
+            return view('realty.search', compact(
+                'realtys',
+                'filter',
+                'pick_filters'
+            ));
+        }
     }
 
     public function show($slug) {

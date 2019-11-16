@@ -129,7 +129,7 @@ a:hover {
 b {
   font-weight: 600; }
 
-.wrap-content {
+.wrap {
   padding: 0 60px;
   max-width: 100%; }
 
@@ -193,6 +193,14 @@ h1 {
   padding: 19px 20px;
   font-size: 15px;
   line-height: 20px; }
+
+.btn.btn-small, .btn-small.btn-disabled {
+  padding: 6px 21px; }
+
+.btn.btn-gray, .btn-gray.btn-disabled {
+  background: #f6f6f6;
+  border-color: #f6f6f6;
+  color: #000b28; }
 
 /* Material Ripple */
 .btn, .btn-disabled {
@@ -1254,6 +1262,12 @@ h1.realty-title {
 .realty-added-videos label {
   max-width: 560px;
   width: 100%; }
+
+.pick-filter {
+  margin-top: 30px; }
+
+.pick-filter .btn:after, .pick-filter .btn-disabled:after {
+  content: "test"; }
 
 .toasts-wrap {
   position: fixed;

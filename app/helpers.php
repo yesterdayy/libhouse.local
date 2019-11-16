@@ -646,7 +646,12 @@ if (! function_exists('clear_numeric')) {
             return null;
         }
 
-        $numeric = preg_match('/[0-9,.]+/', $numeric, $matches);
+        preg_match('/[0-9,.]+/', $numeric, $matches);
+
+        if (empty($matches)) {
+            return null;
+        }
+
         $numeric = $matches[0];
         return !empty($numeric) ? $numeric : null;
     }

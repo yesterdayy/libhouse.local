@@ -7,7 +7,7 @@
   array (
     'name' => 'Laravel',
     'env' => 'local',
-    'debug' => true,
+    'debug' => false,
     'url' => 'http://libhouse.local/',
     'timezone' => 'Europe/Moscow',
     'locale' => 'ru',

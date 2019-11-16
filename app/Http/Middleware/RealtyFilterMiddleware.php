@@ -26,7 +26,7 @@ class RealtyFilterMiddleware
         $request['price_start'] = clear_numeric($request['price_start']);
         $request['price_end'] = clear_numeric($request['price_end']);
 
-        $request['type'] = isset($request['type']) ? explode(',', $request['type']) : false;
+        $request['type'] = isset($request['type']) ? explode(',', $request['type']) : null;
         if ($request['type']) {
             $request['type'] = array_filter(array_map(function ($type) {
                 return clear_numeric($type);
@@ -36,7 +36,7 @@ class RealtyFilterMiddleware
             }
         }
 
-        $request['room_type'] = isset($request['room_type']) ? explode(',', $request['room_type']) : false;
+        $request['room_type'] = isset($request['room_type']) ? explode(',', $request['room_type']) : null;
         if ($request['room_type']) {
             $request['room_type'] = array_filter(array_map(function ($room_type) {
                 return clear_numeric($room_type);

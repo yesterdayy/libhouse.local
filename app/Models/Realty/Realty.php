@@ -48,6 +48,7 @@ class Realty extends Model
         $template = $shortcode_args['templage'] ?? 'list';
         $start = $shortcode_args['start'] ?? 0;
         $limit = $shortcode_args['limit'] ?? 10;
+        $start = Request::get('page') ? (Request::get('page') - 1) * $limit : $start;
         $author_id = $shortcode_args['author_id'] ?? null;
         $ajax_url = $shortcode_args['ajax_url'] ?? null;
         $type = $shortcode_args['type'] ?? null;
@@ -55,7 +56,7 @@ class Realty extends Model
         $realtys = null;
 
         if ($type == 'search') {
-            $realtys = RealtyFilter::getRealty(Request::all());
+            list($realtys, $paginator) = RealtyFilter::getRealty(Request::all());
         } else {
             $realtys = Realty::with('info', 'attachments')->where('status', 'published');
 
@@ -86,7 +87,8 @@ class Realty extends Model
             'realtys',
             'limit',
             'author_id',
-            'ajax_url'
+            'ajax_url',
+            'paginator'
         );
 
         return view('/realty/' . $template, $data)->render();
@@ -96,7 +98,7 @@ class Realty extends Model
         $result = [];
         $info = $realty->info->pluck('value', 'field');
 
-        $result[]['Количество комнат'] = $realty->type->name;
+        $result[]['Количество комнат'] = $realty->room_type->name;
 
         if (isset($info['floor'])) {
             $result[]['Этаж'] = $info['floor'];

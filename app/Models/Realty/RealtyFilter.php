@@ -3,7 +3,11 @@
 namespace App\Models\Realty;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Request;
+use Symfony\Component\HttpFoundation\ParameterBag;
 
 class RealtyFilter extends Model
 {
@@ -11,8 +15,8 @@ class RealtyFilter extends Model
     private const REALTY_TYPES = ['owner' => 1, 'realtor' => 2, 'builder' => 3];
 
     public static function getRealty($request) {
-        $start = $request['start'] ?? 0;
-        $length = $request['length'] ?? 10;
+        $length = $request['length'] ?? 9;
+        $start = isset($request['page']) ? ($request['page'] - 1) * $length : 0;
 
         $where = [];
 
@@ -56,6 +60,10 @@ class RealtyFilter extends Model
             $where = '';
         }
 
+        $count = DB::select("SELECT COUNT(*) `count`
+        FROM `realty_entry` `re`
+        WHERE `re`.`status` = 'published' $where");
+
         $result = DB::select("SELECT `re`.*
         FROM `realty_entry` `re`
         LEFT JOIN `users` ON `users`.id = `re`.author_id
@@ -63,7 +71,10 @@ class RealtyFilter extends Model
         ORDER BY `re`.`id` DESC
         LIMIT $start, $length");
 
-        return Realty::hydrate($result);
+
+        $paginator = new \Illuminate\Pagination\LengthAwarePaginator($result, $count[0]->count, $length, isset($request['page']) ?? 1, ['path' => Request::fullUrl(), 'query']);
+
+        return [Realty::hydrate($result), $paginator];
     }
 
 }

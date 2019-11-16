@@ -45,8 +45,8 @@
 <body class="<?= $page_class ?? '' ?>">
     @include('header')
 
-    <div class="wrap-content row">
-        <div class="col-md-12">
+    <div class="wrap row">
+        <div class="wrap-content col-md-12">
             @yield('content')
         </div>
     </div>

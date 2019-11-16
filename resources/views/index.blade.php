@@ -31,7 +31,7 @@
     {{ Html::script('plugins/select2/single_select2.fix.min.js') }}
     {{ Html::style('plugins/select2/select2.min.css') }}
 
-    {{ Html::script('plugins/slick/slick.min.js') }}
+    {{ Html::script('plugins/slick/slick.js') }}
     {{ Html::style('plugins/slick/slick.min.css') }}
 
     {{ Html::script('plugins/autocomplete/jquery.autocomplete.min.js') }}
@@ -40,13 +40,14 @@
     {{ Html::style('plugins/bootstrap/bootstrap.min.css') }}
     {{ Html::style('plugins/bootstrap/bootstrap.min.js') }}
     {{ Html::script('js/scripts.min.js') }}
+    {{ Html::script('js/filter.min.js') }}
 
 </head>
 <body class="<?= $page_class ?? '' ?>">
     @include('header')
 
-    <div class="wrap-content row">
-        <div class="col-md-9">
+    <div class="wrap row">
+        <div class="wrap-content col-md-9">
             @yield('content')
         </div>
 
