@@ -84,8 +84,7 @@ class RealtyController extends Controller
             $result = [];
             $result['html'] = shortcodes_parse(view('realty.search', compact(
                 'realtys',
-                'filter',
-                'pick_filters'
+                'filter'
             ))->render());
 
             return response()->json($result);

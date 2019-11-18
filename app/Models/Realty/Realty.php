@@ -5,6 +5,7 @@ namespace App\Models\Realty;
 use App\Models\Kladr\Kladr;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Request;
 
 class Realty extends Model
@@ -45,7 +46,6 @@ class Realty extends Model
     ];
 
     public static function realty_list_widget($shortcode_args) {
-        $template = $shortcode_args['templage'] ?? 'list';
         $start = $shortcode_args['start'] ?? 0;
         $limit = $shortcode_args['limit'] ?? 10;
         $start = Request::get('page') ? (Request::get('page') - 1) * $limit : $start;
@@ -91,7 +91,7 @@ class Realty extends Model
             'paginator'
         );
 
-        return view('/realty/' . $template, $data)->render();
+        return $data;
     }
 
     public static function info_format (Realty $realty) {
@@ -171,6 +171,53 @@ class Realty extends Model
         return $result;
     }
 
+    public static function pick_filters($data) {
+        $filter = Input::toArray();
+        $data['pick_filters'] = [];
+
+        if ($filter['trade_type']) {
+            $filter['trade_name'] = RealtyTradeType::select('name')->find($filter['trade_type']);
+            $data['pick_filters'][] = $filter['trade_name']->name;
+        }
+
+        if ($filter['type']) {
+            $names = [];
+            $types = RealtyType::select('name')->whereIn('id', $filter['type'])->get();
+            foreach ($types as $type) {
+                $names[] = $type->name;
+            }
+
+            $data['pick_filters'][] = $names;
+            unset($names);
+        }
+
+        if ($filter['room_type']) {
+            $names = [];
+            $room_types = RealtyRoomType::select('name')->whereIn('id', $filter['room_type'])->get();
+            foreach ($room_types as $room_type) {
+                $names[] = $room_type->name;
+            }
+
+            $data['pick_filters'][] = $names;
+            unset($names);
+        }
+
+        if ($filter['dop_type']) {
+            $filter['dop_type_name'] = RealtyDopType::select('name')->find($filter['dop_type']);
+            $data['pick_filters'][] = $filter['dop_type_name']->name;
+        }
+
+        if ($filter['price_start']) {
+            $data['pick_filters'][] = 'от ' . $filter['price_start'] . ' руб.';
+        }
+
+        if ($filter['price_end']) {
+            $data['pick_filters'][] = 'до ' . $filter['price_end'] . ' руб.';
+        }
+
+        return $data;
+    }
+
     /*
      * *******************************************************
      * RelationShips
@@ -243,7 +290,14 @@ class Realty extends Model
 
     // Виджет для вывода списка объявлений
     public static function realty_list_shortcode($args) {
-        return self::realty_list_widget($args);
+        $template = $args['templage'] ?? 'list';
+        $data = self::realty_list_widget($args);
+
+        if ($args['type'] == 'search') {
+            $data = self::pick_filters($data);
+        }
+
+        return view('/realty/' . $template, $data)->render();
     }
 
     public static function realty_cats_list_shortcode($args) {

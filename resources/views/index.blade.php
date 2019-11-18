@@ -31,7 +31,7 @@
     {{ Html::script('plugins/select2/single_select2.fix.min.js') }}
     {{ Html::style('plugins/select2/select2.min.css') }}
 
-    {{ Html::script('plugins/slick/slick.js') }}
+    {{ Html::script('plugins/slick/slick.min.js') }}
     {{ Html::style('plugins/slick/slick.min.css') }}
 
     {{ Html::script('plugins/autocomplete/jquery.autocomplete.min.js') }}
