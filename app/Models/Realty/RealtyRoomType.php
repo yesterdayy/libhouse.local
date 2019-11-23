@@ -16,7 +16,7 @@ class RealtyRoomType extends Model
             try {
                 $entry_counts = DB::select("SELECT `room_type`.id, COUNT(*) `count`
                 FROM `realty_room_type` `room_type`
-                LEFT JOIN `realty_entry` `entry` ON `entry`.room_type = `room_type`.id
+                LEFT JOIN `realty_entry` `entry` ON `entry`.room_type_id = `room_type`.id
                 WHERE `entry`.`status` = 'published'
                 GROUP BY `room_type`.id");
                 $entry_counts = array_column($entry_counts, 'count', 'id');

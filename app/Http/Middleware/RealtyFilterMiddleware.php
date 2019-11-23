@@ -46,6 +46,11 @@ class RealtyFilterMiddleware
             }
         }
 
+        $request['sort'] = clear_string($request['sort']);
+        if (!$request['sort']) {
+            $request['sort'] = 'default';
+        }
+
         return $next($request);
     }
 }

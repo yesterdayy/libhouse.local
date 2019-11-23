@@ -1,3 +1,33 @@
+@if (!auth()->check())
+    <!-- LOGIN AND REGISTER MODAL -->
+    <div class="modal fade" id="auth-form-modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+            <div class="modal-content pt-0">
+                <div class="modal-body">
+                    <ul class="nav auth-tabs" role="tablist">
+                        <li>
+                            <a class="active" id="nav-login-tab" data-toggle="tab" href="#login" role="tab" aria-controls="nav-login" aria-selected="true">Вход</a>
+                        </li>
+
+                        <li>
+                            <a id="nav-register-tab" data-toggle="tab" href="#register" role="tab" aria-controls="nav-register" aria-selected="false">Регистрация</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="login" role="tabpanel" aria-labelledby="nav-login-tab">
+                            [login-form]
+                        </div>
+
+                        <div class="tab-pane fade" id="register" role="tabpanel" aria-labelledby="nav-register-tab">
+                            [register-form]
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endif
+
 <!-- SUCCESS FORM MODAL -->
 <div class="modal fade" id="success-form-modal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered" role="document">

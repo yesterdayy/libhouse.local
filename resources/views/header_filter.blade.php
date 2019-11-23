@@ -14,10 +14,11 @@
                     <div data-chars="6" data-default-text="Купить">{{ $filter['trade_name'] ?? 'Купить' }}</div>
                     <i class="lh-icon lh-icon-select-arrow"></i>
 
-                    <input type="hidden" name="trade_type">
+                    <input type="hidden" name="trade_type" value="{{ isset($filter['trade_type']) && $filter['trade_type'] ? $filter['trade_type'] : '' }}">
 
                     <div class="header-rent-types d-none">
                         <ul class="header-filter-simple-list">
+                            <li data-val="">Все</li>
                             @foreach ($realty_trade_types as $realty_trade_type)
                                 <li data-val="{{ $realty_trade_type->id }}">{{ $realty_trade_type->name }}</li>
                             @endforeach
@@ -78,6 +79,7 @@
                     <div class="header-dop-types d-none">
                         <div class="header-filter-label-popup">Категория</div>
                         <ul class="header-filter-simple-list">
+                            <li data-val="">Все</li>
                             @foreach ($realty_dop_types as $adv_dop_type)
                                 <li data-val="{{ $adv_dop_type->id }}">{{ $adv_dop_type->name }}</li>
                             @endforeach
@@ -93,6 +95,8 @@
                     <input type="text" name="price_end" placeholder="До" value="{{ $filter['price_end'] ?? '' }}">
                 </div>
             </div>
+
+            <input type="hidden" name="sort" value="default">
 
             <div class="d-table-row">
                 <button type="submit" class="btn btn-primary header-filter-submit">Найти <i class="lh-icon lh-icon-arrow-right lh-after"></i> </button>

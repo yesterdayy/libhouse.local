@@ -24,6 +24,9 @@ class ShortcodesServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        Shortcodes::addShortcode('login-form', ['User\User', 'login_form']);
+        Shortcodes::addShortcode('register-form', ['User\User', 'register_form']);
+
         Shortcodes::addShortcode('realty-list', ['Realty\Realty', 'realty_list']);
         Shortcodes::addShortcode('realty-cats-list', ['Realty\Realty', 'realty_cats_list']);
 

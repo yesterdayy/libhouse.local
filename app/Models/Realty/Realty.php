@@ -45,9 +45,16 @@ class Realty extends Model
         'expired_at',
     ];
 
+    const SORT_VARIANTS = [
+        'default' => 'по умолчанию',
+        'price_asc' => 'по цене (сначала дешевле)',
+        'price_desc' => 'по цене (сначала дороже)',
+        'square_desc' => 'по общей площади',
+    ];
+
     public static function realty_list_widget($shortcode_args) {
         $start = $shortcode_args['start'] ?? 0;
-        $limit = $shortcode_args['limit'] ?? 10;
+        $limit = $shortcode_args['limit'] ?? 9;
         $start = Request::get('page') ? (Request::get('page') - 1) * $limit : $start;
         $author_id = $shortcode_args['author_id'] ?? null;
         $ajax_url = $shortcode_args['ajax_url'] ?? null;
@@ -56,7 +63,7 @@ class Realty extends Model
         $realtys = null;
 
         if ($type == 'search') {
-            list($realtys, $paginator) = RealtyFilter::getRealty(Request::all());
+            $realtys = RealtyFilter::getRealty(Request::all());
         } else {
             $realtys = Realty::with('info', 'attachments')->where('status', 'published');
 
@@ -64,7 +71,7 @@ class Realty extends Model
                 $realtys = $realtys->where('author_id', $author_id);
             }
 
-            $realtys = $realtys->orderBy('id', 'desc')->offset($start)->take($limit)->get();
+            $realtys = $realtys->orderBy('id', 'desc')->offset($start)->paginate($limit);
         }
 
         $city_kladrs = [];
@@ -87,8 +94,7 @@ class Realty extends Model
             'realtys',
             'limit',
             'author_id',
-            'ajax_url',
-            'paginator'
+            'ajax_url'
         );
 
         return $data;
@@ -175,44 +181,58 @@ class Realty extends Model
         $filter = Input::toArray();
         $data['pick_filters'] = [];
 
+//        if ($filter['header_address_city']) {
+//            $data['pick_filters']['header_address_city'] = Kladr::get_city_by_kladr($filter['header_address_city']);
+//        }
+//
+//        if ($filter['header_address_street']) {
+//            $data['pick_filters']['header_address_street'] = Kladr::get_street_by_kladr($filter['header_address_street']);
+//        }
+
         if ($filter['trade_type']) {
             $filter['trade_name'] = RealtyTradeType::select('name')->find($filter['trade_type']);
-            $data['pick_filters'][] = $filter['trade_name']->name;
+            $data['pick_filters']['trade_type'] = $filter['trade_name']->name;
         }
 
         if ($filter['type']) {
             $names = [];
-            $types = RealtyType::select('name')->whereIn('id', $filter['type'])->get();
+            $types = RealtyType::select('id', 'name')->whereIn('id', $filter['type'])->get();
             foreach ($types as $type) {
-                $names[] = $type->name;
+                $names[] = [
+                    'id' => $type->id,
+                    'val' => $type->name
+                ];
             }
 
-            $data['pick_filters'][] = $names;
+            $data['pick_filters']['type'] = $names;
             unset($names);
         }
 
         if ($filter['room_type']) {
             $names = [];
-            $room_types = RealtyRoomType::select('name')->whereIn('id', $filter['room_type'])->get();
+            $room_types = RealtyRoomType::select('id', 'name')->whereIn('id', $filter['room_type'])->get();
             foreach ($room_types as $room_type) {
-                $names[] = $room_type->name;
+                $names[] = [
+                    'id' => $room_type->id,
+                    'val' => $room_type->name
+                ];
             }
 
-            $data['pick_filters'][] = $names;
+            $data['pick_filters']['room_type'] = $names;
             unset($names);
         }
 
         if ($filter['dop_type']) {
-            $filter['dop_type_name'] = RealtyDopType::select('name')->find($filter['dop_type']);
-            $data['pick_filters'][] = $filter['dop_type_name']->name;
+            $filter['dop_type_name'] = RealtyDopType::select('id', 'name')->find($filter['dop_type']);
+            $data['pick_filters']['dop_type'] = $filter['dop_type_name']->name;
         }
 
         if ($filter['price_start']) {
-            $data['pick_filters'][] = 'от ' . $filter['price_start'] . ' руб.';
+            $data['pick_filters']['price_start'] = 'от ' . $filter['price_start'] . ' руб.';
         }
 
         if ($filter['price_end']) {
-            $data['pick_filters'][] = 'до ' . $filter['price_end'] . ' руб.';
+            $data['pick_filters']['price_end'] = 'до ' . $filter['price_end'] . ' руб.';
         }
 
         return $data;
@@ -292,9 +312,12 @@ class Realty extends Model
     public static function realty_list_shortcode($args) {
         $template = $args['templage'] ?? 'list';
         $data = self::realty_list_widget($args);
+        $data['page_type'] = isset($args['type']) ? $args['type'] : null;
 
-        if ($args['type'] == 'search') {
+        if (isset($args['type']) && $args['type'] == 'search') {
             $data = self::pick_filters($data);
+            $data['sort_variants'] = self::SORT_VARIANTS;
+            $data['sort_by'] = Input::get('sort');
         }
 
         return view('/realty/' . $template, $data)->render();

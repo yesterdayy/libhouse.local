@@ -3,6 +3,7 @@
 use App\Components\Shortcodes;
 use App\Models\Comment\Comment;
 use App\Models\Blog\Post;
+use App\Models\Kladr\Kladr;
 use Illuminate\Support\Facades\URL;
 use Jenssegers\Date\Date;
 use App\Models\Common\Settings;
@@ -420,6 +421,7 @@ if (! function_exists('get_realty_nav')) {
         ])->render();
     }
 }
+
 
 /*
  * *******************************************************

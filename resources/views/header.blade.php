@@ -14,7 +14,7 @@
                 </ul>
             @else
                 <ul class="header-profile-menu">
-                    <li><a href="{{ route('login') }}"><i class="lh-icon lh-icon-user"></i> <span>Войти</span></a></li>
+                    <li class="auth-login"><a href="#"><i class="lh-icon lh-icon-user"></i> <span>Войти</span></a></li>
                 </ul>
             @endif
         </div>

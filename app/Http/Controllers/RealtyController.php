@@ -291,6 +291,9 @@ class RealtyController extends Controller
             $realty->attachments()->attach($insert_photos);
         }
 
+        $counters = new RealtyCounters(['realty_id' => $realty->id, 'counter' => 1]);
+        $realty->counters()->save($counters);
+
         dd('realty add. id - ' . $realty->id);
 
     }

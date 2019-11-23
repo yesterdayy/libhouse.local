@@ -36,12 +36,12 @@ class RealtyFormRequest extends FormRequest
             'youtube.*' => 'max:535|nullable',
             'content' => 'required|max:3000',
             'price' => 'numeric|nullable',
-            'price' => 'required|integer',
             'info.floor' => 'required|integer',
             'info.floors' => 'required|integer',
             'info.square_common' => 'integer|nullable',
             'info.square_living' => 'integer|nullable',
             'info.square_kitchen' => 'integer|nullable',
+            'sort' => 'max:20|nullable',
         ];
     }
 

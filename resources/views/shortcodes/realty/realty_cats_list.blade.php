@@ -4,7 +4,7 @@
     <div class="row" {!! $args !!}>
         <div class="col-md-6">
             <label>Жилая</label>
-            <div class="table">
+            <div class="d-table table mb-0">
                 @foreach ($room_types as $room_type_item)
                     <div class="d-table-row">
                         @foreach ($room_type_item as $room_type)
@@ -21,7 +21,7 @@
 
         <div class="col-md-6">
             <label>Коммерческая</label>
-            <div class="table">
+            <div class="d-table table mb-0">
                 @foreach ($types as $type_item)
                     <div class="d-table-row">
                         @foreach ($type_item as $type)

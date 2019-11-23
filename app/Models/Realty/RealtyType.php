@@ -21,7 +21,7 @@ class RealtyType extends Model
                 try {
                     $entry_counts = DB::select("SELECT `type`.id, COUNT(*) `count`
                     FROM `realty_type` `type`
-                    LEFT JOIN `realty_entry` `entry` ON `entry`.type = `type`.id
+                    LEFT JOIN `realty_entry` `entry` ON `entry`.type_id = `type`.id
                     WHERE `entry`.`status` = 'published'
                     AND `type`.commercy = 1
                     GROUP BY `type`.id");
@@ -31,7 +31,7 @@ class RealtyType extends Model
                         $type->cnt = $entry_counts[$type->id] ?? 0;
                     }
                 } catch (\Exception $err) {
-
+                    dd($err);
                 }
             }
         } else {
@@ -40,7 +40,7 @@ class RealtyType extends Model
                 try {
                     $entry_counts = DB::select("SELECT `type`.id, COUNT(*) `count`
                     FROM `realty_type` `type`
-                    LEFT JOIN `realty_entry` `entry` ON `entry`.type = `type`.id
+                    LEFT JOIN `realty_entry` `entry` ON `entry`.type_id = `type`.id
                     WHERE `entry`.`status` = 'published'
                     GROUP BY `type`.id");
                     $entry_counts = array_column($entry_counts, 'count', 'id');

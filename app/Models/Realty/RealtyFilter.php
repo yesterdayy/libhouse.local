@@ -52,6 +52,25 @@ class RealtyFilter extends Model
             $where[] = " `re`.`price` <= {$request['price_end']} ";
         }
 
+        $sort = '';
+        switch ($request['sort']) {
+            case 'price_asc':
+                $order = 'ORDER BY `re`.`price` ASC';
+                break;
+
+            case 'price_desc':
+                $order = 'ORDER BY `re`.`price` DESC';
+                break;
+
+            case 'square_desc':
+                $order = 'ORDER BY `rei`.value DESC';
+                break;
+
+            default:
+                $order = 'ORDER BY `re`.`id` DESC';
+                break;
+        }
+
         $result = [];
 
         if (!empty($where)) {
@@ -66,15 +85,16 @@ class RealtyFilter extends Model
 
         $result = DB::select("SELECT `re`.*
         FROM `realty_entry` `re`
+        LEFT JOIN `realty_entry_info` `rei` ON `rei`.realty_id = `re`.id AND `rei`.`field` = 'square_common'
         LEFT JOIN `users` ON `users`.id = `re`.author_id
         WHERE `re`.`status` = 'published' $where
-        ORDER BY `re`.`id` DESC
+        $order
         LIMIT $start, $length");
 
+        $result = Realty::with('info', 'attachments')->hydrate($result);
+        $result = new \Illuminate\Pagination\LengthAwarePaginator($result, $count[0]->count, $length, isset($request['page']) ?? 1, ['path' => Request::fullUrl(), 'query']);
 
-        $paginator = new \Illuminate\Pagination\LengthAwarePaginator($result, $count[0]->count, $length, isset($request['page']) ?? 1, ['path' => Request::fullUrl(), 'query']);
-
-        return [Realty::hydrate($result), $paginator];
+        return $result;
     }
 
 }

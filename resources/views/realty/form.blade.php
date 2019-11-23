@@ -13,7 +13,7 @@
 @endif
 
 <div class="realty-create-form-block">
-    <div class="form-group row">
+    <div class="form-group">
         {!! Form::rawLabel('user_realty_type', 'Тип аккаунта<span>*</span>') !!}
 
         <div class="btn-group-toggle" data-toggle="buttons">
@@ -25,7 +25,7 @@
         </div>
     </div>
 
-    <div class="form-group row">
+    <div class="form-group">
         {!! Form::rawLabel('trade_type', 'Тип сделки<span>*</span>') !!}
 
         <div class="btn-group-toggle" data-toggle="buttons">
@@ -37,7 +37,7 @@
         </div>
     </div>
 
-    <div class="form-group row">
+    <div class="form-group">
         {!! Form::rawLabel('duration', 'Тип аренды<span>*</span>') !!}
 
         <div class="btn-group-toggle" data-toggle="buttons">
@@ -52,7 +52,7 @@
         </div>
     </div>
 
-    <div class="form-group row">
+    <div class="form-group">
         {!! Form::rawLabel('dop_type', 'Категория недвижимости<span>*</span>') !!}
 
         <div class="btn-group-toggle" data-toggle="buttons">
@@ -64,7 +64,7 @@
         </div>
     </div>
 
-    <div class="form-group row">
+    <div class="form-group">
         {!! Form::rawLabel('rent_type', 'Тип недвижимости<span>*</span>') !!}
 
         <div class="btn-group-toggle" data-toggle="buttons">
@@ -77,7 +77,7 @@
     </div>
 
     @if ($types->count() > 0)
-        <div class="form-group row">
+        <div class="form-group">
             {!! Form::rawLabel('rent_type', 'Объект<span>*</span>') !!}
             <div class="radio-grid rent-type rent-type-0">
                 @foreach ($types->where('commercy', 0) as $type)
@@ -106,7 +106,7 @@
 </div>
 
 <div class="realty-create-form-block">
-    <div class="form-group row">
+    <div class="form-group">
         {!! Form::rawLabel('address', 'Адрес<span>*</span>') !!}
         {{ Form::text('address', null, ['class' => 'form-control address-select autocomplete-input ' . ($errors->has('address_city') || $errors->has('address_street') ? 'is-invalid' : (isset($old['address_city']) && !empty($old['address_city']) ? 'is-valid' : '')), 'placeholder' => 'Город, улица']) }}
         {{ Form::hidden('address_city') }}
@@ -114,7 +114,7 @@
     </div>
 
     @if ($room_types->count() > 0)
-        <div class="form-group row">
+        <div class="form-group">
             {!! Form::rawLabel('rent_type', 'Количество комнат<span>*</span>') !!}
             <div class="radio-grid room_type">
                 @foreach ($room_types as $room_type)
@@ -128,27 +128,27 @@
         </div>
     @endif
 
-    <div class="form-group row">
+    <div class="form-group">
         {!! Form::rawLabel('info[floor]', 'Этаж<span>*</span>') !!}
         {{ Form::text('info[floor]', null, ['class' => 'form-control ' . ($errors->has('info.floor') ? 'is-invalid' : (isset($old['info[floor]']) && !empty($old['info[floor]']) ? 'is-valid' : '')), 'style' => 'max-width: 300px;', 'placeholder' => 'Укажите свой этаж']) }}
     </div>
 
-    <div class="form-group row">
+    <div class="form-group">
         {!! Form::rawLabel('info[floors]', 'Этажей в доме<span>*</span>') !!}
         {{ Form::text('info[floors]', null, ['class' => 'form-control ' . ($errors->has('info.floors') ? 'is-invalid' : (isset($old['info[floors]']) && !empty($old['info[floors]']) ? 'is-valid' : '')), 'style' => 'max-width: 300px;', 'placeholder' => 'Укажите этажность дома']) }}
     </div>
 
-    <div class="form-group row">
+    <div class="form-group">
         {{ Form::label('info[square_common]', 'Общая площадь') }}
         {{ Form::text('info[square_common]', null, ['class' => 'form-control ' . ($errors->has('info.square_common') ? 'is-invalid' : (isset($old['info[square_common]']) && !empty($old['info[square_common]']) ? 'is-valid' : '')), 'style' => 'max-width: 87px;']) }}
     </div>
 
-    <div class="form-group row">
+    <div class="form-group">
         {{ Form::label('info[square_living]', 'Жилая площадь') }}
         {{ Form::text('info[square_living]', null, ['class' => 'form-control ' . ($errors->has('info.square_living') ? 'is-invalid' : (isset($old['info[square_living]']) && !empty($old['info[square_living]']) ? 'is-valid' : '')), 'style' => 'max-width: 87px;']) }}
     </div>
 
-    <div class="form-group row">
+    <div class="form-group">
         {{ Form::label('info[square_kitchen]', 'Площадь кухни') }}
         {{ Form::text('info[square_kitchen]', null, ['class' => 'form-control ' . ($errors->has('info.square_kitchen') ? 'is-invalid' : (isset($old['info[square_kitchen]']) && !empty($old['info[square_kitchen]']) ? 'is-valid' : '')), 'style' => 'max-width: 87px;']) }}
     </div>
@@ -174,7 +174,7 @@
 </div>
 
 <div class="realty-create-form-block">
-    <div class="form-group row">
+    <div class="form-group">
         {!! Form::rawLabel('photos', 'Фотографии<span>*</span>') !!}
         <div class="label-desc">Не допускаются к размещению фотографии с водяными знаками, чужих объектов и рекламные баннеры. JPG, PNG или GIF.<br>Максимальный размер файла 10 мб</div>
         <div class="dropzone-wrap" id="dropzoneupload" data-name="photos[]"></div>
@@ -184,7 +184,7 @@
         </script>
     </div>
 
-    <div class="form-group row">
+    <div class="form-group">
         {!! Form::label('floor', 'Видео') !!}
         <div class="d-table w-100">
             <div class="d-table-cell">
@@ -203,7 +203,7 @@
 </div>
 
 <div class="realty-create-form-block">
-    <div class="form-group row">
+    <div class="form-group">
         {!! Form::rawLabel('content', 'Описание объявления<span>*</span>') !!}
         {{ Form::textarea('content', null, ['class' => 'form-control ' . ($errors->has('content') ? 'is-invalid' : (isset($old['content']) && !empty($old['content']) ? 'is-valid' : ''))]) }}
     </div>
@@ -216,13 +216,13 @@
         </div>
     </div>
 
-    <div class="form-group row">
+    <div class="form-group">
         {{ Form::label('', '') }}
         {{ Form::checkbox('info[with_communal]', null, null, ['id' => 'with_communal', 'class' => 'checkbox blue']) }}
         {{ Form::label('with_communal', 'Коммунальные услуги включены') }}
     </div>
 </div>
 
-<div class="form-group row float-right">
+<div class="form-group float-right">
     <button class="btn btn-lg active" style="margin-right: 0;">Опубликовать объявление</button>
 </div>

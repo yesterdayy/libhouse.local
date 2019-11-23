@@ -36,6 +36,10 @@
   -moz-osx-font-smoothing: grayscale;
   vertical-align: middle; }
 
+.lh-icon-cross:before {
+  content: "";
+  color: #bdbdbd; }
+
 .lh-icon:not(.lh-after) {
   margin-right: 7px; }
 
@@ -202,6 +206,10 @@ h1 {
   border-color: #f6f6f6;
   color: #000b28; }
 
+.btn-block {
+  display: block;
+  width: 100%; }
+
 /* Material Ripple */
 .btn, .btn-disabled {
   position: relative;
@@ -234,6 +242,9 @@ h1 {
 
 .btn.no-pointer, .no-pointer.btn-disabled {
   cursor: initial; }
+
+div .form-group {
+  margin-bottom: 0; }
 
 input:not([type=checkbox]).form-control::placeholder {
   color: #000b28; }
@@ -301,21 +312,21 @@ textarea.form-control {
   transition: 0.1s;
   border: 1px solid #c4c4c4;
   font-size: 0;
-  line-height: 17px;
+  line-height: 16px;
   vertical-align: middle;
   margin-right: 10px;
-  padding-left: 1px;
-  margin-top: -1px; }
+  margin-top: -2px; }
 
 .checkbox:checked + label:before {
   border-color: #49c628; }
 
 .checkbox:checked + label:before {
-  font-size: 12px; }
+  font-size: 10px; }
 
 .checkbox.blue:checked + label:before {
-  color: #495aff;
-  border-color: #495aff; }
+  color: #ffffff;
+  border-color: #495aff;
+  background: #495aff; }
 
 .select2-container--default .select2-selection--single .select2-selection__rendered {
   line-height: 60px;
@@ -397,7 +408,11 @@ label {
   font-weight: bold;
   line-height: 20px;
   color: #000b28;
-  margin: 20px 0; }
+  margin: 20px 0;
+  display: block; }
+
+label.m-light {
+  margin: 10px 0; }
 
 label span {
   color: #ea0000; }
@@ -613,6 +628,53 @@ h1 + form.realty-create-form {
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px; }
 
+.form-after-desc {
+  font-size: 12px;
+  line-height: 20px;
+  color: #5a5a5a;
+  padding: 0 18px; }
+
+.popover.tooltip_err {
+  max-width: 300px !important;
+  padding: 20px 30px !important;
+  background: #ea0000;
+  border-radius: 4px !important;
+  -webkit-border-radius: 4px !important;
+  -moz-border-radius: 4px !important;
+  box-shadow: 2px 2px 10px 0 rgba(0, 0, 0, 0.25);
+  line-height: 20px; }
+
+.popover.tooltip_err .popover-body {
+  color: #ffffff; }
+
+.popover.tooltip_err .arrow {
+  display: block !important; }
+
+.popover.tooltip_err .arrow:after {
+  border-right-color: #ea0000; }
+
+.login-params {
+  margin: 10px 0 30px 0 !important;
+  width: 100%; }
+
+.auth-tabs {
+  font-family: "AvenirNextCyr", sans-serif;
+  font-size: 15px;
+  font-weight: bold;
+  line-height: 20px;
+  margin: 0 0 22px 0 !important;
+  padding: 0; }
+
+.auth-tabs li {
+  margin-right: 20px; }
+
+.auth-tabs li a {
+  color: #c4c4c4; }
+
+.auth-tabs li a:hover, .auth-tabs li a.active {
+  color: #000b28;
+  text-decoration: none; }
+
 .widget-title {
   font-size: 22px;
   font-weight: bold;
@@ -689,6 +751,15 @@ h1 + form.realty-create-form {
 
 .modal-footer:empty {
   padding: 0 !important; }
+
+#auth-form-modal .modal-dialog {
+  max-width: 380px; }
+
+#auth-form-modal .modal-content {
+  padding: 50px 40px; }
+
+#auth-form-modal form {
+  margin: 0; }
 
 .header {
   background: #000b28;
@@ -1025,11 +1096,16 @@ h1 + form.realty-create-form {
 .slick-arrow i:before {
   color: #000b28; }
 
+.realty-cats-list-content {
+  margin: -6px 0 -8px 0; }
+
 .realty-cats-list-content label {
   line-height: 20px;
   color: #a1a1a1;
   margin-bottom: 5px;
-  display: inline-block; }
+  display: inline-block;
+  font-weight: 300;
+  margin-top: 0; }
 
 .adv-cats-link {
   font-size: 15px;
@@ -1042,6 +1118,9 @@ h1 + form.realty-create-form {
 
 .realty-cats-list-content .d-table-cell:not(:last-child) {
   padding-right: 30px; }
+
+.realty-cats-list-content .d-table .d-table-row:last-child a {
+  padding-bottom: 0; }
 
 .realty-list.row {
   margin-left: -10px;
@@ -1287,6 +1366,18 @@ h1.realty-title {
   font-size: 14px;
   margin-left: 5px;
   margin-right: 0; }
+
+.filter-sort-pick li:first-letter {
+  text-transform: uppercase; }
+
+.pick-filter .lh-icon {
+  margin: -2px 0 0 8px;
+  font-size: 14px;
+  display: inline-block; }
+
+.pick-filter .lh-icon:hover:before {
+  color: #495aff;
+  transition: 0.2s; }
 
 .toasts-wrap {
   position: fixed;

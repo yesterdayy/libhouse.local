@@ -54,4 +54,18 @@ class User extends Authenticatable
         return $this->hasOne('App\Models\Realty\RealtyUserCommentRating', 'author_id', 'id');
     }
 
+    /*
+     * *******************************************************
+     * Shortcodes
+     * *******************************************************
+     */
+
+    public static function login_form_shortcode($args) {
+        return view('auth/login');
+    }
+
+    public static function register_form_shortcode($args) {
+        return view('auth/register');
+    }
+
 }

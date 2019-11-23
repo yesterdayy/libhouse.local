@@ -92,11 +92,18 @@ class KladrController extends Controller
                 $street_term = last($street_term);
                 $street_term = explode('.', $street_term, 2);
                 $street_term = trim(last($street_term));
+
+                $city = Kladr::city($request->get('term'), $this->default_region, $limit);
             } else {
-                $street_term = $request->get('term');
+                $term = explode(',', $request->get('term'));
+                $city_term = head($term);
+                $street_term = last($term);
+                $street_term = explode('.', $street_term, 2);
+                $street_term = trim(last($street_term));
+
+                $city = Kladr::city($city_term, $this->default_region, $limit);
             }
 
-            $city = Kladr::city($request->get('term'), $this->default_region, $limit);
             $street = Kladr::street($street_term, $city_codes, 91, $limit, true);
 
             $result = [];
