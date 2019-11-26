@@ -614,16 +614,16 @@
   'mail' => 
   array (
     'driver' => 'smtp',
-    'host' => '127.0.0.1',
+    'host' => 'smtp.gmail.com',
     'port' => '587',
     'from' => 
     array (
       'address' => 'hello@example.com',
       'name' => 'Example',
     ),
-    'encryption' => NULL,
-    'username' => '',
-    'password' => '',
+    'encryption' => 'tls',
+    'username' => 'yesterdayy33@gmail.com',
+    'password' => '305lz.1xs',
     'sendmail' => '/usr/sbin/sendmail -bs',
     'markdown' => 
     array (

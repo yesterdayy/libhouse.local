@@ -147,6 +147,9 @@ h1 {
 .wrap-sidebar {
   margin-top: 110px; }
 
+.pagination {
+  margin: 0 auto 20px auto; }
+
 .btn, .btn-disabled {
   padding: 12px 21px;
   color: #495aff;
@@ -408,7 +411,7 @@ label {
   font-weight: bold;
   line-height: 20px;
   color: #000b28;
-  margin: 20px 0;
+  margin: 16px 0;
   display: block; }
 
 label.m-light {
@@ -653,6 +656,9 @@ h1 + form.realty-create-form {
 .popover.tooltip_err .arrow:after {
   border-right-color: #ea0000; }
 
+.form-inline-table .d-table-cell:not(:first-child) {
+  padding-left: 20px; }
+
 .login-params {
   margin: 10px 0 30px 0 !important;
   width: 100%; }
@@ -674,6 +680,34 @@ h1 + form.realty-create-form {
 .auth-tabs li a:hover, .auth-tabs li a.active {
   color: #000b28;
   text-decoration: none; }
+
+.auth-form-title {
+  font-size: 15px;
+  font-weight: bold;
+  line-height: 20px;
+  color: #000b28;
+  margin: 4px 0; }
+
+.auth-form-desc {
+  font-size: 15px;
+  line-height: 20px;
+  color: #000b28;
+  margin: 0 0 22px 0; }
+
+.auth-reset-back i:before {
+  color: #332e0d;
+  font-size: 10px;
+  font-weight: bold; }
+
+.btn.auth-reset-back, .auth-reset-back.btn-disabled {
+  font-weight: bold;
+  color: #495aff;
+  margin: 0 0 6px -21px;
+  padding: 12px 21px; }
+
+.btn.auth-reset-back i, .auth-reset-back.btn-disabled i {
+  margin-top: -3px;
+  display: inline-block; }
 
 .widget-title {
   font-size: 22px;
@@ -1039,6 +1073,10 @@ h1 + form.realty-create-form {
 
 .address-popover {
   width: 383px; }
+
+.logo {
+  padding: 30px 60px 29px 60px;
+  box-sizing: content-box; }
 
 .slick-slide {
   height: initial; }

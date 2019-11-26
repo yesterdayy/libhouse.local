@@ -11,7 +11,7 @@
 
     <div class="form-group">
         {!! Form::rawLabel('phone', 'Телефон<span>*</span>', ['class' => 'm-light']) !!}
-        {{ Form::email('phone', null, ['class' => 'form-control']) }}
+        {{ Form::text('phone', null, ['class' => 'form-control']) }}
     </div>
 
     <div class="form-group row login-params no-gutters">

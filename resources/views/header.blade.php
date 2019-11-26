@@ -73,7 +73,7 @@
 
     <div class="row no-gutters header-middle-wrap">
         <div class="col-md-2">
-            <img src="" width="215px" height="30px" />
+            <a href="/"><img src="/img/logo.png" width="100px" height="31px" class="logo" /></a>
         </div>
 
         <div class="col-md-7">

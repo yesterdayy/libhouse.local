@@ -17,6 +17,7 @@ class ShortcodeMiddleware
     public function handle($request, Closure $next)
     {
         $response = $next($request);
+
         if (!method_exists($response, 'content')) {
             return false;
         }

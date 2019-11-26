@@ -46,7 +46,7 @@
                     {{ Form::radio('duration', $rent_duration->id, $loop->first ? true : false) }} {{ $rent_duration->name }}
                 </div>
             @endforeach
-                <div class="hidden">
+                <div class="d-none">
                     {{ Form::radio('duration', 0, false) }}
                 </div>
         </div>
@@ -128,29 +128,33 @@
         </div>
     @endif
 
-    <div class="form-group">
-        {!! Form::rawLabel('info[floor]', 'Этаж<span>*</span>') !!}
-        {{ Form::text('info[floor]', null, ['class' => 'form-control ' . ($errors->has('info.floor') ? 'is-invalid' : (isset($old['info[floor]']) && !empty($old['info[floor]']) ? 'is-valid' : '')), 'style' => 'max-width: 300px;', 'placeholder' => 'Укажите свой этаж']) }}
+    <div class="d-table form-inline-table">
+        <div class="form-group d-table-cell">
+            {!! Form::rawLabel('info[floor]', 'Этаж<span>*</span>') !!}
+            {{ Form::text('info[floor]', null, ['class' => 'form-control ' . ($errors->has('info.floor') ? 'is-invalid' : (isset($old['info[floor]']) && !empty($old['info[floor]']) ? 'is-valid' : '')), 'style' => 'max-width: 150px;']) }}
+        </div>
+
+        <div class="form-group d-table-cell">
+            {!! Form::rawLabel('info[floors]', 'Этажей в доме<span>*</span>') !!}
+            {{ Form::text('info[floors]', null, ['class' => 'form-control ' . ($errors->has('info.floors') ? 'is-invalid' : (isset($old['info[floors]']) && !empty($old['info[floors]']) ? 'is-valid' : '')), 'style' => 'max-width: 150px;']) }}
+        </div>
     </div>
 
-    <div class="form-group">
-        {!! Form::rawLabel('info[floors]', 'Этажей в доме<span>*</span>') !!}
-        {{ Form::text('info[floors]', null, ['class' => 'form-control ' . ($errors->has('info.floors') ? 'is-invalid' : (isset($old['info[floors]']) && !empty($old['info[floors]']) ? 'is-valid' : '')), 'style' => 'max-width: 300px;', 'placeholder' => 'Укажите этажность дома']) }}
-    </div>
+    <div class="d-table form-inline-table">
+        <div class="form-group d-table-cell">
+            {{ Form::label('info[square_common]', 'Общая площадь') }}
+            {{ Form::text('info[square_common]', null, ['class' => 'form-control ' . ($errors->has('info.square_common') ? 'is-invalid' : (isset($old['info[square_common]']) && !empty($old['info[square_common]']) ? 'is-valid' : '')), 'style' => 'max-width: 150px;']) }}
+        </div>
 
-    <div class="form-group">
-        {{ Form::label('info[square_common]', 'Общая площадь') }}
-        {{ Form::text('info[square_common]', null, ['class' => 'form-control ' . ($errors->has('info.square_common') ? 'is-invalid' : (isset($old['info[square_common]']) && !empty($old['info[square_common]']) ? 'is-valid' : '')), 'style' => 'max-width: 87px;']) }}
-    </div>
+        <div class="form-group d-table-cell">
+            {{ Form::label('info[square_living]', 'Жилая площадь') }}
+            {{ Form::text('info[square_living]', null, ['class' => 'form-control ' . ($errors->has('info.square_living') ? 'is-invalid' : (isset($old['info[square_living]']) && !empty($old['info[square_living]']) ? 'is-valid' : '')), 'style' => 'max-width: 150px;']) }}
+        </div>
 
-    <div class="form-group">
-        {{ Form::label('info[square_living]', 'Жилая площадь') }}
-        {{ Form::text('info[square_living]', null, ['class' => 'form-control ' . ($errors->has('info.square_living') ? 'is-invalid' : (isset($old['info[square_living]']) && !empty($old['info[square_living]']) ? 'is-valid' : '')), 'style' => 'max-width: 87px;']) }}
-    </div>
-
-    <div class="form-group">
-        {{ Form::label('info[square_kitchen]', 'Площадь кухни') }}
-        {{ Form::text('info[square_kitchen]', null, ['class' => 'form-control ' . ($errors->has('info.square_kitchen') ? 'is-invalid' : (isset($old['info[square_kitchen]']) && !empty($old['info[square_kitchen]']) ? 'is-valid' : '')), 'style' => 'max-width: 87px;']) }}
+        <div class="form-group d-table-cell">
+            {{ Form::label('info[square_kitchen]', 'Площадь кухни') }}
+            {{ Form::text('info[square_kitchen]', null, ['class' => 'form-control ' . ($errors->has('info.square_kitchen') ? 'is-invalid' : (isset($old['info[square_kitchen]']) && !empty($old['info[square_kitchen]']) ? 'is-valid' : '')), 'style' => 'max-width: 150px;']) }}
+        </div>
     </div>
 </div>
 
@@ -192,7 +196,7 @@
             </div>
 
             <div class="d-table-cell add-video-cell">
-                <div class="btn btn-lg btn-primary add-video">Добавить</div>
+                <div class="btn btn-lg btn-primary add-video" tabindex="0">Добавить</div>
             </div>
         </div>
     </div>
@@ -208,11 +212,23 @@
         {{ Form::textarea('content', null, ['class' => 'form-control ' . ($errors->has('content') ? 'is-invalid' : (isset($old['content']) && !empty($old['content']) ? 'is-valid' : ''))]) }}
     </div>
 
-    <div class="form-group row">
-        {{ Form::label('price', 'Стоимость') }}
-        <div class="price-input">
-            {{ Form::text('price', null, ['class' => 'form-control ' . ($errors->has('price') ? 'is-invalid' : (isset($old['price']) && !empty($old['price']) ? 'is-valid' : '')), 'style' => 'max-width: 300px;', 'maxlength' => '16']) }}
-            <span class="currency-price-input">руб.</span>
+    <div class="d-table form-inline-table">
+        <div class="form-group row d-table-cell">
+            {{ Form::label('price', 'Стоимость') }}
+            <div class="price-input">
+                {{ Form::text('price', null, ['class' => 'form-control ' . ($errors->has('price') ? 'is-invalid' : (isset($old['price']) && !empty($old['price']) ? 'is-valid' : '')), 'style' => 'max-width: 150px;', 'maxlength' => '16']) }}
+                <span class="currency-price-input">руб.</span>
+            </div>
+        </div>
+
+        <div class="form-group row d-table-cell">
+            {{ Form::label('phone', 'Номер телефона для связи') }}
+            {{ Form::text('phone', null, ['class' => 'form-control ' . ($errors->has('phone') ? 'is-invalid' : (isset($old['phone']) && !empty($old['phone']) ? 'is-valid' : '')), 'style' => 'max-width: 300px;', 'maxlength' => '20']) }}
+        </div>
+
+        <div class="form-group row d-table-cell">
+            {{ Form::label('email', 'Электронная почта') }}
+            {{ Form::text('email', null, ['class' => 'form-control ' . ($errors->has('email') ? 'is-invalid' : (isset($old['price']) && !empty($old['email']) ? 'is-valid' : '')), 'style' => 'max-width: 300px;']) }}
         </div>
     </div>
 

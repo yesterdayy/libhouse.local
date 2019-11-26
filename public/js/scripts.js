@@ -181,6 +181,8 @@ function init_header_filters() {
     // Аутентификация окно
     $('.auth-login a').click(function (e) {
         e.preventDefault();
+        $('.auth-reset-back').click();
+        $('#auth-form-modal form').trigger('reset');
         $('#auth-form-modal').modal('show');
     });
 
@@ -195,17 +197,59 @@ function init_header_filters() {
             data: $(this).serialize(),
             dataType: 'JSON',
             success: function(result) {
+                $('input, textarea', that).removeClass('is-invalid');
                 if ('status' in result && result.status == 'success') {
                     location.href = result.redirect;
+                } else {
+                    show_toast(result.message)
                 }
             },
             error: function (result, test, arr) {
+                $('input, textarea', that).removeClass('is-invalid');
                 if ('errors' in result.responseJSON) {
                     tooltip_err(result.responseJSON.errors, that);
                 }
             },
         });
     });
+
+    // Забыли пароль
+    $('.reset-pass').click(function (e) {
+        e.preventDefault();
+        $('.auth-wrap').addClass('d-none');
+        $('.reset-password-wrap').removeClass('d-none');
+    })
+
+    $('.reset-password-form').submit(function (e) {
+        e.preventDefault();
+        var that = this;
+
+        $.ajax({
+            type: 'POST',
+            url: $(this).attr('action'),
+            data: $(this).serialize(),
+            dataType: 'JSON',
+            success: function(result) {
+                $('input, textarea', that).removeClass('is-invalid');
+                if ('status' in result && result.status == 'success') {
+                    show_toast(result.message);
+                }
+            },
+            error: function (result, test, arr) {
+                $('input, textarea', that).removeClass('is-invalid');
+                if ('errors' in result.responseJSON) {
+                    tooltip_err(result.responseJSON.errors, that);
+                }
+            },
+        });
+    });
+
+    // Назад (Забыли пароль)
+    $('.auth-reset-back').click(function (e) {
+        e.preventDefault();
+        $('.auth-wrap').removeClass('d-none');
+        $('.reset-password-wrap').addClass('d-none');
+    })
 }
 
 function show_modal(modal) {
@@ -263,8 +307,6 @@ function autocomplete_close_listener(selector, with_clear) {
 
 window.tooltip_err_timeout = null;
 function tooltip_err(err_json, form) {
-    $('input, textarea', form).removeClass('is-invalid');
-
     if (Object.keys(err_json).length) {
         for (var field in err_json) {
             if ($('[name='+field+']', form).length) {

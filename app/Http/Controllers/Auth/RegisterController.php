@@ -4,8 +4,9 @@ namespace App\Http\Controllers\Auth;
 
 use App\Models\User\User;
 use App\Http\Controllers\Controller;
-use App\Models\User\UserCompany;
-use function foo\func;
+use App\Models\User\UserSubscribe;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -52,9 +53,9 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6|confirmed',
+            'password' => 'required|string|min:6',
+            'phone' => 'required|string|max:20|min:8',
         ]);
     }
 
@@ -67,122 +68,156 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         $user = User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-            'realty_type' => $data['realty_type']
+            'email' => clear_string($data['email']),
+            'password' => Hash::make(clear_string($data['password'])),
+            'realty_type' => (isset($data['realtor']) ? '2' : '1'),
+            'phone' => clear_numeric($data['phone']),
         ]);
 
-        if (isset($data['phone']) && !empty($data['phone'])) {
-            $user->info()->create([
-                'user_id' => $user->id,
-                'field' => 'phone',
-                'value' => $data['phone'],
-                'realty_type' => $data['realty_type']
-            ]);
+        if (isset($data['subscribe']) && $user) {
+            UserSubscribe::create(['user_id' => $user->id]);
         }
 
-        $company_info = [];
-        $company_id = UserCompany::max('id') + 1;
-
-        if (isset($data['company_address'])) {
-            $company_info[] = [
-                'id' => $company_id,
-                'field' => 'address',
-                'value' => $data['company_address']
-            ];
-        }
-
-        if (isset($data['company_name'])) {
-            $company_info[] = [
-                'id' => $company_id,
-                'field' => 'company_name',
-                'value' => $data['company_name']
-            ];
-        }
-
-        if (isset($data['company_phone'])) {
-            $company_info[] = [
-                'id' => $company_id,
-                'field' => 'phone',
-                'value' => $data['company_phone']
-            ];
-        }
-
-        if (isset($data['company_work_time'])) {
-            $company_info[] = [
-                'id' => $company_id,
-                'field' => 'work_time',
-                'value' => $data['company_work_time']
-            ];
-        }
-
-        if (isset($data['company_email'])) {
-            $company_info[] = [
-                'id' => $company_id,
-                'field' => 'email',
-                'value' => $data['company_email']
-            ];
-        }
-
-        if (isset($data['company_vk'])) {
-            $company_info[] = [
-                'id' => $company_id,
-                'field' => 'vk',
-                'value' => $data['company_vk']
-            ];
-        }
-
-        if (isset($data['company_ok'])) {
-            $company_info[] = [
-                'id' => $company_id,
-                'field' => 'ok',
-                'value' => $data['company_ok']
-            ];
-        }
-
-        if (isset($data['company_facebook'])) {
-            $company_info[] = [
-                'id' => $company_id,
-                'field' => 'facebook',
-                'value' => $data['company_facebook']
-            ];
-        }
-
-        if (!empty($company_info)) {
-            UserCompany::insert($company_info);
-            $user->company()->attach($company_id);
-        }
-
-        $company_attachments = [];
-        if (isset($data['photos'])) {
-            $company_attachments = array_merge(
-                $company_attachments
-                , array_map(function($photo) {
-                return [
-                    'type' => 'photo',
-                    'attachment_id' => $photo,
-                    'is_moderated' => 1
-                ];
-            }, $data['photos']));
-        }
-
-        if (isset($data['documents'])) {
-            $company_attachments = array_merge(
-                $company_attachments
-                , array_map(function($document) {
-                return [
-                    'type' => 'document',
-                    'attachment_id' => $document,
-                    'is_moderated' => 0
-                ];
-            }, $data['documents']));
-        }
-
-        if (!empty($company_attachments)) {
-            $user->company[0]->attachments()->attach($company_attachments);
-        }
+//        if (isset($data['phone']) && !empty($data['phone'])) {
+//            $user->info()->create([
+//                'user_id' => $user->id,
+//                'field' => 'phone',
+//                'value' => $data['phone'],
+//                'realty_type' => $data['realty_type']
+//            ]);
+//        }
+//
+//        $company_info = [];
+//        $company_id = UserCompany::max('id') + 1;
+//
+//        if (isset($data['company_address'])) {
+//            $company_info[] = [
+//                'id' => $company_id,
+//                'field' => 'address',
+//                'value' => $data['company_address']
+//            ];
+//        }
+//
+//        if (isset($data['company_name'])) {
+//            $company_info[] = [
+//                'id' => $company_id,
+//                'field' => 'company_name',
+//                'value' => $data['company_name']
+//            ];
+//        }
+//
+//        if (isset($data['company_phone'])) {
+//            $company_info[] = [
+//                'id' => $company_id,
+//                'field' => 'phone',
+//                'value' => $data['company_phone']
+//            ];
+//        }
+//
+//        if (isset($data['company_work_time'])) {
+//            $company_info[] = [
+//                'id' => $company_id,
+//                'field' => 'work_time',
+//                'value' => $data['company_work_time']
+//            ];
+//        }
+//
+//        if (isset($data['company_email'])) {
+//            $company_info[] = [
+//                'id' => $company_id,
+//                'field' => 'email',
+//                'value' => $data['company_email']
+//            ];
+//        }
+//
+//        if (isset($data['company_vk'])) {
+//            $company_info[] = [
+//                'id' => $company_id,
+//                'field' => 'vk',
+//                'value' => $data['company_vk']
+//            ];
+//        }
+//
+//        if (isset($data['company_ok'])) {
+//            $company_info[] = [
+//                'id' => $company_id,
+//                'field' => 'ok',
+//                'value' => $data['company_ok']
+//            ];
+//        }
+//
+//        if (isset($data['company_facebook'])) {
+//            $company_info[] = [
+//                'id' => $company_id,
+//                'field' => 'facebook',
+//                'value' => $data['company_facebook']
+//            ];
+//        }
+//
+//        if (!empty($company_info)) {
+//            UserCompany::insert($company_info);
+//            $user->company()->attach($company_id);
+//        }
+//
+//        $company_attachments = [];
+//        if (isset($data['photos'])) {
+//            $company_attachments = array_merge(
+//                $company_attachments
+//                , array_map(function($photo) {
+//                return [
+//                    'type' => 'photo',
+//                    'attachment_id' => $photo,
+//                    'is_moderated' => 1
+//                ];
+//            }, $data['photos']));
+//        }
+//
+//        if (isset($data['documents'])) {
+//            $company_attachments = array_merge(
+//                $company_attachments
+//                , array_map(function($document) {
+//                return [
+//                    'type'    => 'document',
+//                    'attachment_id' => $document,
+//                    'is_moderated' => 0
+//                ];
+//            }, $data['documents']));
+//        }
+//
+//        if (!empty($company_attachments)) {
+//            $user->company[0]->attachments()->attach($company_attachments);
+//        }
 
         return $user;
+    }
+
+    /**
+     * Handle a registration request for the application.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function register(Request $request)
+    {
+        $this->validator($request->all())->validate();
+
+        event(new Registered($user = $this->create($request->all())));
+
+        $this->guard()->login($user);
+
+        $result = [];
+        if ($this->registered($request, $user)) {
+            $result = [
+              'status' => 'error',
+              'message' => 'Вы авторизованы',
+            ];
+        } else {
+            $result = [
+                'status' => 'success',
+                'redirect' => self::redirectPath()
+            ];
+        }
+
+        return response()->json($result);
     }
 }

@@ -68,4 +68,8 @@ class User extends Authenticatable
         return view('auth/register');
     }
 
+    public static function reset_password_shortcode($args) {
+        return view('auth/passwords/email');
+    }
+
 }

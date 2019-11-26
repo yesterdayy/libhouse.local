@@ -18,7 +18,7 @@
 
         <div class="col-md-6 text-right" style="margin-top: -1px">
             @if (Route::has('password.request'))
-                <a href="{{ route('password.request') }}">Забыли пароль ?</a>
+                <a href="{{ route('password.request') }}" class="reset-pass">Забыли пароль ?</a>
             @endif
         </div>
     </div>

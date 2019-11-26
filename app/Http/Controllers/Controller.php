@@ -35,6 +35,7 @@ class Controller extends BaseController
 
         view()->share('popular_cities', Kladr::get_popular_cities(4));
 
+
         if (!Cookie::has('city')) {
             view()->share('city', geoip('194.28.103.76')->getAttribute('city'));
         } else {
