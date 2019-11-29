@@ -34,7 +34,10 @@
   line-height: 1;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  vertical-align: middle; }
+  vertical-align: middle;
+  font-size: 18px;
+  margin-top: -2px;
+  display: inline-block; }
 
 .lh-icon-cross:before {
   content: "";
@@ -134,7 +137,7 @@ b {
   font-weight: 600; }
 
 .wrap {
-  padding: 0 60px;
+  padding: 0 56px;
   max-width: 100%; }
 
 h1 {
@@ -151,7 +154,7 @@ h1 {
   margin: 0 auto 20px auto; }
 
 .btn, .btn-disabled {
-  padding: 12px 21px;
+  padding: 10px 17px;
   color: #495aff;
   vertical-align: middle;
   line-height: 16px;
@@ -161,6 +164,7 @@ h1 {
   display: inline-block;
   margin: 10px;
   font-family: "AvenirNextCyr", sans-serif;
+  font-size: 15px;
   transition: 0.4s;
   border-radius: 4px;
   -webkit-border-radius: 4px;
@@ -171,7 +175,6 @@ h1 {
 
 .btn-primary, .btn.active, .active.btn-disabled {
   background: #495aff;
-  padding: 12px 21px;
   color: #f6f6f6; }
 
 .btn.active:hover, .active.btn-disabled:hover {
@@ -198,11 +201,10 @@ h1 {
 
 .btn.btn-lg, .btn-lg.btn-disabled {
   padding: 19px 20px;
-  font-size: 15px;
   line-height: 20px; }
 
 .btn.btn-small, .btn-small.btn-disabled {
-  padding: 6px 21px; }
+  padding: 6px 17px; }
 
 .btn.btn-gray, .btn-gray.btn-disabled {
   background: #f6f6f6;
@@ -309,16 +311,19 @@ textarea.form-control {
   display: inline-block;
   font-family: "libhouse-icons";
   text-align: center;
-  width: 17px;
-  height: 17px;
+  width: 18px;
+  height: 18px;
   color: #49c628;
   transition: 0.1s;
-  border: 1px solid #c4c4c4;
+  border: 2px solid rgba(196, 196, 196, 0.54);
   font-size: 0;
   line-height: 16px;
   vertical-align: middle;
   margin-right: 10px;
-  margin-top: -2px; }
+  margin-top: -2px;
+  border-radius: 2px;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px; }
 
 .checkbox:checked + label:before {
   border-color: #49c628; }
@@ -428,34 +433,31 @@ label span {
 
 .radio + label:before {
   content: "";
-  width: 14.5px;
-  height: 14.5px;
+  width: 18px;
+  height: 18px;
   display: inline-block;
   margin-right: 10px;
   vertical-align: middle;
-  margin-top: -2.5px;
+  margin-top: -2px;
   transition: 0.2s;
   border-radius: 50%;
   -webkit-border-radius: 50%;
   -moz-border-radius: 50%; }
 
 .radio + label:before {
-  border: 1.5px solid #c4c4c4;
-  background: -moz-radial-gradient(circle closest-side, #c4c4c4 2.8px, #ffffff 3.8px);
-  background: -webkit-gradient(circle closest-side, #c4c4c4 2.8px, #ffffff 3.8px);
-  background: -webkit-radial-gradient(circle closest-side, #c4c4c4 2.8px, #ffffff 3.8px);
-  background: -o-radial-gradient(circle closest-side, #c4c4c4 2.8px, #ffffff 3.8px);
-  background: -ms-radial-gradient(circle closest-side, #c4c4c4 2.8px, #ffffff 3.8px);
-  background: radial-gradient(circle closest-side, #c4c4c4 2.8px, #ffffff 3.8px); }
+  border: 1.5px solid #c4c4c4; }
+
+.radio + label:hover:before {
+  border-color: #495aff; }
 
 .radio:checked + label:before {
-  border: 1.5px solid #495aff;
-  background: -moz-radial-gradient(circle closest-side, #495aff 2.8px, #ffffff 3.8px);
-  background: -webkit-gradient(circle closest-side, #495aff 2.8px, #ffffff 3.8px);
-  background: -webkit-radial-gradient(circle closest-side, #495aff 2.8px, #ffffff 3.8px);
-  background: -o-radial-gradient(circle closest-side, #495aff 2.8px, #ffffff 3.8px);
-  background: -ms-radial-gradient(circle closest-side, #495aff 2.8px, #ffffff 3.8px);
-  background: radial-gradient(circle closest-side, #495aff 2.8px, #ffffff 3.8px); }
+  border-color: #495aff;
+  background: -moz-radial-gradient(circle closest-side, #495aff 4px, #ffffff 5px);
+  background: -webkit-gradient(circle closest-side, #495aff 4px, #ffffff 5px);
+  background: -webkit-radial-gradient(circle closest-side, #495aff 4px, #ffffff 5px);
+  background: -o-radial-gradient(circle closest-side, #495aff 4px, #ffffff 5px);
+  background: -ms-radial-gradient(circle closest-side, #495aff 4px, #ffffff 5px);
+  background: radial-gradient(circle closest-side, #495aff 4px, #ffffff 5px); }
 
 .radio + label {
   line-height: 20px;
@@ -637,28 +639,6 @@ h1 + form.realty-create-form {
   color: #5a5a5a;
   padding: 0 18px; }
 
-.popover.tooltip_err {
-  max-width: 300px !important;
-  padding: 20px 30px !important;
-  background: #ea0000;
-  border-radius: 4px !important;
-  -webkit-border-radius: 4px !important;
-  -moz-border-radius: 4px !important;
-  box-shadow: 2px 2px 10px 0 rgba(0, 0, 0, 0.25);
-  line-height: 20px; }
-
-.popover.tooltip_err .popover-body {
-  color: #ffffff; }
-
-.popover.tooltip_err .arrow {
-  display: block !important; }
-
-.popover.tooltip_err .arrow:after {
-  border-right-color: #ea0000; }
-
-.form-inline-table .d-table-cell:not(:first-child) {
-  padding-left: 20px; }
-
 .login-params {
   margin: 10px 0 30px 0 !important;
   width: 100%; }
@@ -722,6 +702,9 @@ h1 + form.realty-create-form {
   max-width: 532px !important;
   font-family: "AvenirNextCyr", sans-serif !important;
   border: 0 !important; }
+
+.popover[role="tooltip"] {
+  font-size: 15px; }
 
 .popover .arrow {
   display: none !important; }
@@ -795,9 +778,34 @@ h1 + form.realty-create-form {
 #auth-form-modal form {
   margin: 0; }
 
+.popover.tooltip_err {
+  max-width: 300px !important;
+  padding: 20px 30px !important;
+  background: #ea0000;
+  border-radius: 4px !important;
+  -webkit-border-radius: 4px !important;
+  -moz-border-radius: 4px !important;
+  box-shadow: 2px 2px 10px 0 rgba(0, 0, 0, 0.25);
+  line-height: 20px; }
+
+.popover.tooltip_err .popover-body {
+  color: #ffffff; }
+
+.popover.tooltip_err .arrow {
+  display: block !important; }
+
+.popover.tooltip_err .arrow:after {
+  border-right-color: #ea0000; }
+
+.form-inline-table .d-table-cell:not(:first-child) {
+  padding-left: 20px; }
+
 .header {
   background: #000b28;
   width: 100%; }
+
+.header-top-wrap {
+  background: #1a1a1a; }
 
 .header-top-wrap > div:not(.city-question-popup) {
   padding: 0 60px;
@@ -805,9 +813,6 @@ h1 + form.realty-create-form {
   vertical-align: middle;
   color: #f6f6f6;
   font-size: 13px; }
-
-.header-top-wrap .lh-icon {
-  font-size: 18px; }
 
 .current-city-wrap {
   cursor: pointer;
@@ -1204,12 +1209,15 @@ div.realty-title {
 
 .realty-favorite, .realty-counter, .realty-date {
   color: #a1a1a1;
-  height: 27px;
-  line-height: 27px; }
+  height: 28px;
+  line-height: 28px; }
 
 .realty-favorite {
   margin-bottom: 10px;
   cursor: pointer; }
+
+.realty-favorite i {
+  font-size: 18px; }
 
 .realty-favorite:hover span {
   border: 0; }

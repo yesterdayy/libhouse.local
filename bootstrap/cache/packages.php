@@ -124,6 +124,13 @@
       0 => 'Orchid\\Widget\\WidgetServiceProvider',
     ),
   ),
+  'propaganistas/laravel-phone' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Propaganistas\\LaravelPhone\\PhoneServiceProvider',
+    ),
+  ),
   'torann/geoip' => 
   array (
     'providers' => 

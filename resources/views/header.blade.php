@@ -35,7 +35,7 @@
             @endforeach
         </div>
 
-        @if (!cookie('city'))
+        @if (!Cookie::has('city'))
             <div class="city-question-popup" style="display: none;">
                 <div class="popup-question">Ваш город - <b>{{ $city }}</b></div>
                 <div class="popup-group-btn text-center">
@@ -83,7 +83,9 @@
         <div class="col-md-3 text-right">
             <ul class="header-additional-menu">
                 <li><i class="lh-icon lh-icon-search"></i></li>
-                <li><i class="lh-icon lh-icon-heart"></i></li>
+                @if (auth()->check())
+                    <li><i class="lh-icon lh-icon-heart"></i></li>
+                @endif
                 <li><a href="{{ route('realty.create') }}" class="btn btn-primary">+ Добавить объявление</a></li>
             </ul>
         </div>

@@ -178,9 +178,10 @@ return [
         App\Providers\BlogServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
         Barryvdh\Debugbar\ServiceProvider::class,
+        Propaganistas\LaravelPhone\PhoneServiceProvider::class,
 
         /*
-         * Derkach.BizService Providers...
+         * LinSkill Providers...
          */
         \App\Providers\ShortcodesServiceProvider::class,
 

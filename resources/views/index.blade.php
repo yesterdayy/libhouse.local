@@ -47,7 +47,7 @@
     @include('header')
 
     <div class="wrap row">
-        <div class="wrap-content col-md-9">
+        <div class="wrap-content col-md-9 px-0">
             @yield('content')
         </div>
 

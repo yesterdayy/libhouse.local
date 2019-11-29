@@ -5,6 +5,9 @@
     font-family: "AvenirNextCyr",sans-serif !important
     border: 0 !important
 
+.popover[role="tooltip"]
+    font-size: 15px
+
 .popover .arrow
     display: none !important
 
@@ -76,3 +79,23 @@
 
 #auth-form-modal form
     margin: 0
+
+.popover.tooltip_err
+    max-width: 300px !important
+    padding: 20px 30px !important
+    background: $red
+    @include border-radius(4px !important)
+    box-shadow: 2px 2px 10px 0 rgba(0, 0, 0, 0.25)
+    line-height: 20px
+
+.popover.tooltip_err .popover-body
+    color: $white
+
+.popover.tooltip_err .arrow
+    display: block !important
+
+.popover.tooltip_err .arrow:after
+    border-right-color: $red
+
+.form-inline-table .d-table-cell:not(:first-child)
+    padding-left: 20px

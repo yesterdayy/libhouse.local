@@ -34,8 +34,8 @@
                     <div class="realty-city">{{ $realty->city }}</div>
                 </div>
 
-                <div class="col-md-6">
-                    <div class="realty-favorite text-right"><i class="lh-icon lh-icon-heart"></i><span>в избранное</span></div>
+                <div class="col-md-6 pl-0">
+                    <div class="realty-favorite text-right"><i class="lh-icon lh-icon-heart"></i><span>Добавить в избранное</span></div>
                     <div class="realty-counter"><i class="lh-icon lh-icon-eye"></i>{{ $realty->counters->counter }}</div>
                     <div class="realty-date float-right">{{ get_locale_date($realty->created_at, 'j F') }}</div>
                 </div>

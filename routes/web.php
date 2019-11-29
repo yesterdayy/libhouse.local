@@ -35,7 +35,7 @@ Route::get('/realty/{slug?}', 'IndexController@index')->where('slug', 'kvartira|
 
 Route::get('/realty', 'RealtyController@index');
 Route::get('/realty/create', 'RealtyController@create')->name('realty.create');
-Route::post('/realty', 'RealtyController@store');
+Route::post('/realty', 'RealtyController@store')->middleware('realty.store');
 Route::get('/realty/{slug}', 'RealtyController@show')->name('realty.show');
 Route::put('/realty/{slug}', 'RealtyController@update')->name('realty.update');
 Route::get('/realty/{slug}/edit', 'RealtyController@edit')->name('realty.edit');

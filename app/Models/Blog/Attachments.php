@@ -135,7 +135,7 @@ class Attachments extends Model
         foreach ($thumbs_urls as $thumb) {
             if (Storage::disk($disk)->exists($this->physicalPath())) {
                 $thumbname = $thumb['value'][0] . '_' . $thumb['value'][1];
-                $thumbs[$thumb['slug']] = Storage::disk($disk)->url($this->physicalPath($thumbname));
+                $thumbs[$thumb['slug']] = mb_substr(Storage::disk($disk)->url($this->physicalPath($thumbname)), 0, -3) . 'jpg';
             }
         }
 

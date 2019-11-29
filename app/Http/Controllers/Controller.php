@@ -37,7 +37,7 @@ class Controller extends BaseController
 
 
         if (!Cookie::has('city')) {
-            view()->share('city', geoip('194.28.103.76')->getAttribute('city'));
+            view()->share('city', geoip($_SERVER['REMOTE_ADDR'])->getAttribute('city'));
         } else {
             view()->share('city', Cookie::get('city'));
         }

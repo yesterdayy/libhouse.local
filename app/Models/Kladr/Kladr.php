@@ -10,6 +10,8 @@ class Kladr extends Model
 
     protected static $limit = 10;
 
+    const DB_NAME = 'kladr';
+
     public static function city($city_name, $region_code, $limit = null, $with_socr = true) {
         $result = ['results' => []];
         $where = '1';
@@ -25,7 +27,7 @@ class Kladr extends Model
         }
 
         $result = DB::select("SELECT CODE `CITY_CODE`, SOCR `CITY_SOCR`, NAME `CITY_NAME` 
-        FROM kladr.kladr 
+        FROM ".self::DB_NAME.".kladr 
         WHERE $where 
         AND `NAME` LIKE '$city_name%' 
         AND RIGHT(`CODE`, 2) = '00' 
@@ -41,7 +43,7 @@ class Kladr extends Model
             $city_kladr = "'" . implode("', '", $city_kladr) . "'";
 
             $result = DB::select("SELECT `CODE`, `NAME` 
-            FROM kladr.kladr 
+            FROM ".self::DB_NAME.".kladr 
             WHERE `CODE` IN ($city_kladr)
             AND RIGHT(`CODE`, 2) = '00' 
             ORDER BY `SOCR` IS NULL ASC, FIELD(`SOCR`, 'г', 'пгт', 'c', 'аал', 'автодорога', 'АО', 'Аобл', 'арбан', 'аул', 'волость', 'высел', 'г-к', 'г.о.', 'гп', 'д', 'днп', 'дп', 'ж/д пл-ка', 'ж/д_будка', 'ж/д_казарм', 'ж/д_оп', 'ж/д_платф', 'ж/д_пост', 'ж/д_рзд', 'ж/д_ст', 'жилзона', 'жилрайон', 'заимка', 'казарма', 'кв-л', 'кордон', 'кп', 'край', 'лпх', 'м', 'массив', 'мкр', 'нп', 'обл', 'округ', 'остров', 'п', 'п. ж/д ст.', 'п/о', 'п/р', 'п/ст', 'погост', 'починок', 'промзона', 'р-н', 'Респ', 'рзд', 'рп', 'с', 'с/а', 'с/мо', 'с/о', 'с/п', 'с/с', 'сл', 'снт', 'ст', 'ст-ца', 'тер', 'у', 'ул', 'х', 'Чувашия', '') ASC
@@ -94,8 +96,8 @@ class Kladr extends Model
         $result = DB::select("SELECT * FROM (
         SELECT street.CODE `STREET_CODE`, street.SOCR `STREET_SOCR`, `street`.NAME `STREET_NAME`,
         city.CODE `CITY_CODE`, city.SOCR `CITY_SOCR`, `city`.NAME `CITY_NAME`
-        FROM kladr.street `street`
-        LEFT JOIN kladr.kladr `city` ON city.CODE = LEFT(street.CODE, 13)
+        FROM ".self::DB_NAME.".street `street`
+        LEFT JOIN ".self::DB_NAME.".kladr `city` ON city.CODE = CONCAT(LEFT(street.CODE, 11), '00')
         WHERE 1 $city_code AND street.`NAME` LIKE '$street_name%' 
         $region_code
         AND RIGHT(street.`CODE`, 2) = '00' 
@@ -149,8 +151,8 @@ class Kladr extends Model
 
         $data = DB::select("SELECT * FROM (
         SELECT street.`CODE`, street.`SOCR`, city.`SOCR` `CITY_SOCR`, CONCAT_WS(', ', city.`NAME`, CONCAT(street.`SOCR`, '. ', street.`NAME`)) `NAME`
-        FROM kladr.street `street`
-        LEFT JOIN kladr.kladr `city` ON city.CODE = LEFT(street.CODE, 13)
+        FROM ".self::DB_NAME.".street `street`
+        LEFT JOIN ".self::DB_NAME.".kladr `city` ON city.CODE = LEFT(street.CODE, 13)
         WHERE 1 $city_code AND street.`NAME` LIKE '$street_name%' 
         $region_code
         AND RIGHT(street.`CODE`, 2) = '00' 
@@ -173,16 +175,16 @@ class Kladr extends Model
     }
 
     public static function get_city_by_kladr($kladr) {
-        return DB::select("SELECT `NAME` FROM kladr.kladr WHERE `CODE` = $kladr LIMIT 1")[0]->NAME;
+        return DB::select("SELECT `NAME` FROM ".self::DB_NAME.".kladr WHERE `CODE` = $kladr LIMIT 1")[0]->NAME;
     }
 
     public static function get_street_by_kladr($kladr) {
-        return DB::select("SELECT `NAME` FROM kladr.street WHERE `CODE` = $kladr LIMIT 1")[0]->NAME;
+        return DB::select("SELECT `NAME` FROM ".self::DB_NAME.".street WHERE `CODE` = $kladr LIMIT 1")[0]->NAME;
     }
 
     public static function get_popular_cities($per_row = 5) {
         $cities = DB::select("SELECT `NAME`
-        FROM `kladr`.kladr 
+        FROM `".self::DB_NAME."`.kladr 
         WHERE (`CODE` LIKE '92%' OR `CODE` LIKE '91%') and socr = 'г' AND RIGHT(`CODE`, 2) = '00'
         ORDER BY `NAME`");
 

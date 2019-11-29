@@ -29,7 +29,7 @@
     </div>
 
     <div class="form-group">
-        <button class="btn btn-lg btn-block active" style="margin-left: 0;margin-right: 0;">Зарегистрироваться</button>
+        <button class="btn btn-lg btn-block active mx-0">Зарегистрироваться</button>
     </div>
 
     <div class="form-group form-after-desc text-center">

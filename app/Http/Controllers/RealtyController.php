@@ -219,9 +219,17 @@ class RealtyController extends Controller
     public function store(RealtyFormRequest $request, $slug = null) {
         $input = $request->all();
 
-        if (isset($input['user_realty_type'])) {
+        if (isset($input['user_realty_type']) || isset($input['phone']) || isset($input['email'])) {
             $user = Auth::user();
-            $user->realty_type = $input['user_realty_type'];
+            if (isset($input['email']) && !empty($input['email'])) {
+                $user->email = $input['email'];
+            }
+            if (isset($input['phone']) && !empty($input['phone'])) {
+                $user->phone = $input['phone'];
+            }
+            if (isset($input['user_realty_type']) && !empty($input['user_realty_type'])) {
+                $user->realty_type = $input['user_realty_type'];
+            }
             $user->save();
         }
 
@@ -282,10 +290,12 @@ class RealtyController extends Controller
         if (isset($input['photos'])) {
             $insert_photos= [];
             foreach ($input['photos'] as $k => $photo) {
-                $insert_photos[] = [
-                    'type' => 'photo',
-                    'attachment_id' => $photo,
-                ];
+                if (!empty($photo)) {
+                    $insert_photos[] = [
+                        'type' => 'photo',
+                        'attachment_id' => $photo,
+                    ];
+                }
             }
             unset($k, $photo);
             $realty->attachments()->attach($insert_photos);

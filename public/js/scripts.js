@@ -130,6 +130,7 @@ function init_header_filters() {
         $.cookie('city', $(this).closest('li').attr('data-val'));
         $('.current-city').text($(this).closest('li').attr('data-val'));
         show_toast('Сохранено');
+        hide_modal();
     });
 
     // Инпута выбора адреса в фильтре
@@ -168,14 +169,8 @@ function init_header_filters() {
             $.cookie('city_kladr', suggestion.data.city_kladr);
             $('.current-city').text(suggestion.value);
             show_toast('Сохранено');
+            hide_modal();
         },
-    });
-
-    // Выбор города пользователя
-    $('.address-pick').on('select2:select', function () {
-        $.cookie('city', $(this).val());
-        $('.current-city').text($(this).val());
-        show_toast('Сохранено');
     });
 
     // Аутентификация окно
@@ -206,6 +201,7 @@ function init_header_filters() {
             },
             error: function (result, test, arr) {
                 $('input, textarea', that).removeClass('is-invalid');
+                $('input, textarea', that).addClass('is-valid');
                 if ('errors' in result.responseJSON) {
                     tooltip_err(result.responseJSON.errors, that);
                 }
@@ -307,6 +303,8 @@ function autocomplete_close_listener(selector, with_clear) {
 
 window.tooltip_err_timeout = null;
 function tooltip_err(err_json, form) {
+    $('.tooltip_err', form).popover('dispose');
+
     if (Object.keys(err_json).length) {
         for (var field in err_json) {
             if ($('[name='+field+']', form).length) {
@@ -326,16 +324,12 @@ function tooltip_err(err_json, form) {
                 }
 
                 $('[name=' + field + ']', form).popover('show');
-                $('[name='+field+']', form).addClass('is-invalid');
+                $('[name='+field+']', form).removeClass('is-valid').addClass('is-invalid');
             }
         }
 
-        if (window.tooltip_err_timeout) {
-            clearTimeout(window.tooltip_err_timeout);
-        }
-
         window.tooltip_err_timeout = setTimeout(function () {
-            $('.tooltip_err', form).popover('hide');
+            $('.tooltip_err', form).popover('dispose');
         }, 5000);
     }
 }

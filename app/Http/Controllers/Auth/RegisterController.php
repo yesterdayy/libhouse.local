@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Models\User\User;
 use App\Http\Controllers\Controller;
 use App\Models\User\UserSubscribe;
+use App\Rules\EmailRFC;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -53,9 +54,9 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'email' => 'required|string|email|max:255|unique:users',
+            'email' => ['required', 'unique:users', new EmailRFC],
             'password' => 'required|string|min:6',
-            'phone' => 'required|string|max:20|min:8',
+            'phone' => 'required|phone:RU',
         ]);
     }
 
