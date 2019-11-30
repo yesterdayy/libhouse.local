@@ -175,11 +175,11 @@ class Kladr extends Model
     }
 
     public static function get_city_by_kladr($kladr) {
-        return DB::select("SELECT `NAME` FROM ".self::DB_NAME.".kladr WHERE `CODE` = $kladr LIMIT 1")[0]->NAME;
+        return DB::select("SELECT `NAME` FROM ".self::DB_NAME.".kladr WHERE `CODE` = '$kladr' LIMIT 1")[0]->NAME;
     }
 
     public static function get_street_by_kladr($kladr) {
-        return DB::select("SELECT `NAME` FROM ".self::DB_NAME.".street WHERE `CODE` = $kladr LIMIT 1")[0]->NAME;
+        return DB::select("SELECT `NAME` FROM ".self::DB_NAME.".street WHERE `CODE` = '$kladr' LIMIT 1")[0]->NAME;
     }
 
     public static function get_popular_cities($per_row = 5) {

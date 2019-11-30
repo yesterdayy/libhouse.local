@@ -50,7 +50,8 @@
     46 => 'App\\Providers\\BlogServiceProvider',
     47 => 'Intervention\\Image\\ImageServiceProvider',
     48 => 'Barryvdh\\Debugbar\\ServiceProvider',
-    49 => 'App\\Providers\\ShortcodesServiceProvider',
+    49 => 'Propaganistas\\LaravelPhone\\PhoneServiceProvider',
+    50 => 'App\\Providers\\ShortcodesServiceProvider',
   ),
   'eager' => 
   array (
@@ -86,7 +87,8 @@
     29 => 'App\\Providers\\BlogServiceProvider',
     30 => 'Intervention\\Image\\ImageServiceProvider',
     31 => 'Barryvdh\\Debugbar\\ServiceProvider',
-    32 => 'App\\Providers\\ShortcodesServiceProvider',
+    32 => 'Propaganistas\\LaravelPhone\\PhoneServiceProvider',
+    33 => 'App\\Providers\\ShortcodesServiceProvider',
   ),
   'deferred' => 
   array (

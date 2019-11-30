@@ -22,7 +22,9 @@ class Realty extends Model
 
         // auto-sets values on creation
         static::creating(function ($query) {
-            $query->author_id = Auth::user()->getAuthIdentifier();
+            if (Auth::check()) {
+                $query->author_id = Auth::user()->getAuthIdentifier();
+            }
         });
     }
 

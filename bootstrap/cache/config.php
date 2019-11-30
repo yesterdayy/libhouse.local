@@ -49,7 +49,8 @@
       29 => 'App\\Providers\\BlogServiceProvider',
       30 => 'Intervention\\Image\\ImageServiceProvider',
       31 => 'Barryvdh\\Debugbar\\ServiceProvider',
-      32 => 'App\\Providers\\ShortcodesServiceProvider',
+      32 => 'Propaganistas\\LaravelPhone\\PhoneServiceProvider',
+      33 => 'App\\Providers\\ShortcodesServiceProvider',
     ),
     'aliases' => 
     array (

@@ -219,7 +219,7 @@ class RealtyController extends Controller
     public function store(RealtyFormRequest $request, $slug = null) {
         $input = $request->all();
 
-        if (isset($input['user_realty_type']) || isset($input['phone']) || isset($input['email'])) {
+        if ((isset($input['user_realty_type']) || isset($input['phone']) || isset($input['email'])) && Auth::check()) {
             $user = Auth::user();
             if (isset($input['email']) && !empty($input['email'])) {
                 $user->email = $input['email'];
@@ -262,7 +262,7 @@ class RealtyController extends Controller
             foreach ($input['info'] as $k => $info) {
                 if (!empty($info)) {
                     if (is_array($info)) {
-                        $info = implode('||', strip_tags($info));
+                        $info = strip_tags(implode('||', $info));
                     }
 
                     $insert_info[] = [
