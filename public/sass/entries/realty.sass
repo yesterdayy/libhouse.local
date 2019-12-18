@@ -1,8 +1,8 @@
-.realty-list.row
+.realty.row
     margin-left: -10px
     margin-right: -10px
 
-.realty-list .realty-list-article
+.realty-article
     padding-left: 10px
     padding-right: 10px
     margin-bottom: 20px
@@ -10,7 +10,7 @@
 .realty-border
     border: solid 1px $white-two
 
-.realt-wrap
+.realty-content-wrap
     padding: 20px
 
 div.realty-title
@@ -40,20 +40,24 @@ div.realty-title
 .realty-city
     font-size: 22px
 
-.realty-favorite, .realty-counter, .realty-date
+.realty-favorite-btn, .realty-counter, .realty-date
     color: $warm-grey
     height: 28px
     line-height: 28px
 
-.realty-favorite
+.realty-favorite-btn
     margin-bottom: 10px
     cursor: pointer
 
-.realty-favorite i
+.realty-favorite-btn i
     font-size: 18px
 
-.realty-favorite:hover span
+.realty-favorite-btn:hover span
     border: 0
+
+.realty-favorite-btn.active i:before
+    color: $red
+    transition:     .4s
 
 .realty-counter
     margin-left: 10px
@@ -70,12 +74,15 @@ div.realty-title
 .realty-photos > .realty-img:nth-child(n + 2)
     display: none
 
+.compact-realty-template .realty-photos, .favorite-realty-template .realty-photos, .search-realty-template .realty-photos
+    background: none
+
 .realty-counter i.lh-icon
     font-size: 18px
     margin-top: -2px
     display: inline-block
 
-.realty-favorite span
+.realty-favorite-btn span
     border-bottom: 1px dotted $warm-grey
 
 .realty-single-photo-nav .realty-img

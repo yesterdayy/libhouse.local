@@ -18,9 +18,10 @@ class RealtyFilterMiddleware
         $request['start'] = clear_string($request['start']);
         $request['length'] = clear_string($request['length']);
 
+        $request['term'] = clear_string($request['term']);
         $request['address'] = clear_string($request['address']);
-        $request['address_city'] = clear_numeric($request['header_address_city']);
-        $request['address_street'] = clear_numeric($request['header_address_street']);
+        $request['header_address_city'] = clear_numeric($request['header_address_city']);
+        $request['header_address_street'] = clear_numeric($request['header_address_street']);
         $request['trade_type'] = clear_numeric($request['trade_type']);
         $request['dop_type'] = clear_numeric($request['dop_type']);
         $request['price_start'] = clear_numeric($request['price_start']);

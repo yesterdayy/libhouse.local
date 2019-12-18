@@ -422,6 +422,16 @@ if (! function_exists('get_realty_nav')) {
     }
 }
 
+if (! function_exists('is_active_realty')) {
+    function is_active_realty($realty) {
+        if ($realty->expired_at > date('Y-m-d H:i:s')) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+}
+
 
 /*
  * *******************************************************
@@ -625,6 +635,25 @@ if (! function_exists('toBoolean')) {
     }
 
 }
+
+if (! function_exists('toast_response')) {
+
+    function toast_response(string $status, string $message, array $dop_params = null) {
+        $http_code = 200;
+        if ($status == 'error') {
+            $http_code = 401;
+        }
+
+        $result = ['status' => $status, 'message' => $message];
+        if (!empty($dop_params)) {
+            $result = array_merge($result, $dop_params);
+        }
+
+        return response()->json($result, $http_code);
+    }
+
+}
+
 
 if (! function_exists('clear_string')) {
 

@@ -16,7 +16,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'last_name', 'first_name', 'email', 'password', 'phone', 'realty_type'
+        'last_name', 'first_name', 'email', 'password', 'phone', 'realty_type_id'
     ];
 
     /**
@@ -44,9 +44,9 @@ class User extends Authenticatable
         return $this->belongsToMany('App\Models\User\UserCompany', 'users_company', null, 'company_id');
     }
 
-    public function realty_type_info()
+    public function realty_type()
     {
-        return $this->hasOne('App\Models\User\UserRealtyType', 'id', 'realty_type');
+        return $this->hasOne('App\Models\User\UserRealtyType', 'id', 'realty_type_id');
     }
 
     public function realty_comment_rating()

@@ -1,5 +1,7 @@
-$toast_background: #495aff
-$toast_color: #ffffff
+$toast_success_background: #49C628
+$toast_error_background: #EA0000
+$toast_success_color: #ffffff
+$toast_error_color: #ffffff
 
 .toasts-wrap
     position: fixed
@@ -8,12 +10,16 @@ $toast_color: #ffffff
     z-index: 999999
 
 .toast
-    background-color: $toast_background !important
-    color: $toast_color !important
     margin: 10px 0
-    width: 300px
-    height: 80px
-    padding: 12px 21px
+    padding: 20px 38px
+
+.toast.toast-success
+    background: $toast_success_background
+    color: $toast_success_color
+
+.toast.toast-error
+    background: $toast_error_background
+    color: $toast_error_color
 
 .toast .toast-body > p:first-child
     margin-top: 0

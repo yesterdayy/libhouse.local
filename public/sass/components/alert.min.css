@@ -1,0 +1,1 @@
+body:before{white-space:pre;font-family:monospace;content:"Error: Undefined variable: \"$red-50\".\A         on line 5 of alert.sass\A \A 1: .alert\A 2:     border-radius: 4px\A 3: \A 4: .alert-danger\A 5:     border: solid 1px $red-50\A 6:     background-color: $red-15"}

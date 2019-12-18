@@ -3,10 +3,10 @@
 {{ Html::script('js/form.min.js') }}
 
 @if ($errors->any())
-    <div class="alert form-errors">
-        <ul>
+    <div class="alert alert-danger">
+        <ul class="form-errors">
             @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
+                <li>@if ($loop->first)<i class="lh-icon lh-icon-danger"></i> @endif{{ $error }}</li>
             @endforeach
         </ul>
     </div>
@@ -18,8 +18,8 @@
 
         <div class="btn-group-toggle" data-toggle="buttons">
             @foreach ($user_realty_types as $user_realty_type)
-                <div class="@if ($loop->first) active @endif @if ($user_realty_type->status == 0) btn-disabled @else btn @endif">
-                    {{ Form::radio('user_realty_type', $user_realty_type->id, $loop->first ? true : false, ['disabled' => $user_realty_type->status == 0 ? true : false]) }} {{ $user_realty_type->name }}
+                <div class="{{ (isset($old['user_realty_type']) && !empty($old['user_realty_type']) ? ($old['user_realty_type'] == $user_realty_type->id ? 'active' : '') : ($loop->first ? 'active' : '')) }} @if ($user_realty_type->status == 0) btn-disabled @else btn @endif">
+                    {{ Form::radio('user_realty_type', $user_realty_type->id, (isset($old['user_realty_type']) && !empty($old['user_realty_type']) ? (boolean) ($old['user_realty_type'] == $user_realty_type->id) : ($loop->first ? true : false)), ['disabled' => $user_realty_type->status == 0 ? true : false]) }} {{ $user_realty_type->name }}
                 </div>
             @endforeach
         </div>
@@ -30,8 +30,8 @@
 
         <div class="btn-group-toggle" data-toggle="buttons">
             @foreach ($trade_types as $trade_type)
-                <div class="@if ($loop->first) active @endif btn">
-                    {{ Form::radio('trade_type', $trade_type->id, $loop->first ? true : false) }} {{ $trade_type->name }}
+                <div class="{{ (isset($old['trade_type']) && !empty($old['trade_type']) ? ($old['trade_type'] == $trade_type->id ? 'active' : '') : ($loop->first ? 'active' : '')) }} btn">
+                    {{ Form::radio('trade_type', $trade_type->id, (isset($old['trade_type']) && !empty($old['trade_type']) ? (boolean) ($old['trade_type'] == $trade_type->id) : ($loop->first ? true : false))) }} {{ $trade_type->name }}
                 </div>
             @endforeach
         </div>
@@ -42,8 +42,8 @@
 
         <div class="btn-group-toggle" data-toggle="buttons">
             @foreach ($rent_durations as $rent_duration)
-                <div class="@if ($loop->first) active @endif btn">
-                    {{ Form::radio('duration', $rent_duration->id, $loop->first ? true : false) }} {{ $rent_duration->name }}
+                <div class="{{ (isset($old['duration']) && !empty($old['duration']) ? ($old['duration'] == $rent_duration->id ? 'active' : '') : ($loop->first ? 'active' : '')) }} btn">
+                    {{ Form::radio('duration', $rent_duration->id, (isset($old['duration']) && !empty($old['duration']) ? (boolean) ($old['duration'] == $rent_duration->id) : ($loop->first ? true : false))) }} {{ $rent_duration->name }}
                 </div>
             @endforeach
                 <div class="d-none">
@@ -57,8 +57,8 @@
 
         <div class="btn-group-toggle" data-toggle="buttons">
             @foreach ($dop_types as $dop_type)
-                <div class="@if ($loop->first) active @endif btn">
-                    {{ Form::radio('dop_type', $dop_type->id, $loop->first ? true : false) }} {{ $dop_type->name }}
+                <div class="{{ (isset($old['dop_type']) && !empty($old['dop_type']) ? ($old['dop_type'] == $dop_type->id ? 'active' : '') : ($loop->first ? 'active' : '')) }} btn">
+                    {{ Form::radio('dop_type', $dop_type->id, (isset($old['dop_type']) && !empty($old['dop_type']) ? (boolean) ($old['dop_type'] == $dop_type->id) : ($loop->first ? true : false))) }} {{ $dop_type->name }}
                 </div>
             @endforeach
         </div>
@@ -69,8 +69,8 @@
 
         <div class="btn-group-toggle" data-toggle="buttons">
             @foreach ($rent_types as $rent_type)
-                <div class="@if ($loop->first) active @endif btn">
-                    {{ Form::radio('rent_type', $rent_type->id, $loop->first ? true : false) }} {{ $rent_type->name }}
+                <div class="{{ (isset($old['rent_type']) && !empty($old['rent_type']) ? ($old['rent_type'] == $rent_type->id ? 'active' : '') : ($loop->first ? 'active' : '')) }} btn">
+                    {{ Form::radio('rent_type', $rent_type->id, (isset($old['rent_type']) && !empty($old['rent_type']) ? (boolean) ($old['rent_type'] == $rent_type->id) : ($loop->first ? true : false))) }} {{ $rent_type->name }}
                 </div>
             @endforeach
         </div>
@@ -97,7 +97,9 @@
                 $('.rent-type').addClass('d-none');
                 $('.rent-type').prop('checked', false);
                 $('.rent-type-' + $(this).val()).removeClass('d-none');
-                $('.rent-type-' + $(this).val()).find('input[type="radio"]').eq(0).prop('checked', true);
+                if ($('.rent-type-' + $(this).val()).find('input[type="radio"]:checked').length === 0) {
+                    $('.rent-type-' + $(this).val()).find('input[type="radio"]').eq(0).prop('checked', true);
+                }
             });
 
             $('input[name=rent_type]:checked').change();
@@ -113,6 +115,18 @@
         {{ Form::hidden('address_street') }}
     </div>
 
+    @if ($house_classes->count() > 0)
+        <div class="form-group d-none house-classes">
+            {{ Form::label('house_classes', 'Класс здания') }}
+            @foreach ($house_classes as $house_class)
+                <div class="d-inline-block">
+                    {{ Form::radio('house_class', $house_class->id, (isset($old['house_class']) && !empty($old['house_class']) ? (boolean) ($old['house_class'] == $house_class->id) : null), ['class' => 'radio', 'id' => 'house_class' . '_' . $house_class->id]) }}
+                    {{ Form::label('house_class' . '_' . $house_class->id, $house_class->name) }}
+                </div>
+            @endforeach
+        </div>
+    @endif
+
     @if ($room_types->count() > 0)
         <div class="form-group">
             {!! Form::rawLabel('rent_type', 'Количество комнат<span>*</span>') !!}
@@ -123,7 +137,9 @@
             </div>
 
             <script>
-                $('.room_type input[type=radio]').eq(0).prop('checked', true);
+                if ($('.room_type input[type=radio]:checked').length === 0) {
+                    $('.room_type input[type=radio]').eq(0).prop('checked', true);
+                }
             </script>
         </div>
     @endif
@@ -156,9 +172,11 @@
             {{ Form::text('info[square_kitchen]', null, ['class' => 'form-control ' . ($errors->has('info.square_kitchen') ? 'is-invalid' : (isset($old['info[square_kitchen]']) && !empty($old['info[square_kitchen]']) ? 'is-valid' : '')), 'style' => 'max-width: 150px;']) }}
         </div>
     </div>
+
+    <div class="commercy-info-wrap"></div>
 </div>
 
-<div class="realty-create-form-block">
+<div class="realty-create-form-block comfort-add-wrap">
     @if (count($comforts) > 0)
         <div class="form-group row checkbox-grid-wrap">
             @foreach ($comforts as $cat_name => $comfort_cat)
@@ -206,7 +224,12 @@
     </div>
 </div>
 
-<div class="realty-create-form-block">
+<div class="realty-create-form-block last-realty-add-wrap">
+    <div class="form-group d-none">
+        {{ Form::label('title', 'Название объявления') }}
+        {{ Form::text('title', null, ['class' => 'form-control' . ($errors->has('title') ? 'is-invalid' : (isset($old['title']) && !empty($old['title']) ? 'is-valid' : ''))]) }}
+    </div>
+
     <div class="form-group">
         {!! Form::rawLabel('content', 'Описание объявления<span>*</span>') !!}
         {{ Form::textarea('content', null, ['class' => 'form-control ' . ($errors->has('content') ? 'is-invalid' : (isset($old['content']) && !empty($old['content']) ? 'is-valid' : ''))]) }}
@@ -214,21 +237,20 @@
 
     <div class="d-table form-inline-table">
         <div class="form-group row d-table-cell">
-            {{ Form::label('price', 'Стоимость') }}
-            <div class="price-input">
-                {{ Form::text('price', null, ['class' => 'form-control ' . ($errors->has('price') ? 'is-invalid' : (isset($old['price']) && !empty($old['price']) ? 'is-valid' : '')), 'style' => 'max-width: 150px;', 'maxlength' => '16']) }}
-                <span class="currency-price-input">руб.</span>
-            </div>
+            {{ Form::label('price', 'Арендная плата') }}
+            {{ Form::text('price', null, ['class' => 'form-control d-inline-block' . ($errors->has('price') ? 'is-invalid' : (isset($old['price']) && !empty($old['price']) ? 'is-valid' : '')), 'style' => 'max-width: 150px;', 'maxlength' => '16']) }}
+            <span class="currency-price-input">руб.</span>
+        </div>
+
+        <div class="form-group row d-table-cell" style="display: none;">
+            {{ Form::label('comission', 'Размер комиссии') }}
+            {{ Form::text('info[comission]', null, ['class' => 'form-control d-inline-block' . ($errors->has('price') ? 'is-invalid' : (isset($old['price']) && !empty($old['price']) ? 'is-valid' : '')), 'style' => 'max-width: 150px;', 'maxlength' => '16', 'id' => 'comission']) }}
+            <span class="currency-price-input">%</span>
         </div>
 
         <div class="form-group row d-table-cell">
-            {{ Form::label('phone', 'Номер телефона для связи') }}
-            {{ Form::text('phone', null, ['class' => 'form-control ' . ($errors->has('phone') ? 'is-invalid' : (isset($old['phone']) && !empty($old['phone']) ? 'is-valid' : '')), 'style' => 'max-width: 300px;', 'maxlength' => '20']) }}
-        </div>
-
-        <div class="form-group row d-table-cell">
-            {{ Form::label('email', 'Электронная почта') }}
-            {{ Form::text('email', null, ['class' => 'form-control ' . ($errors->has('email') ? 'is-invalid' : (isset($old['price']) && !empty($old['email']) ? 'is-valid' : '')), 'style' => 'max-width: 300px;']) }}
+            {{ Form::label('realty-add-phone', 'Номер телефона для связи') }}
+            {{ Form::text('phone', null, ['class' => 'form-control ' . ($errors->has('phone') ? 'is-invalid' : (isset($old['phone']) && !empty($old['phone']) ? 'is-valid' : '')), 'style' => 'max-width: 300px;', 'maxlength' => '20', 'id' => 'realty-add-phone']) }}
         </div>
     </div>
 
@@ -240,5 +262,12 @@
 </div>
 
 <div class="form-group float-right">
-    <button class="btn btn-lg active" style="margin-right: 0;">Опубликовать объявление</button>
+    <button class="btn btn-lg active add-realty" style="margin-right: 0;">Опубликовать объявление</button>
 </div>
+
+<script>
+    $(function() {
+        $('.btn-group-toggle .btn.active input').change();
+        hidden_field_set_null_value('.realty-create-form');
+    });
+</script>

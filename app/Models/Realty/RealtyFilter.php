@@ -20,6 +20,10 @@ class RealtyFilter extends Model
 
         $where = [];
 
+        if ($request['term']) {
+            $where[] = " `re`.`title` LIKE '%{$request['term']}%' ";
+        }
+
         if ($request['header_address_city']) {
             $where[] = " `re`.`city` = {$request['header_address_city']} ";
         }

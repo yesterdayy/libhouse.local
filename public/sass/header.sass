@@ -16,9 +16,6 @@
     cursor: pointer
     display: inline-block
 
-.current-city-wrap:hover > span
-    text-decoration: underline
-
 .header-profile-menu
     margin: 0
     padding: 0
@@ -37,11 +34,8 @@
 .header-profile-menu li a:hover
     text-decoration: none
 
-.header-profile-menu li a:hover > span
-    text-decoration: underline
-
 .header-middle-wrap
-    padding: 0 10px
+    padding: 0 50px 0 60px
     line-height: 90px
     vertical-align: middle
     display: inline-block
@@ -65,6 +59,8 @@
     margin: 0
     padding: 0
     float: right
+    width: 100%
+    display: flex
 
 .header-additional-menu li
     float: left
@@ -270,5 +266,34 @@
     width: 383px
 
 .logo
-    padding: 30px 60px 29px 60px
+    padding: 30px 60px 29px 0
     box-sizing: content-box
+
+.light-header .header-middle-wrap
+    @include box-shadow(0px 0px 4px rgba(0, 0, 0, 0.1))
+    margin-bottom: 20px
+
+.header-search
+    cursor: pointer
+
+li.header-search.active
+    position: relative
+    margin-top: 15px
+
+.header-search input
+    transition: 0.4s
+
+.header-search.active .lh-icon-search
+    position: absolute
+    right: 22px
+    top: 23px
+
+.header-search:hover .lh-icon-search:before, .header-search.active .lh-icon-search:before
+    color: $lightish-blue
+
+.header-additional-menu > li.header-search
+    flex: 1 1
+    max-width: 318px
+
+.header-additional-menu > li.header-search input[type=text]
+    padding: 0 75px 0 30px

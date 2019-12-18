@@ -20,6 +20,11 @@
     background: $lightish-blue
     color: $white-two
 
+.btn-success
+    background-color: $toxic-green
+    border-color: $toxic-green
+    color: $white-two
+
 .btn.active:hover
     background: $warm-blue
 
@@ -44,7 +49,7 @@
     margin: 0
 
 .btn.btn-lg
-    padding: 19px 20px
+    padding: 17px 31px
     line-height: 20px
 
 .btn.btn-small
@@ -58,6 +63,45 @@
 .btn-block
     display: block
     width: 100%
+
+.btn-simple-badge
+    margin-left: 10px
+    padding: 4px 10px
+    line-height: 20px
+    font-size: 15px
+    @include border-radius(4px)
+
+.btn-default.green
+    border-color: $toxic-green
+    color: $dark-navy-blue
+
+.btn-default.green .btn-simple-badge
+    background: rgba($toxic-green, .15)
+    color: $toxic-green
+
+.btn-default.gray
+    border-color: $pinkish-grey
+    color: $dark-navy-blue
+
+.btn-default.gray .btn-simple-badge
+    background: rgba($pinkish-grey, .15)
+    color: $pinkish-grey
+
+.btn-default.red
+    border-color: $red
+    color: $dark-navy-blue
+
+.btn-default.red .btn-simple-badge
+    background: rgba($red, .15)
+    color: $red
+
+.btn-default.blue
+    border-color: $lightish-blue
+    color: $dark-navy-blue
+
+.btn-default.blue .btn-simple-badge
+    background: rgba($lightish-blue, .15)
+    color: $lightish-blue
 
 /* Material Ripple */
 

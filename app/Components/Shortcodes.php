@@ -19,7 +19,7 @@ class Shortcodes extends App
                 view()->share('shortcode_string_args', shortcode_args_to_string($args));
                 view()->share('shortcode_args', $args);
                 view()->share('widget_class', $args['shortcode']);
-                view()->share('widget_title', $args['widget_title'] ?? $args['shortcode']);
+                view()->share('widget_title', $args['widget_title'] ?? null);
                 view()->share('ajax', request()->ajax());
                 return $class::$method($args);
             }

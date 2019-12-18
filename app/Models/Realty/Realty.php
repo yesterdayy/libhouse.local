@@ -3,6 +3,8 @@
 namespace App\Models\Realty;
 
 use App\Models\Kladr\Kladr;
+use App\Models\User\UserRealtyFavorite;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
@@ -47,6 +49,10 @@ class Realty extends Model
         'expired_at',
     ];
 
+    protected $dates = [
+        'expired_at',
+    ];
+
     const SORT_VARIANTS = [
         'default' => 'по умолчанию',
         'price_asc' => 'по цене (сначала дешевле)',
@@ -54,49 +60,125 @@ class Realty extends Model
         'square_desc' => 'по общей площади',
     ];
 
-    public static function realty_list_widget($shortcode_args) {
+    public static function realty_widget($shortcode_args) {
         $start = $shortcode_args['start'] ?? 0;
         $limit = $shortcode_args['limit'] ?? 9;
         $start = Request::get('page') ? (Request::get('page') - 1) * $limit : $start;
-        $author_id = $shortcode_args['author_id'] ?? null;
-        $ajax_url = $shortcode_args['ajax_url'] ?? null;
-        $type = $shortcode_args['type'] ?? null;
 
-        $realtys = null;
+        $realtys = Realty::with('info', 'attachments');
 
-        if ($type == 'search') {
-            $realtys = RealtyFilter::getRealty(Request::all());
-        } else {
-            $realtys = Realty::with('info', 'attachments')->where('status', 'published');
+        $realtys = $realtys->orderBy('id', 'desc')->offset($start)->paginate($limit);
+        $realtys = self::get_realty_cities($realtys);
 
-            if ($author_id) {
-                $realtys = $realtys->where('author_id', $author_id);
-            }
-
-            $realtys = $realtys->orderBy('id', 'desc')->offset($start)->paginate($limit);
-        }
-
-        $city_kladrs = [];
+        $realty_ids = [];
         foreach ($realtys as $realty) {
-            if (isset($realty->city)) {
-                $city_kladrs[] = $realty->city;
-            }
+            $realty->info_arr = $realty->info->pluck('value', 'field');
+            $realty_ids[] = $realty->id;
         }
 
-        if (!empty($city_kladrs)) {
-            $city_kladrs = Kladr::city_by_kladrs($city_kladrs);
-            foreach ($realtys as $realty) {
-                if (isset($city_kladrs[$realty->city])) {
-                    $realty->city = $city_kladrs[$realty->city];
-                }
+        // Берем избранные посты
+        $favorites = UserRealtyFavorite::select('realty_id')->where('user_id', Auth::id())->whereIn('realty_id', $realty_ids)->pluck('realty_id')->toArray();
+        foreach ($realtys as $realty) {
+            if (in_array($realty->id, $favorites)) {
+                $realty->is_favorite = true;
+            } else {
+                $realty->is_favorite = false;
             }
         }
 
         $data = compact(
-            'realtys',
-            'limit',
-            'author_id',
-            'ajax_url'
+            'realtys'
+        );
+
+        return $data;
+    }
+
+    public static function realty_search_widget($shortcode_args) {
+        $realtys = RealtyFilter::getRealty(Request::all());
+        $realtys = self::get_realty_cities($realtys);
+
+        $data = compact(
+            'realtys'
+        );
+
+        return $data;
+    }
+
+    public static function realty_author_widget($shortcode_args) {
+        if (!isset($shortcode_args['author_id'])) {
+            return false;
+        }
+
+        $start = $shortcode_args['start'] ?? 0;
+        $limit = $shortcode_args['limit'] ?? 9;
+        $start = Request::get('page') ? (Request::get('page') - 1) * $limit : $start;
+        $author_id = $shortcode_args['author_id'];
+
+        $realtys = Realty::with('info', 'attachments');
+        $realtys = $realtys->where('author_id', $author_id);
+
+        // Если кнопочный фильтр
+        // как в профиле - объявления
+        if (isset($shortcode_args['btn_filter'])) {
+            switch ($shortcode_args['btn_filter']) {
+                case 'active':
+                    $realtys = $realtys->where('status', 'published')->where('expired_at', '>', Carbon::today());
+                    break;
+
+                case 'no_active':
+                    $realtys = $realtys->where('status', 'published')->where('expired_at', '<=', Carbon::today());
+                    break;
+
+                case 'blocked':
+                    $realtys = $realtys->where('status', 'blocked');
+                    break;
+
+                case 'draft':
+                    $realtys = $realtys->where('status', 'draft');
+                    break;
+            }
+        } else {
+            $realtys = $realtys->where('status', 'published');
+        }
+
+        $realtys = $realtys->orderBy('id', 'desc')->offset($start)->paginate($limit);
+        $realtys = self::get_realty_cities($realtys);
+
+        $data = compact(
+            'realtys'
+        );
+
+        return $data;
+    }
+
+    public static function realty_favorite_widget($shortcode_args) {
+        if (!isset($shortcode_args['user_id'])) {
+            return false;
+        }
+
+        $start = $shortcode_args['start'] ?? 0;
+        $limit = $shortcode_args['limit'] ?? 9;
+        $start = Request::get('page') ? (Request::get('page') - 1) * $limit : $start;
+        $user_id = $shortcode_args['user_id'];
+
+        $favorite_ids = UserRealtyFavorite::select('realty_id')->where('user_id', $user_id)->get()->toArray();
+
+        if (empty($favorite_ids)) {
+            return 'У вас ещё нет избранных';
+        }
+
+        $realtys = Realty::with('info', 'attachments');
+        $realtys = $realtys->whereIn('id', $favorite_ids);
+        $realtys = $realtys->where('status', 'published');
+        $realtys = $realtys->orderBy('id', 'desc')->offset($start)->paginate($limit);
+        $realtys = self::get_realty_cities($realtys);
+
+        foreach ($realtys as $realty) {
+            $realty->info_arr = $realty->info->pluck('value', 'field');
+        }
+
+        $data = compact(
+            'realtys'
         );
 
         return $data;
@@ -114,6 +196,10 @@ class Realty extends Model
 
         if (isset($info['floors'])) {
             $result[]['Этажей в доме'] = $info['floors'];
+        }
+
+        if (isset($realty->house_class_id) && $realty->house_class_id > 0) {
+            $result[]['Класс здания'] = $realty->house_class->name;
         }
 
         if (isset($info['square_common'])) {
@@ -160,16 +246,17 @@ class Realty extends Model
     }
 
     public static function get_title($request) {
-        $trade_type = RealtyTradeType::findOrFail($request['trade_type'])->name;
-        if ($trade_type == 1) {
-            $duration = RealtyRentDuration::withoutGlobalScopes()->findOrFail($request['duration'])->name;
+        $trade_type = RealtyTradeType::findOrFail($request['trade_type'])->name_autocreate;
+        if ($request['trade_type'] == 1) {
+            $duration = RealtyRentDuration::withoutGlobalScopes()->findOrFail($request['duration'])->name_autocreate;
         }
-        $type = RealtyType::findOrFail($request['type'])->name;
-        $street = (!empty($request['address_street']) ? ' , ул. ' . Kladr::get_street_by_kladr($request['address_street']) : '');
+        $type = RealtyType::findOrFail($request['type'])->name_autocreate;
+        $street = (!empty($request['address_street']) ? Kladr::get_street_by_kladr($request['address_street']) : null);
+        $street = ($street ? $street->SOCR . '. ' . $street->NAME : '');
 
         // Если аренда
-        if ($trade_type == 1) {
-            $result = $trade_type . ' на ' . $duration . ' ' . $type . ' ' . $street;
+        if ($request['trade_type'] == 1) {
+            $result = $trade_type . ' ' . $duration . ' ' . $type . ', ' . $street;
         }
         // Если продажа
         else {
@@ -240,6 +327,62 @@ class Realty extends Model
         return $data;
     }
 
+    public static function get_btn_filters_count(int $author_id): array {
+        $user_realties = Realty::select('id', 'status', 'expired_at')->where('author_id', $author_id)->get();
+
+        $counts = [
+            'active' => 0,
+            'no_active' => 0,
+            'blocked' => 0,
+            'draft' => 0,
+        ];
+
+        foreach ($user_realties as $realty) {
+            if ($realty->expired_at < date('Y-m-d H:i:s')) {
+                $counts['no_active']++;
+            }
+
+            switch($realty->status) {
+                case 'published':
+                    if ($realty->expired_at > date('Y-m-d H:i:s')) {
+                        $counts['active']++;
+                    }
+                    break;
+
+                case 'blocked':
+                    $counts['blocked']++;
+                    break;
+
+                case 'draft':
+                    $counts['draft']++;
+                    break;
+            }
+        }
+
+        return $counts;
+    }
+
+    private static function get_realty_cities($realtys) {
+        $city_kladrs = [];
+        foreach ($realtys as $realty) {
+            if (isset($realty->city)) {
+                $city_kladrs[] = $realty->city;
+            }
+        }
+
+        if (!empty($city_kladrs)) {
+            $city_kladrs = array_unique($city_kladrs);
+            $city_kladrs = Kladr::city_by_kladrs($city_kladrs);
+            foreach ($realtys as $realty) {
+                if (isset($city_kladrs[$realty->city])) {
+                    $realty->city = $city_kladrs[$realty->city];
+                }
+            }
+        }
+
+        return $realtys;
+    }
+
     /*
      * *******************************************************
      * RelationShips
@@ -264,6 +407,10 @@ class Realty extends Model
 
     public function rent_duration() {
         return $this->hasOne('App\Models\Realty\RealtyRentDuration', 'id', 'rent_duration_id')->name;
+    }
+
+    public function house_class() {
+        return $this->hasOne('App\Models\Realty\RealtyHouseClass', 'id', 'house_class_id');
     }
 
     public function info() {
@@ -311,21 +458,44 @@ class Realty extends Model
     }
 
     // Виджет для вывода списка объявлений
-    public static function realty_list_shortcode($args) {
-        $template = $args['templage'] ?? 'list';
-        $data = self::realty_list_widget($args);
-        $data['page_type'] = isset($args['type']) ? $args['type'] : null;
-
-        if (isset($args['type']) && $args['type'] == 'search') {
-            $data = self::pick_filters($data);
-            $data['sort_variants'] = self::SORT_VARIANTS;
-            $data['sort_by'] = Input::get('sort');
-        }
-
-        return view('/realty/' . $template, $data)->render();
+    public static function realty_shortcode($args) {
+        $data = self::realty_widget($args);
+        return view('realty.loops.list', $data)->render();
     }
 
-    public static function realty_cats_list_shortcode($args) {
+    // Виджет для поиска объявлений
+    public static function realty_search_shortcode($args) {
+        $data = self::realty_search_widget($args);
+
+        // подтягивать выбранные фильтры и сортировку
+        $data = self::pick_filters($data);
+        $data['sort_variants'] = self::SORT_VARIANTS;
+        $data['sort_by'] = Input::get('sort');
+
+        return view('realty.loops.search_list', $data)->render();
+    }
+
+    // Виджет для вывода списка объявлений автора
+    public static function realty_author_shortcode($args) {
+        $data = self::realty_author_widget($args);
+        if (isset($data['realtys'])) {
+            return view('realty.loops.author_list', $data)->render();
+        } else {
+            return $data;
+        }
+    }
+
+    // Виджет для вывода списка избранных объявлений
+    public static function realty_favorite_shortcode($args) {
+        $data = self::realty_favorite_widget($args);
+        if (isset($data['realtys'])) {
+            return view('realty.loops.favorite_list', $data)->render();
+        } else {
+            return $data;
+        }
+    }
+
+    public static function realty_cats_shortcode($args) {
         $types = RealtyType::realty_type($args);
         $room_types = RealtyRoomType::realty_room_type($args);
 

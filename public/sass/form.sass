@@ -1,5 +1,6 @@
 div .form-group
     margin-bottom: 0
+    padding-bottom: 1px
 
 input:not([type=checkbox]).form-control::placeholder
     color: $dark-navy-blue
@@ -25,12 +26,11 @@ input:not([type=checkbox]).form-control.is-invalid
     position: relative
 
 .currency-price-input
-    position: absolute
-    top: 0
-    right: 30px
+    display: inline-block
     line-height: 60px
     color: $dark-navy-blue
     font-size: 15px
+    margin-left: 6px
 
 textarea.form-control
     width: 100%
@@ -356,3 +356,27 @@ h1 + form.realty-create-form
     line-height: 20px
     color: $greyish-brown
     padding: 0 18px
+
+.form-errors
+    margin: 0
+    padding: 0
+
+.form-errors li
+    list-style: none
+    line-height: 20px
+    color: $dark-navy-blue
+
+.form-errors li i
+    margin-top: -3px
+
+.form-errors li:not(:first-child)
+    margin-left: 29px
+
+.form-errors li:not(:last-child)
+    margin-bottom: 12px
+
+.form-inline-table .d-table-cell:not(:first-child)
+    padding-left: 30px
+
+.house-classes label
+    margin-right: 15px

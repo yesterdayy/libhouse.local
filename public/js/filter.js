@@ -1,6 +1,6 @@
 $(function () {
     $('.adv-form-header').submit(function (e) {
-        if (location.href.indexOf('/realty/search') != -1) {
+        if (location.href.indexOf('/search') != -1) {
             e.preventDefault();
             var that = this;
 

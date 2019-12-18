@@ -5,8 +5,8 @@
                 <div class="adv-address-popup header-filter-with-label header-filter-with-address">
                     <div class="header-filter-label">Город, адрес, метро, район, ж/д, шоссе или ЖК</div>
                     <input type="text" name="address" class="header-address-input autocomplete-input" placeholder="Введите город, улица" value="{{ $filter['address'] ?? '' }}">
-                    <input type="hidden" name="header_address_city" value="{{ $filter['address_city'] ?? '' }}">
-                    <input type="hidden" name="header_address_street" value="{{ $filter['address_street'] ?? '' }}">
+                    <input type="hidden" name="header_address_city" value="{{ $filter['header_address_city'] ?? '' }}">
+                    <input type="hidden" name="header_address_street" value="{{ $filter['header_address_street'] ?? '' }}">
                     <i class="lh-icon lh-icon-select-arrow"></i>
                 </div>
 

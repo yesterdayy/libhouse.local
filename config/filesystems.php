@@ -77,6 +77,16 @@ return [
                         1 => 348,
                     ),
             ),
+        'thumb-wide' =>
+            array (
+                'name' => 'Миниатюра для объявлений в профиле',
+                'slug' => 'thumb-wide',
+                'value' =>
+                    array (
+                        0 => 318,
+                        1 => 198,
+                    ),
+            ),
         'slide-wide' =>
             array (
                 'name' => 'Картинка для слайда',

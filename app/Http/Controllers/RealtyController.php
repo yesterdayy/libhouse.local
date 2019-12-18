@@ -10,12 +10,14 @@ use App\Models\Realty\RealtyComfort;
 use App\Models\Realty\RealtyComfortCat;
 use App\Models\Realty\RealtyCounters;
 use App\Models\Realty\RealtyDopType;
+use App\Models\Realty\RealtyHouseClass;
 use App\Models\Realty\RealtyInfo;
 use App\Models\Realty\RealtyRentDuration;
 use App\Models\Realty\RealtyRoomType;
 use App\Models\Realty\RealtyTradeType;
 use App\Models\Realty\RealtyType;
 use App\Models\Kladr\Kladr;
+use App\Models\User\UserRealtyFavorite;
 use App\Models\User\UserRealtyType;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -97,6 +99,38 @@ class RealtyController extends Controller
         }
     }
 
+    public function cabinet_search($user_id) {
+        $term = clear_string(request()->get('term'));
+
+        if (!empty($user_id) && !empty($term)) {
+            $shortcode_args = [
+                'template' => 'search',
+            ];
+
+            $realtys = Realty::where('author_id', $user_id)->where('title', 'like', '%' . $term . '%')->paginate(5);
+
+            // Берем избранные посты
+            $realty_ids = [];
+            foreach ($realtys as $realty) {
+                $realty_ids[] = $realty->id;
+            }
+
+            $favorites = UserRealtyFavorite::select('realty_id')->where('user_id', Auth::id())->whereIn('realty_id', $realty_ids)->pluck('realty_id')->toArray();
+            foreach ($realtys as $realty) {
+                if (in_array($realty->id, $favorites)) {
+                    $realty->is_favorite = true;
+                } else {
+                    $realty->is_favorite = false;
+                }
+            }
+
+            return view('realty.loops.favorite_list', [
+                'realtys' => $realtys,
+                'shortcode_args' => $shortcode_args,
+            ]);
+        }
+    }
+
     public function show($slug) {
         $realty = Realty::with('info', 'comfort', 'attachments', 'dop_type', 'author', 'counters')->whereSlug($slug)->where('status', 'published')->firstOrFail();
 
@@ -142,7 +176,15 @@ class RealtyController extends Controller
             }
         }
 
-        return view('realty/single', compact(
+        // Берем инфу избранный он или нет
+        $is_favorite = UserRealtyFavorite::select('realty_id')->where('user_id', Auth::id())->where('realty_id', $realty->id)->first();
+        if ($is_favorite) {
+            $realty->is_favorite = true;
+        } else {
+            $realty->is_favorite = false;
+        }
+
+        return view('realty/templates/single', compact(
             'realty',
             'realty_next',
             'realty_info',
@@ -175,6 +217,7 @@ class RealtyController extends Controller
         $room_types = RealtyRoomType::all();
         $trade_types = RealtyTradeType::all();
         $rent_durations = RealtyRentDuration::all();
+        $house_classes = RealtyHouseClass::all();
 
         $photos = [];
         if (!empty($request->old('photos'))) {
@@ -185,7 +228,7 @@ class RealtyController extends Controller
 
         $old = $request->old();
 
-        $user_realty_types = UserRealtyType::all();
+        $user_realty_types = UserRealtyType::where('id', '>', '0')->get();
         return view('realty/add', compact(
             'comforts',
             'rent_types',
@@ -195,6 +238,7 @@ class RealtyController extends Controller
             'trade_types',
             'rent_durations',
             'user_realty_types',
+            'house_classes',
             'fields_ru',
             'photos',
             'old'
@@ -207,7 +251,7 @@ class RealtyController extends Controller
 
         $realty->info = $realty->info->pluck('value', 'field');
         $realty->info['city_val'] = isset($realty->info['city']) ? Kladr::get_city_by_kladr($realty->info['city']) : null;
-        $realty->info['street_val'] = isset($realty->info['street']) ? Kladr::get_street_by_kladr($realty->info['street']) : null;
+        $realty->info['street_val'] = isset($realty->info['street']) ? Kladr::get_street_by_kladr($realty->info['street'])->NAME : null;
         $realty->comfort = $realty->comfort->pluck('name', 'id');
 
         $comforts = RealtyComfort::all();
@@ -228,7 +272,7 @@ class RealtyController extends Controller
                 $user->phone = $input['phone'];
             }
             if (isset($input['user_realty_type']) && !empty($input['user_realty_type'])) {
-                $user->realty_type = $input['user_realty_type'];
+                $user->realty_type_id = $input['user_realty_type'];
             }
             $user->save();
         }
@@ -243,12 +287,13 @@ class RealtyController extends Controller
             $realty = new Realty();
         }
 
-        $realty->title = Realty::get_title($input);
+        $realty->title = isset($input['title']) && !empty($input['title']) ? $input['title'] : Realty::get_title($input);
         $realty->type_id = $input['type'];
         $realty->dop_type_id = $input['dop_type'];
         $realty->room_type_id = $input['room_type'];
         $realty->trade_type_id = $input['trade_type'];
         $realty->rent_duration_id = $input['duration'];
+        $realty->house_class_id = $input['house_class'] ?? null;
         $realty->city = $input['address_city'];
         $realty->street = $input['address_street'];
         $realty->content = strip_tags($input['content']);
@@ -301,16 +346,41 @@ class RealtyController extends Controller
             $realty->attachments()->attach($insert_photos);
         }
 
-        $counters = new RealtyCounters(['realty_id' => $realty->id, 'counter' => 1]);
+        $counters = new RealtyCounters(['realty_id' => $realty->id, 'counter' => 0]);
         $realty->counters()->save($counters);
 
-        dd('realty add. id - ' . $realty->id);
-
+        return response()->redirectToRoute('realty.show', $realty->slug);
     }
 
     public function update(Request $request, $slug) {
         $this->store($request, $slug);
         return redirect()->route('realty_edit', $slug);
+    }
+
+    public function favorite($realty_id) {
+        if (Auth::check()) {
+            $favorite_exists = UserRealtyFavorite::where('user_id', Auth::id())->where('realty_id', $realty_id)->first();
+
+            if (!$favorite_exists) {
+                UserRealtyFavorite::create([
+                    'user_id' => Auth::id(),
+                    'realty_id' => $realty_id,
+                    'created_at' => Carbon::now()
+                ]);
+                $status = 'success';
+                $message = 'Добавлено в избранное';
+                $dop_params = ['create' => 1];
+            } else {
+                $favorite_exists->forceDelete();
+                $status = 'success';
+                $message = 'Удалено из избранного';
+                $dop_params = ['remove' => 1];
+            }
+
+            return toast_response($status, $message, $dop_params);
+        } else {
+            return toast_response('error', 'Авторизуйтесь на сайте.');
+        }
     }
 
     public function change_active_status($realty_id) {

@@ -436,6 +436,16 @@
           1 => 348,
         ),
       ),
+      'thumb-wide' => 
+      array (
+        'name' => 'Миниатюра для объявлений в профиле',
+        'slug' => 'thumb-wide',
+        'value' => 
+        array (
+          0 => 318,
+          1 => 198,
+        ),
+      ),
       'slide-wide' => 
       array (
         'name' => 'Картинка для слайда',
@@ -462,7 +472,7 @@
   array (
     'log_failures' => true,
     'include_currency' => true,
-    'service' => 'ipapi',
+    'service' => 'maxmind_database',
     'services' => 
     array (
       'maxmind_database' => 
@@ -472,7 +482,7 @@
         'update_url' => 'https://geolite.maxmind.com/download/geoip/database/GeoLite2-City.mmdb.gz',
         'locales' => 
         array (
-          0 => 'en',
+          0 => 'ru',
         ),
       ),
       'maxmind_api' => 

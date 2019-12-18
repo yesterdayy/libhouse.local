@@ -11,7 +11,7 @@
             </div>
         </a>
 
-        <div class="realt-wrap">
+        <div class="realty-content-wrap">
             <div class="realty-title"><a href="{{ get_realty_link($realty) }}">{{ $realty->title }}</a></div>
 
             <div class="realty-square row no-gutters">
@@ -35,8 +35,12 @@
                 </div>
 
                 <div class="col-md-6 pl-0">
-                    <div class="realty-favorite text-right"><i class="lh-icon lh-icon-heart"></i><span>Добавить в избранное</span></div>
-                    <div class="realty-counter"><i class="lh-icon lh-icon-eye"></i>{{ $realty->counters->counter }}</div>
+                    @if ($realty->is_favorite)
+                        <div class="realty-favorite-btn text-right active" data-id="{{ $realty->id }}"><i class="lh-icon lh-icon-heart"></i><span>В избранном</span></div>
+                    @else
+                        <div class="realty-favorite-btn text-right" data-id="{{ $realty->id }}"><i class="lh-icon lh-icon-heart"></i><span>Добавить в избранное</span></div>
+                    @endif
+                    <div class="realty-counter"><i class="lh-icon lh-icon-eye"></i>{{ isset($realty->counters) ? $realty->counters->counter : 0 }}</div>
                     <div class="realty-date float-right">{{ get_locale_date($realty->created_at, 'j F') }}</div>
                 </div>
             </div>

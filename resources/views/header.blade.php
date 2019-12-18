@@ -1,4 +1,4 @@
-<div class="header">
+<div class="header @if (isset($light_header)) light-header @endif">
     <div class="row no-gutters header-top-wrap">
         <div class="col-md-6 text-left">
             <div class="current-city-wrap">
@@ -76,24 +76,31 @@
             <a href="/"><img src="/img/logo.png" width="100px" height="31px" class="logo" /></a>
         </div>
 
-        <div class="col-md-7">
+        <div class="col-md-6">
             {!! get_menu('header', ['ul_class' => 'header-menu left grt-menu', 'li_class' => 'header-menu-item']) !!}
         </div>
 
-        <div class="col-md-3 text-right">
+        <div class="col-md-4 text-right">
             <ul class="header-additional-menu">
-                <li><i class="lh-icon lh-icon-search"></i></li>
+                <li class="header-search">
+                    <form action="{{ route('realty.search') }}" class="d-none">
+                        <input type="text" name="term" class="form-control fade" />
+                    </form>
+                    <i class="lh-icon lh-icon-search"></i>
+                </li>
                 @if (auth()->check())
-                    <li><i class="lh-icon lh-icon-heart"></i></li>
+                    <li><a href="{{ route('cabinet', ['id' => auth()->id()]) . '#favorite' }}"><i class="lh-icon lh-icon-heart"></i></a></li>
                 @endif
                 <li><a href="{{ route('realty.create') }}" class="btn btn-primary">+ Добавить объявление</a></li>
             </ul>
         </div>
     </div>
 
-    <div class="header-bottom-wrap text-center">
-        <div class="header-title">Найди свое жилье на LibHouse</div>
+    @if (!isset($light_header))
+        <div class="header-bottom-wrap text-center">
+            <div class="header-title">Найди свое жилье на LibHouse</div>
 
-        @include('header_filter')
-    </div>
+            @include('header_filter')
+        </div>
+    @endif
 </div>

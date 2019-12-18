@@ -7,7 +7,7 @@
 @endif
 
 <div class="d-table-cell">
-    {{ Form::radio($alias, $item->id, null, ['class' => 'radio', 'id' => $alias . '_' . $item->id]) }}
+    {{ Form::radio($alias, $item->id, (isset($old[$alias]) && !empty($old[$alias]) ? (boolean) ($old[$alias] == $item->id) : false), ['class' => 'radio', 'id' => $alias . '_' . $item->id]) }}
     {{ Form::label($alias . '_' . $item->id, $item->name) }}
 </div>
 

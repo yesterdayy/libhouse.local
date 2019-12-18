@@ -28,7 +28,11 @@
             </div>
         </div>
 
-        <div class="realty-favorite single"><i class="lh-icon lh-icon-heart"></i><span>Добавить в избранное</span></div>
+        @if ($realty->is_favorite)
+            <div class="realty-favorite-btn single active" data-id="{{ $realty->id }}"><i class="lh-icon lh-icon-heart"></i><span>В избранном</span></div>
+        @else
+            <div class="realty-favorite-btn single" data-id="{{ $realty->id }}"><i class="lh-icon lh-icon-heart"></i><span>Добавить в избранное</span></div>
+        @endif
 
         @if (get_realty_photos($realty)->count() > 0)
             <div class="realty-single-photo">
@@ -100,7 +104,7 @@
 
         <div class="realty-sidebar-user-info">
             <div class="realty-sidebar-user-name"><i class="lh-icon lh-icon-user"></i> <a href="{{ route('cabinet', ['id' => $realty->author->id]) }}">{{ $realty->author->first_name }}</a></div>
-            <div class="realty-sidebar-user-type">{{ $realty->author->realty_type_info->name }}</div>
+            <div class="realty-sidebar-user-type">{{ $realty->author->realty_type->name }}</div>
             <div class="realty-sidebar-user-created">На LIBHouse с {{ get_locale_date($realty->author->created_at, 'd.m.Y') }}</div>
 
             <div class="btn btn-default show-user-number" data-id="{{ $realty->author->id }}">Показать телефон</div>

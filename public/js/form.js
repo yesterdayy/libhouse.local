@@ -3,12 +3,105 @@ $(function () {
     $('input[name=trade_type]').change(function () {
         var duration = $('input[name=duration]')[0];
         if ($(this).val() == '1') {
-            $(duration).closest('.form-group').removeClass('d-none');
+            $('label[for=price]').text('Арендная плата');
+            $('.comfort-add-wrap').show();
+
+            switch ($(this).closest('form').find('[name="user_realty_type"]:checked').val()) {
+                case '1':
+                    $('#comission').closest('.form-group').hide();
+                    break;
+
+                case '2':
+                    $('#comission').closest('.form-group').show();
+                    break;
+            }
+
+            $(duration).closest('.form-group').show();
             $(duration).closest('.btn-group-toggle').find('input[name=duration]').eq(0).click();
+            toggle_commercy_fields(false);
         } else {
-            $(duration).closest('.form-group').addClass('d-none');
+            $('label[for=price]').text('Цена');
+            $('.comfort-add-wrap').hide();
+            $('#comission').closest('.form-group').hide();
+            $(duration).closest('.form-group').hide();
             $(duration).closest('.btn-group-toggle').find('input[name=duration]').last().prop('checked', true);
+            $('input[name="info[with_communal]"]').closest('.form-group').hide();
+
+            if (
+                $(this).closest('form').find('[name="user_realty_type"]:checked').val() == '2'
+                && $(this).closest('form').find('[name="rent_type"]:checked').val() == '1'
+            ) {
+                toggle_commercy_fields(true);
+            } else {
+                toggle_commercy_fields(false);
+            }
         }
+        hidden_field_set_null_value('.realty-create-form');
+    });
+
+    // Если посуточная аренда, то убираем комиссию
+    $('input[name=duration]').change(function () {
+        if ($(this).val() == '3') {
+            $('input[name="info[with_communal]"]').closest('.form-group').hide();
+        } else {
+            $('input[name="info[with_communal]"]').closest('.form-group').show();
+        }
+        hidden_field_set_null_value('.realty-create-form');
+    });
+
+    // Если аренда и агент, то добавляем поле коммиссия
+    $('input[name=user_realty_type]').change(function () {
+        if ($(this).closest('form').find('[name="trade_type"]:checked').val() == '1') {
+            switch ($(this).val()) {
+                case '1':
+                    $('#comission').closest('.form-group').hide();
+                    toggle_commercy_fields(false);
+                    break;
+
+                case '2':
+                    $('#comission').closest('.form-group').show();
+                    toggle_commercy_fields(false);
+                    break;
+            }
+        }
+        else {
+            if (
+                $(this).val() == '2'
+                && $(this).closest('form').find('[name="trade_type"]:checked').val() == '2'
+                && $(this).closest('form').find('[name="rent_type"]:checked').val() == '1'
+            ) {
+                toggle_commercy_fields(true);
+            } else {
+                toggle_commercy_fields(false);
+            }
+        }
+        hidden_field_set_null_value('.realty-create-form');
+    });
+
+    // Если продажа коммереской недвижимости, то меняем поля для заполнения
+    $('input[name=rent_type]').change(function () {
+        if ($(this).closest('form').find('[name="trade_type"]:checked').val() == '2') {
+            $('#comission').closest('.form-group').hide();
+            switch ($(this).val()) {
+                case '0':
+                    toggle_commercy_fields(false);
+                    break;
+
+                case '1':
+                    if ($(this).closest('form').find('[name="user_realty_type"]:checked').val() == '2') {
+                        toggle_commercy_fields(true);
+                    } else {
+                        toggle_commercy_fields(false);
+                    }
+                    break;
+            }
+        } else {
+            if ($(this).closest('form').find('[name="user_realty_type"]:checked').val() == '2') {
+                $('#comission').closest('.form-group').show();
+            }
+            toggle_commercy_fields(false);
+        }
+        hidden_field_set_null_value('.realty-create-form');
     });
 
     // Добавление видео
@@ -45,13 +138,12 @@ $(function () {
 
     // Инпута выбора адреса
     $('.address-select').autocomplete({
-        serviceUrl: '/kladr/street_with_city',
+        serviceUrl: '/kladr/city_and_street',
         dataType: 'json',
         paramName: 'term',
         minChars: 3,
-        onSearchStart: function (params) {
-            params.city = $('input[name=address_city]').val();
-        },
+        preventBadQueries: false,
+        groupBy: 'cat',
         onSelect: function (suggestion) {
             $('input[name=address_city]').val(suggestion.data.city_kladr);
             if ('street_kladr' in suggestion.data) {
@@ -96,12 +188,17 @@ $(function () {
                     $(thisDropzone.element).append('<input type="hidden" name="photos[]" value="' + photo.id + '" />');
                 });
 
+                $(this.element).closest('form').find('.add-realty').prop('disabled', false);
+
                 this.on("maxfilesexceeded", function (file) {
                     this.removeFile(file);
                 });
             } else {
 
             }
+        },
+        queuecomplete: function() {
+            $(this.element).closest('form').find('.add-realty').prop('disabled', false);
         },
         success: function(file) {
             if (typeof file !== 'undefined' && file.hasOwnProperty('xhr')) {
@@ -113,6 +210,8 @@ $(function () {
         },
         addedfile: function addedfile(file) {
             var _this2 = this;
+
+            $(this.element).closest('form').find('.add-realty').prop('disabled', true);
 
             if (this.element === this.previewsContainer) {
                 this.element.classList.add("dz-started");
@@ -196,3 +295,53 @@ $(function () {
         },
     });
 });
+
+function toggle_commercy_fields(show) {
+    if (show) {
+        $('.house-classes').show();
+        $('input[name="info[floor]"]').closest('.form-group').hide();
+        $('input[name="info[floors]"]').closest('.form-group').hide();
+        $('input[name="info[square_common]"]').closest('.form-group').find('label').text('Площадь');
+        $('input[name="info[square_living]"]').closest('.form-group').hide();
+        $('input[name="info[square_kitchen]"]').closest('.form-group').hide();
+        $('input[name="info[with_communal]"]').closest('.form-group').hide();
+        $('.comfort-add-wrap').hide();
+        $('.room_type').closest('.form-group').hide();
+
+        $('input[name="title"]').closest('.form-group').show();
+        if ($('.last-realty-add-wrap').html().length > 0) {
+            $('.commercy-info-wrap').html($('.last-realty-add-wrap').html());
+            $('.last-realty-add-wrap').html('');
+        }
+    }
+    else {
+        $('.house-classes').hide();
+        $('input[name="info[floor]"]').closest('.form-group').show();
+        $('input[name="info[floors]"]').closest('.form-group').show();
+        $('input[name="info[square_common]"]').closest('.form-group').find('label').text('Общая площадь');
+        $('input[name="info[square_living]"]').closest('.form-group').show();
+        $('input[name="info[square_kitchen]"]').closest('.form-group').show();
+        $('input[name="info[with_communal]"]').closest('.form-group').show();
+        $('.room_type').closest('.form-group').show();
+
+        $('input[name="title"]').closest('.form-group').hide();
+        if ($('.commercy-info-wrap').html().length > 0) {
+            $('.last-realty-add-wrap').html($('.commercy-info-wrap').html());
+            $('.commercy-info-wrap').html('');
+        }
+    }
+}
+
+function hidden_field_set_null_value(form) {
+    setTimeout(function () {
+        $('.form-group:hidden input:not([type=radio]):not([type=checkbox])', form).val(null);
+        $('.form-group:hidden input[type=radio], .form-group:hidden input[type=checkbox]', form).prop('checked', false);
+        $('.form-group:hidden input[type=radio]', form).each(function() {
+            if ($(this).parent().hasClass('btn')) {
+                $(this).parent().removeClass('active');
+            }
+        });
+
+        $('.form-group:hidden select', form).val(null).change();
+    }, 50);
+}

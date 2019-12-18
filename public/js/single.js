@@ -18,10 +18,17 @@ $(function () {
         swipe: false,
     });
 
+    window.show_user_number = false;
     $('.show-user-number').click(function () {
+        if (window.show_user_number) {
+            return false;
+        }
+
+        window.show_user_number = true;
+
         var that = this;
         $.ajax({
-            url: '/user/phone?id=' + $(this).attr('data-id'),
+            url: '/cabinet/phone?id=' + $(this).attr('data-id'),
             dataType: "json",
             success: function (result) {
                 if ('phone' in result) {
@@ -30,6 +37,8 @@ $(function () {
                     $(that).off('click');
                 }
             }
+        }).always(function() {
+            window.show_user_number = false;
         });
     });
 })

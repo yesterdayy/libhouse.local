@@ -129,7 +129,7 @@ function init_header_filters() {
         e.preventDefault();
         $.cookie('city', $(this).closest('li').attr('data-val'));
         $('.current-city').text($(this).closest('li').attr('data-val'));
-        show_toast('Сохранено');
+        show_toast({status: 'success', message: 'Сохранено'});
         hide_modal();
     });
 
@@ -141,9 +141,6 @@ function init_header_filters() {
         groupBy: 'cat',
         minChars: 3,
         containerClass: 'autocomplete-suggestions header-address-autocomplete',
-        onSearchStart: function (params) {
-            params.city = $('input[name=header_address_city]').val();
-        },
         onSelect: function (suggestion) {
             $('input[name=header_address_city]').val(suggestion.data.city_kladr);
             if ('street_kladr' in suggestion.data) {
@@ -168,7 +165,7 @@ function init_header_filters() {
             $.cookie('city', suggestion.value);
             $.cookie('city_kladr', suggestion.data.city_kladr);
             $('.current-city').text(suggestion.value);
-            show_toast('Сохранено');
+            show_toast({status: 'success', message: 'Сохранено'});
             hide_modal();
         },
     });
@@ -196,7 +193,7 @@ function init_header_filters() {
                 if ('status' in result && result.status == 'success') {
                     location.href = result.redirect;
                 } else {
-                    show_toast(result.message)
+                    show_toast(result)
                 }
             },
             error: function (result, test, arr) {
@@ -228,7 +225,7 @@ function init_header_filters() {
             success: function(result) {
                 $('input, textarea', that).removeClass('is-invalid');
                 if ('status' in result && result.status == 'success') {
-                    show_toast(result.message);
+                    show_toast(result);
                 }
             },
             error: function (result, test, arr) {
@@ -246,6 +243,52 @@ function init_header_filters() {
         $('.auth-wrap').removeClass('d-none');
         $('.reset-password-wrap').addClass('d-none');
     })
+
+    $(document).on('hidden.bs.toast', '.toast', function () {
+        $(this).toast('dispose');
+        $(this).remove();
+    });
+
+    $(document).on('click', '.realty-favorite-btn', function() {
+        var id = $(this).attr('data-id');
+        var that = this;
+
+        $.ajax({
+            type: 'GET',
+            url: '/favorite/' + id,
+            dataType: 'JSON',
+            success: function(result) {
+                if ('create' in result) {
+                    $(that).addClass('active');
+                    $('span', that).text('В избранном');
+                } else if ('remove' in result) {
+                    $(that).removeClass('active');
+                    $('span', that).text('Добавить в избранное');
+                }
+
+                show_toast(result);
+            },
+            error: function (result, test, arr) {
+                show_toast({status: 'error', message: 'Произошла ошибка. Повторите попытку позже.'})
+            },
+        });
+    })
+
+    $(document).on('click', '.header-search:not(.active)', function () {
+        var that = this;
+        $(this).addClass('active');
+        $('form', this).removeClass('d-none');
+        setTimeout(function () {
+            $('input', that).addClass('show');
+        }, 10);
+    });
+
+    $(document).on('click', '.header-search.active', function () {
+        var that = this;
+        $(this).addClass('active');
+        $('form', this).removeClass('d-none');
+        $('input', that).addClass('show');
+    });
 }
 
 function show_modal(modal) {
@@ -278,9 +321,18 @@ function hide_modal() {
     return true;
 }
 
-function show_toast(html) {
-    var toast = $('#default-toast').clone();
-    toast.html(html);
+function show_toast(toast_data) {
+    var toast = $('.default-toast').eq(0).clone();
+    toast.removeClass('default-toast');
+    var toast_smile = '';
+    if (toast_data.status == 'success') {
+        toast.addClass('toast-success');
+        toast_smile = '<i class="lh-icon lh-icon-toast-success"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span><span class="path7"></span></i>';
+    } else {
+        toast.addClass('toast-error');
+        toast_smile = '<i class="lh-icon lh-icon-toast-error"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span><span class="path7"></span><span class="path8"></span><span class="path9"></span><span class="path10"></span><span class="path11"></span><span class="path12"></span></i>';
+    }
+    toast.html(toast_smile + ' ' + toast_data.message);
     $('.toasts-wrap').append(toast.removeClass('d-none').toast('show'));
 }
 
@@ -295,6 +347,12 @@ function autocomplete_close_listener(selector, with_clear) {
                 if (!flag) {
                     $(that).autocomplete().onSelect(0);
                     $(that).trigger('close');
+                }
+            } else if ($(that).autocomplete().selection == null) {
+                $(that).val(null);
+                if ($(that).closest('.form-group').find('.address_city').length > 0) {
+                    $(that).closest('.form-group').find('.address_city').val(null);
+                    $(that).closest('.form-group').find('.address_street').val(null);
                 }
             }
         }, 300);

@@ -40,64 +40,23 @@ class KladrController extends Controller
         }
     }
 
-    public function street_with_city(Request $request) {
-        $result = [];
-
-        if (!empty($request->get('term'))) {
-            $limit = 4;
-
-            if (strpos($request->get('term'), ',') !== false && !empty($request->get('city'))) {
-                $term = explode(',', $request->get('term'));
-                $term = last($term);
-                $term = explode('.', $term, 2);
-                $term = trim(last($term));
-                $data = Kladr::street($term, $request->get('city'), 91, $limit, true);
-
-                foreach ($data as $item) {
-                    $result[] = [
-                        'value' => $item->CITY_NAME . ', ' . ($item->STREET_SOCR ? $item->STREET_SOCR . '. ' : '') . $item->STREET_NAME,
-                        'data' => [
-                            'city_kladr' => $item->CITY_CODE,
-                            'street_kladr' => $item->STREET_CODE,
-                        ]
-                    ];
-                }
-            } else {
-                $data = Kladr::city($request->get('term'), 91, $limit, false);
-
-                foreach ($data as $item) {
-                    $result[] = [
-                        'value' => $item->CITY_NAME,
-                        'data' => [
-                            'city_kladr' => $item->CITY_CODE,
-                        ]
-                    ];
-                }
-            }
-
-            $result = ['suggestions' => $result];
-        }
-
-        return response()->json($result);
-    }
-
     public function city_and_street(Request $request) {
         if (!empty($request->get('term'))) {
             $limit = 4;
 
             $city_codes = null;
-            if (strpos($request->get('term'), ',') !== false && !empty($request->get('city'))) {
-                $city_codes = $request->get('city');
-                $street_term = explode(',', $request->get('term'));
-                $street_term = last($street_term);
+            if (strpos($request->get('term'), ',') !== false) {
+                $term = explode(',', $request->get('term'));
+                $city_term = trim(head($term));
+                $street_term = last($term);
                 $street_term = explode('.', $street_term, 2);
                 $street_term = trim(last($street_term));
 
-                $city = Kladr::city($request->get('term'), $this->default_region, $limit);
+                $city = Kladr::city($city_term, $this->default_region, $limit);
+                $city_codes = substr($city[0]->CITY_CODE, 0, 11);
             } else {
-                $term = explode(',', $request->get('term'));
-                $city_term = head($term);
-                $street_term = last($term);
+                $city_term = $request->get('term');
+                $street_term = $request->get('term');
                 $street_term = explode('.', $street_term, 2);
                 $street_term = trim(last($street_term));
 
@@ -108,16 +67,6 @@ class KladrController extends Controller
 
             $result = [];
 
-            foreach ($city as $item) {
-                $result[] = [
-                    'value' => $item->CITY_NAME,
-                    'data' => [
-                        'city_kladr' => $item->CITY_CODE,
-                        'cat' => 'город'
-                    ]
-                ];
-            }
-
             foreach ($street as $item) {
                 $result[] = [
                     'value' => $item->CITY_NAME . ', ' . ($item->STREET_SOCR ? $item->STREET_SOCR . '. ' : '') . $item->STREET_NAME,
@@ -125,6 +74,16 @@ class KladrController extends Controller
                         'street_kladr' => $item->STREET_CODE,
                         'city_kladr' => $item->CITY_CODE,
                         'cat' => 'адреса'
+                    ]
+                ];
+            }
+
+            foreach ($city as $item) {
+                $result[] = [
+                    'value' => $item->CITY_NAME,
+                    'data' => [
+                        'city_kladr' => $item->CITY_CODE,
+                        'cat' => 'город'
                     ]
                 ];
             }

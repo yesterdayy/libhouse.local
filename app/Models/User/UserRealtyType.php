@@ -13,13 +13,4 @@ class UserRealtyType extends Model
 
     const EMPTY_TYPE = 0;
 
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::addGlobalScope('not_empty_type', function (Builder $builder) {
-            $builder->whereKeyNot(self::EMPTY_TYPE);
-        });
-    }
-
 }

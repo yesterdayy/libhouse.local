@@ -28,10 +28,11 @@ class Kladr extends Model
 
         $result = DB::select("SELECT CODE `CITY_CODE`, SOCR `CITY_SOCR`, NAME `CITY_NAME` 
         FROM ".self::DB_NAME.".kladr 
+        LEFT JOIN  ".self::DB_NAME.".socrbase `socr` ON socr.SCNAME = kladr.SOCR
         WHERE $where 
         AND `NAME` LIKE '$city_name%' 
         AND RIGHT(`CODE`, 2) = '00' 
-        ORDER BY `SOCR` IS NULL ASC, FIELD(`SOCR`, 'г', 'пгт', 'c', 'аал', 'автодорога', 'АО', 'Аобл', 'арбан', 'аул', 'волость', 'высел', 'г-к', 'г.о.', 'гп', 'д', 'днп', 'дп', 'ж/д пл-ка', 'ж/д_будка', 'ж/д_казарм', 'ж/д_оп', 'ж/д_платф', 'ж/д_пост', 'ж/д_рзд', 'ж/д_ст', 'жилзона', 'жилрайон', 'заимка', 'казарма', 'кв-л', 'кордон', 'кп', 'край', 'лпх', 'м', 'массив', 'мкр', 'нп', 'обл', 'округ', 'остров', 'п', 'п. ж/д ст.', 'п/о', 'п/р', 'п/ст', 'погост', 'починок', 'промзона', 'р-н', 'Респ', 'рзд', 'рп', 'с', 'с/а', 'с/мо', 'с/о', 'с/п', 'с/с', 'сл', 'снт', 'ст', 'ст-ца', 'тер', 'у', 'ул', 'х', 'Чувашия', '') ASC
+        ORDER BY socr.`LEVEL` ASC
         LIMIT " . $limit);
 
         return $result;
@@ -44,10 +45,10 @@ class Kladr extends Model
 
             $result = DB::select("SELECT `CODE`, `NAME` 
             FROM ".self::DB_NAME.".kladr 
+            LEFT JOIN  ".self::DB_NAME.".socrbase `socr` ON socr.SCNAME = kladr.SOCR
             WHERE `CODE` IN ($city_kladr)
             AND RIGHT(`CODE`, 2) = '00' 
-            ORDER BY `SOCR` IS NULL ASC, FIELD(`SOCR`, 'г', 'пгт', 'c', 'аал', 'автодорога', 'АО', 'Аобл', 'арбан', 'аул', 'волость', 'высел', 'г-к', 'г.о.', 'гп', 'д', 'днп', 'дп', 'ж/д пл-ка', 'ж/д_будка', 'ж/д_казарм', 'ж/д_оп', 'ж/д_платф', 'ж/д_пост', 'ж/д_рзд', 'ж/д_ст', 'жилзона', 'жилрайон', 'заимка', 'казарма', 'кв-л', 'кордон', 'кп', 'край', 'лпх', 'м', 'массив', 'мкр', 'нп', 'обл', 'округ', 'остров', 'п', 'п. ж/д ст.', 'п/о', 'п/р', 'п/ст', 'погост', 'починок', 'промзона', 'р-н', 'Респ', 'рзд', 'рп', 'с', 'с/а', 'с/мо', 'с/о', 'с/п', 'с/с', 'сл', 'снт', 'ст', 'ст-ца', 'тер', 'у', 'ул', 'х', 'Чувашия', '') ASC
-            LIMIT 1");
+            ORDER BY socr.`LEVEL` ASC");
 
             $result = array_column($result, 'NAME', 'CODE');
         } else {
@@ -95,17 +96,18 @@ class Kladr extends Model
 
         $result = DB::select("SELECT * FROM (
         SELECT street.CODE `STREET_CODE`, street.SOCR `STREET_SOCR`, `street`.NAME `STREET_NAME`,
-        city.CODE `CITY_CODE`, city.SOCR `CITY_SOCR`, `city`.NAME `CITY_NAME`
+        city.CODE `CITY_CODE`, city.SOCR `CITY_SOCR`, `city`.NAME `CITY_NAME`,
+        socr.`LEVEL`
         FROM ".self::DB_NAME.".street `street`
         LEFT JOIN ".self::DB_NAME.".kladr `city` ON city.CODE = CONCAT(LEFT(street.CODE, 11), '00')
+        LEFT JOIN  ".self::DB_NAME.".socrbase `socr` ON socr.SCNAME = street.SOCR
         WHERE 1 $city_code AND street.`NAME` LIKE '$street_name%' 
         $region_code
         AND RIGHT(street.`CODE`, 2) = '00' 
         AND RIGHT(city.`CODE`, 2) = '00'
         AND city.SOCR NOT IN ('Респ')
         ) `tbl`
-        ORDER BY `CITY_SOCR` IS NULL ASC, FIELD(`CITY_SOCR`, 'г', 'пгт', 'c', 'аал', 'автодорога', 'АО', 'Аобл', 'арбан', 'аул', 'волость', 'высел', 'г-к', 'г.о.', 'гп', 'д', 'днп', 'дп', 'ж/д пл-ка', 'ж/д_будка', 'ж/д_казарм', 'ж/д_оп', 'ж/д_платф', 'ж/д_пост', 'ж/д_рзд', 'ж/д_ст', 'жилзона', 'жилрайон', 'заимка', 'казарма', 'кв-л', 'кордон', 'кп', 'край', 'лпх', 'м', 'массив', 'мкр', 'нп', 'обл', 'округ', 'остров', 'п', 'п. ж/д ст.', 'п/о', 'п/р', 'п/ст', 'погост', 'починок', 'промзона', 'р-н', 'Респ', 'рзд', 'рп', 'с', 'с/а', 'с/мо', 'с/о', 'с/п', 'с/с', 'сл', 'снт', 'ст', 'ст-ца', 'тер', 'у', 'ул', 'х', 'Чувашия', '') ASC
-        , `STREET_SOCR` IS NULL ASC, FIELD(`STREET_SOCR`, 'ул', 'ш', 'аллея', 'а/я', 'аал', 'б-р', 'берег', 'вал', 'взв.', 'въезд', 'городок', 'гск', 'д', 'днп', 'дор', 'дп', 'ж/д_будка', 'ж/д_казарм', 'ж/д_оп', 'ж/д_платф', 'ж/д_пост', 'ж/д_рзд', 'ж/д_ст', 'ж/р', 'жилрайон', 'жт', 'заезд', 'зона', 'казарма', 'кв-л', 'км', 'кольцо', 'коса', 'линия', 'м', 'мгстр.', 'местность', 'месторожд.', 'мкр', 'мост', 'н/п', 'наб', 'нп', 'остров', 'п', 'п/о', 'п/р', 'п/ст', 'парк', 'пгт', 'пер', 'переезд', 'пл', 'пл-ка', 'платф', 'порт', 'пр-кт', 'проезд', 'промзона', 'просек', 'просека', 'проселок', 'проулок', 'р-н', 'рзд', 'ряд', 'ряды', 'с', 'с/т', 'сад', 'сзд.', 'сквер', 'сл', 'снт', 'спуск', 'ст', 'стр', 'тер', 'тер. ГСК', 'тер. ДНО', 'тер. ДНП', 'тер. ДНТ', 'тер. ДПК', 'тер. ОНО', 'тер. ОНП', 'тер. ОНТ', 'тер. ОПК', 'тер. ПК', 'тер. СНО', 'тер. СНП', 'тер. СНТ', 'тер. СПК', 'тер. ТСН', 'тер.СОСН', 'тер.ф.х.', 'тракт', 'туп', 'ус.', 'уч-к', 'ф/х', 'ферма', 'х') ASC
+        ORDER BY `LEVEL` ASC
         LIMIT " . $limit);
 
         return $result;
@@ -179,7 +181,7 @@ class Kladr extends Model
     }
 
     public static function get_street_by_kladr($kladr) {
-        return DB::select("SELECT `NAME` FROM ".self::DB_NAME.".street WHERE `CODE` = '$kladr' LIMIT 1")[0]->NAME;
+        return DB::select("SELECT `NAME`, `SOCR` FROM ".self::DB_NAME.".street WHERE `CODE` = '$kladr' LIMIT 1")[0];
     }
 
     public static function get_popular_cities($per_row = 5) {

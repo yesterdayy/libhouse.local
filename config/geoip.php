@@ -38,7 +38,7 @@ return [
     |
     */
 
-    'service' => 'ipapi',
+    'service' => 'maxmind_database',
 
     /*
     |--------------------------------------------------------------------------
@@ -55,7 +55,7 @@ return [
             'class' => \Torann\GeoIP\Services\MaxMindDatabase::class,
             'database_path' => storage_path('app/geoip.mmdb'),
             'update_url' => 'https://geolite.maxmind.com/download/geoip/database/GeoLite2-City.mmdb.gz',
-            'locales' => ['en'],
+            'locales' => ['ru'],
         ],
 
         'maxmind_api' => [

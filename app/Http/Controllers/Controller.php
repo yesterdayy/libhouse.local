@@ -15,6 +15,7 @@ use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Cookie;
+use IPGeoBase;
 
 class Controller extends BaseController
 {
@@ -36,7 +37,12 @@ class Controller extends BaseController
         view()->share('popular_cities', Kladr::get_popular_cities(4));
 
         if (!Cookie::has('city')) {
-            view()->share('city', geoip($_SERVER['REMOTE_ADDR'])->getAttribute('city'));
+            $geo = new IPGeoBase();
+            $city = $geo->getRecord($_SERVER['REMOTE_ADDR'])['city'];
+            if (!$city) {
+                $city = 'Симферополь';
+            }
+            view()->share('city', $city);
         } else {
             view()->share('city', Cookie::get('city'));
         }
