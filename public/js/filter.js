@@ -4,15 +4,19 @@ $(function () {
             e.preventDefault();
             var that = this;
 
+            var form_data = $(':input', this).filter(function(index, element) {
+                return $(element).val() != '';
+            }).serialize();
+
             $.ajax({
                 url: $(this).attr('action'),
                 type: 'GET',
-                data: $(this).serialize(),
+                data: form_data,
                 dataType: 'JSON',
                 success: function(result) {
                     if (result.html.length > 0) {
                         $('.wrap-content').html(result.html);
-                        let new_url = location.origin + location.pathname + '?' + $(that).serialize();
+                        let new_url = location.origin + location.pathname + '?' + form_data;
                         history.pushState({}, null, new_url);
                     }
                 }

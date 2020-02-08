@@ -10,6 +10,7 @@ use App\Models\Realty\RealtyComfort;
 use App\Models\Realty\RealtyComfortCat;
 use App\Models\Realty\RealtyCounters;
 use App\Models\Realty\RealtyDopType;
+use App\Models\Realty\RealtyFilter;
 use App\Models\Realty\RealtyHouseClass;
 use App\Models\Realty\RealtyInfo;
 use App\Models\Realty\RealtyRentDuration;
@@ -32,10 +33,117 @@ class RealtyController extends Controller
         return view('home');
     }
 
-    public function search(Request $request) {
-        $realtys = Realty::with('info', 'attachments', 'counters')->where('status', 'published')->orderBy('id', 'desc')->take(20)->get();
+    public function parse_url($slugs) {
+        $is_single_page = explode('-', $slugs);
+        $is_single_page = end($is_single_page);
 
-        $filter = Input::toArray();
+        $routes = cache()->get('routes');
+
+        if (empty($routes)) {
+            $routes = Realty::route_cache();
+        }
+
+        if (!empty($routes)) {
+            $args = explode('/', $slugs);
+            $args = array_filter($args);
+
+            $result = [];
+            $breadcrumbs = [];
+            $city = null;
+
+            foreach ($args as $arg) {
+                $is_find = false;
+
+                foreach ($routes as $key => $route_type) {
+                    if (isset($route_type[$arg])) {
+                        $result[$key] = $route_type[$arg];
+
+                        $val = null;
+                        switch ($key) {
+                            case 'trade_type':
+                                $val = RealtyTradeType::find($route_type[$arg]);
+                                break;
+
+                            case 'type':
+                                $val = RealtyType::find($route_type[$arg]);
+                                break;
+
+                            case 'room_type':
+                                $val = RealtyRoomType::find($route_type[$arg]);
+                                break;
+
+                            case 'dop_type':
+                                $val = RealtyDopType::find($route_type[$arg]);
+                                break;
+
+                            case 'rent_duration':
+                                $val = RealtyRentDuration::find($route_type[$arg]);
+                                break;
+                        }
+
+                        if ($val) {
+                            $breadcrumbs[] = [
+                                'name' => isset($val->name_alt) ? $val->name_alt : $val->name,
+                                'slug' => $val->slug,
+                            ];
+                        }
+
+                        $is_find = true;
+                        break;
+                    }
+                }
+
+                if (!$is_find) {
+                    if (!$city) {
+                        $city = Kladr::get_city_by_slug($arg);
+                        if (!empty($city)) {
+                            $result['city'] = $city->CODE;
+                            $breadcrumbs[] = [
+                                'name' => $city->SOCR . '. ' . $city->NAME,
+                                'slug' => $city->SLUG,
+                            ];
+                        }
+                    }
+                    else {
+                        $street = Kladr::get_street_by_slug($city->CODE, $arg);
+                        if (!empty($street)) {
+                            $result['street'] = $street->CODE;
+                            $breadcrumbs[] = [
+                                'name' => $street->SOCR . '. ' . $street->NAME,
+                                'slug' => $street->SLUG,
+                            ];
+                        }
+                    }
+                }
+            }
+
+            $result = Realty::filter_middleware($result);
+
+            $realtys = RealtyFilter::getRealty($result);
+            $realtys = Realty::get_realty_cities($realtys);
+
+            $data = compact(
+                'realtys'
+            );
+
+            // подтягивать выбранные фильтры и сортировку
+            $data = Realty::pick_filters($data, $result);
+            $data['sort_variants'] = Realty::SORT_VARIANTS;
+            $data['sort_by'] = $result['sort'];
+
+            return view('realty.loops.cat_url', compact(
+                'realtys',
+                'filter',
+                'pick_filters',
+                'breadcrumbs'
+            ));
+        } else {
+            abort(404);
+        }
+    }
+
+    public function search(Request $request) {
+        $filter = $request->all();
         $pick_filters = [];
 
         if ($filter['trade_type']) {
@@ -85,7 +193,6 @@ class RealtyController extends Controller
         if ($request->ajax()) {
             $result = [];
             $result['html'] = shortcodes_parse(view('realty.search', compact(
-                'realtys',
                 'filter'
             ))->render());
 
@@ -149,6 +256,10 @@ class RealtyController extends Controller
         }
 
         $realty_info = $realty->info->pluck('value', 'field');
+        $realty->city = isset($realty->city) ? Kladr::get_city_by_kladr($realty->city) : null;
+        $realty->city = $realty->city ? $realty->city->SOCR . '. ' . $realty->city->NAME : null;
+        $realty->street = isset($realty->street) ? Kladr::get_street_by_kladr($realty->street) : null;
+        $realty->street = $realty->street ? $realty->street->SOCR . '. ' . $realty->street->NAME : null;
         $realty_info_table = Realty::info_format($realty);
 
         foreach ($realty_info as $k => $inf) {
@@ -250,8 +361,6 @@ class RealtyController extends Controller
         $this->authorize('edit', $realty);
 
         $realty->info = $realty->info->pluck('value', 'field');
-        $realty->info['city_val'] = isset($realty->info['city']) ? Kladr::get_city_by_kladr($realty->info['city']) : null;
-        $realty->info['street_val'] = isset($realty->info['street']) ? Kladr::get_street_by_kladr($realty->info['street'])->NAME : null;
         $realty->comfort = $realty->comfort->pluck('name', 'id');
 
         $comforts = RealtyComfort::all();
@@ -298,7 +407,7 @@ class RealtyController extends Controller
         $realty->street = $input['address_street'];
         $realty->content = strip_tags($input['content']);
         $realty->price = $input['price'];
-        $realty->slug = $realty->slug ?? Str::slug($realty->title . '-' . Str::random(6));
+        $realty->slug = $realty->slug ?? Str::slug($realty->title . '-' . rand(100000000, 999999999));
         $realty->status = 'published';
         $realty->save();
 

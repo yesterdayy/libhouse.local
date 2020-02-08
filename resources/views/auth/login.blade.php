@@ -1,13 +1,12 @@
-
 {{ Form::open(['route' => 'login', 'method' => 'post', 'class' => 'login-form']) }}
     <div class="form-group">
-        {{ Form::label('email', 'Email', ['class' => 'm-light']) }}
-        {{ Form::email('email', null, ['class' => 'form-control']) }}
+        {{ Form::label('login-email', 'Email', ['class' => 'm-light']) }}
+        {{ Form::email('email', null, ['class' => 'form-control', 'id' => 'login-email']) }}
     </div>
 
     <div class="form-group">
-        {{ Form::label('password', 'Пароль', ['class' => 'm-light']) }}
-        {{ Form::password('password', ['class' => 'form-control']) }}
+        {{ Form::label('login-pass', 'Пароль', ['class' => 'm-light']) }}
+        {{ Form::password('password', ['class' => 'form-control', 'id' => 'login-pass']) }}
     </div>
 
     <div class="form-group row login-params no-gutters">

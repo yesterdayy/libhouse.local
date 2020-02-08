@@ -30,7 +30,7 @@
 
             <div class="realty-footer-info row">
                 <div class="col-md-6">
-                    <div class="realty-price">{{ $realty->price }} {{ $realty->trade_type_id == 1 ? '₽/мес.' : '₽' }}</div>
+                    <div class="realty-price">@if ($realty->price) {{ $realty->price }} {{ $realty->trade_type_id == 1 ? '₽/мес.' : '₽' }} @else Цена договорная @endif</div>
                     <div class="realty-city">{{ $realty->city }}</div>
                 </div>
 

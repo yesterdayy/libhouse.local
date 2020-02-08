@@ -19,7 +19,7 @@
         <div class="btn-group-toggle" data-toggle="buttons">
             @foreach ($user_realty_types as $user_realty_type)
                 <div class="{{ (isset($old['user_realty_type']) && !empty($old['user_realty_type']) ? ($old['user_realty_type'] == $user_realty_type->id ? 'active' : '') : ($loop->first ? 'active' : '')) }} @if ($user_realty_type->status == 0) btn-disabled @else btn @endif">
-                    {{ Form::radio('user_realty_type', $user_realty_type->id, (isset($old['user_realty_type']) && !empty($old['user_realty_type']) ? (boolean) ($old['user_realty_type'] == $user_realty_type->id) : ($loop->first ? true : false)), ['disabled' => $user_realty_type->status == 0 ? true : false]) }} {{ $user_realty_type->name }}
+                    {{ Form::radio('user_realty_type', $user_realty_type->id, (isset($old['user_realty_type']) && !empty($old['user_realty_type']) ? (boolean) ($old['user_realty_type'] == $user_realty_type->id) : ($loop->first ? true : false)), ['disabled' => $user_realty_type->status == 0 ? true : false, 'id' => null]) }} {{ $user_realty_type->name }}
                 </div>
             @endforeach
         </div>
@@ -31,7 +31,7 @@
         <div class="btn-group-toggle" data-toggle="buttons">
             @foreach ($trade_types as $trade_type)
                 <div class="{{ (isset($old['trade_type']) && !empty($old['trade_type']) ? ($old['trade_type'] == $trade_type->id ? 'active' : '') : ($loop->first ? 'active' : '')) }} btn">
-                    {{ Form::radio('trade_type', $trade_type->id, (isset($old['trade_type']) && !empty($old['trade_type']) ? (boolean) ($old['trade_type'] == $trade_type->id) : ($loop->first ? true : false))) }} {{ $trade_type->name }}
+                    {{ Form::radio('trade_type', $trade_type->id, (isset($old['trade_type']) && !empty($old['trade_type']) ? (boolean) ($old['trade_type'] == $trade_type->id) : ($loop->first ? true : false)), ['id' => null]) }} {{ $trade_type->name }}
                 </div>
             @endforeach
         </div>
@@ -43,7 +43,7 @@
         <div class="btn-group-toggle" data-toggle="buttons">
             @foreach ($rent_durations as $rent_duration)
                 <div class="{{ (isset($old['duration']) && !empty($old['duration']) ? ($old['duration'] == $rent_duration->id ? 'active' : '') : ($loop->first ? 'active' : '')) }} btn">
-                    {{ Form::radio('duration', $rent_duration->id, (isset($old['duration']) && !empty($old['duration']) ? (boolean) ($old['duration'] == $rent_duration->id) : ($loop->first ? true : false))) }} {{ $rent_duration->name }}
+                    {{ Form::radio('duration', $rent_duration->id, (isset($old['duration']) && !empty($old['duration']) ? (boolean) ($old['duration'] == $rent_duration->id) : ($loop->first ? true : false)), ['id' => null]) }} {{ $rent_duration->name }}
                 </div>
             @endforeach
                 <div class="d-none">
@@ -58,7 +58,7 @@
         <div class="btn-group-toggle" data-toggle="buttons">
             @foreach ($dop_types as $dop_type)
                 <div class="{{ (isset($old['dop_type']) && !empty($old['dop_type']) ? ($old['dop_type'] == $dop_type->id ? 'active' : '') : ($loop->first ? 'active' : '')) }} btn">
-                    {{ Form::radio('dop_type', $dop_type->id, (isset($old['dop_type']) && !empty($old['dop_type']) ? (boolean) ($old['dop_type'] == $dop_type->id) : ($loop->first ? true : false))) }} {{ $dop_type->name }}
+                    {{ Form::radio('dop_type', $dop_type->id, (isset($old['dop_type']) && !empty($old['dop_type']) ? (boolean) ($old['dop_type'] == $dop_type->id) : ($loop->first ? true : false)), ['id' => null]) }} {{ $dop_type->name }}
                 </div>
             @endforeach
         </div>
@@ -70,7 +70,7 @@
         <div class="btn-group-toggle" data-toggle="buttons">
             @foreach ($rent_types as $rent_type)
                 <div class="{{ (isset($old['rent_type']) && !empty($old['rent_type']) ? ($old['rent_type'] == $rent_type->id ? 'active' : '') : ($loop->first ? 'active' : '')) }} btn">
-                    {{ Form::radio('rent_type', $rent_type->id, (isset($old['rent_type']) && !empty($old['rent_type']) ? (boolean) ($old['rent_type'] == $rent_type->id) : ($loop->first ? true : false))) }} {{ $rent_type->name }}
+                    {{ Form::radio('rent_type', $rent_type->id, (isset($old['rent_type']) && !empty($old['rent_type']) ? (boolean) ($old['rent_type'] == $rent_type->id) : ($loop->first ? true : false)), ['id' => null]) }} {{ $rent_type->name }}
                 </div>
             @endforeach
         </div>

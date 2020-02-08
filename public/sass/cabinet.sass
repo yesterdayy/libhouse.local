@@ -8,7 +8,7 @@ div.cabinet-tab-list
 div.cabinet-tab-wrap
     padding: 0 30px
 
-.cabinet-wrap > div:not(:last-child)
+.cabinet-wrap > div:not(:last-child), .cabinet-settings-wrap > div:not(:last-child)
     border-right: 1px solid $white-two
 
 .cabinet-tab-title
@@ -175,3 +175,96 @@ ul.realty-btn-filters li:first-child
 
 .compact-favorite .realty-favorite-btn
     margin-bottom: 20px
+
+.cabinet-col-1
+    flex: 0 0 300px
+    margin-right: 20px
+
+.cabinet-col-2
+    flex: 1
+
+.cabinet-left-wrap
+    display: flex
+    flex-wrap: wrap
+
+.cabinet-ava img
+    width: 64px
+    height: 64px
+    @include border-radius(50%)
+
+.cabinet-ava
+    float: left
+    padding-right: 30px
+
+.cabinet-name
+    height: 64px
+    display: flex
+    align-items: center
+    font-size: 22px
+    font-weight: bold
+
+.cabinet-clear-col
+    flex: 1 1 100%
+    height: 50px
+
+.cabinet-info-col-1
+    flex: 0 0 48%
+    max-width: 48%
+
+.cabinet-info-col-2
+    flex: 0 0 52%
+    max-width: 52%
+
+.cabinet-info-col-1, .cabinet-info-col-2
+    padding: 0 14px
+
+.cabinet-user-info
+    padding: 0 14px
+
+.cabinet-user-info > .row:first-child
+    color: $warm-grey
+    margin-bottom: 10px
+
+.change-pass-btn
+    height: 60px
+    padding: 0 30px
+    font-size: 15px
+    font-weight: bold
+    line-height: 58px
+    color: $lightish-blue
+    position: relative
+    border: 1px solid $white-two
+    cursor: pointer
+    @include border-radius(4px)
+
+.change-pass-btn > span
+    border-bottom: 1px dotted $lightish-blue
+
+.change-pass-btn i
+    position: absolute
+    right: 20px
+    top: 26px
+    font-size: 14px
+
+.cabinet-save-form
+    margin-top: 23px
+
+.cabinet-dop-change > p
+    color: $warm-grey
+    margin: 0 0 10px 0
+
+.cabinet-change-view > p
+    margin: 0 0 10px 0
+
+.cabinet-change-link, .cabinet-edit-link
+    color: $lightish-blue
+    cursor: pointer
+
+.cabinet-change-link:hover, .cabinet-edit-link:hover
+    text-decoration: underline
+
+.cabinet-edit-link
+    margin-top: 10px
+
+.cabinet-dop-change
+    margin-bottom: 50px

@@ -18,4 +18,8 @@ class UserPolicy
     public function edit(User $user, User $edit_user) {
         return $user->id == $edit_user->id;
     }
+
+    public function auth(User $user) {
+        return true;
+    }
 }

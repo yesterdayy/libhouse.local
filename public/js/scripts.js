@@ -391,3 +391,13 @@ function tooltip_err(err_json, form) {
         }, 5000);
     }
 }
+
+function validation_toast(err) {
+    if ('errors' in err.responseJSON) {
+        var mesg = [];
+        for (var prop in err.responseJSON.errors) {
+            mesg.push(err.responseJSON.errors[prop][0]);
+        }
+        show_toast({status: 'error', message: mesg.join("<br>")});
+    }
+}

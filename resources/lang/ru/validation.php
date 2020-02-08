@@ -162,6 +162,7 @@ return [
         'name'                  => 'имя',
         'username'              => 'никнейм',
         'email'                 => 'E-Mail адрес',
+        'new_email'                 => 'E-Mail адрес',
         'first_name'            => 'Имя',
         'last_name'             => 'фамилия',
         'password'              => 'пароль',

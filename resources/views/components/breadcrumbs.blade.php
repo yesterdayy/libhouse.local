@@ -1,1 +1,5 @@
-<a href="{{ route('realty.show', ['slug' => $realty_type->slug]) }}">{{ $realty_type->name }}</a> / <a href="{{ route('realty.show', ['slug' => $realty_trade_type->slug]) }}">{{ $realty_trade_type->name_alt }}</a> / <a href="{{ route('realty.show', ['slug' => $realty_room_type->slug]) }}">{{ $realty_room_type->name }}</a> / <a href="{{ route('realty.show', ['slug' => $realty_dop_type->slug]) }}">{{ $realty_dop_type->name }}</a>
+@php $slugs = []; @endphp
+@foreach ($breadcrumbs as $breadcrumb)
+    @php $slugs[] = $breadcrumb['slug']; @endphp
+    <a href="{{ route('realty.cat', ['slugs' => implode('/', $slugs)]) }}">{{ $breadcrumb['name'] }}</a> /
+@endforeach

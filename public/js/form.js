@@ -1,4 +1,6 @@
 $(function () {
+    realty_form_validaition('.realty-create-form');
+
     // Если аренда, то открываем поля аренды, иначе выбираем hidden radio
     $('input[name=trade_type]').change(function () {
         var duration = $('input[name=duration]')[0];
@@ -25,7 +27,6 @@ $(function () {
             $('#comission').closest('.form-group').hide();
             $(duration).closest('.form-group').hide();
             $(duration).closest('.btn-group-toggle').find('input[name=duration]').last().prop('checked', true);
-            $('input[name="info[with_communal]"]').closest('.form-group').hide();
 
             if (
                 $(this).closest('form').find('[name="user_realty_type"]:checked').val() == '2'
@@ -35,6 +36,8 @@ $(function () {
             } else {
                 toggle_commercy_fields(false);
             }
+
+            $('input[name="info[with_communal]"]').closest('.form-group').hide();
         }
         hidden_field_set_null_value('.realty-create-form');
     });
@@ -81,7 +84,6 @@ $(function () {
     // Если продажа коммереской недвижимости, то меняем поля для заполнения
     $('input[name=rent_type]').change(function () {
         if ($(this).closest('form').find('[name="trade_type"]:checked').val() == '2') {
-            $('#comission').closest('.form-group').hide();
             switch ($(this).val()) {
                 case '0':
                     toggle_commercy_fields(false);
@@ -344,4 +346,23 @@ function hidden_field_set_null_value(form) {
 
         $('.form-group:hidden select', form).val(null).change();
     }, 50);
+}
+
+function realty_form_validaition(form) {
+    bootstrapValidate($('[name="address"]', form)[0], 'required');
+
+    bootstrapValidate($('[name="info[floor]"]', form)[0], 'required|integer');
+    bootstrapValidate($('[name="info[floors]"]', form)[0], 'required|integer');
+    bootstrapValidate($('[name="info[square_common]"]', form)[0], 'integer');
+    bootstrapValidate($('[name="info[square_living]"]', form)[0], 'integer');
+    bootstrapValidate($('[name="info[square_kitchen]"]', form)[0], 'integer');
+
+    bootstrapValidate($('[name="youtube"]', form)[0], 'url');
+
+    bootstrapValidate($('[name="content"]', form)[0], 'required|max:3000:test');
+    bootstrapValidate($('[name="price"]', form)[0], 'integer');
+
+    if ($('[name="comission"]', form).length > 0 && $('[name="comission"]', form).parent().is(':visible')) {
+        bootstrapValidate($('[name="comission"]', form)[0], 'integer');
+    }
 }

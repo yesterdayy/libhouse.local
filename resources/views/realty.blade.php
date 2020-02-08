@@ -36,7 +36,6 @@
 
     {{ Html::style('sass/style.min.css') }}
     {{ Html::style('plugins/bootstrap/bootstrap.min.css') }}
-    {{ Html::style('plugins/bootstrap/bootstrap.min.js') }}
     {{ Html::script('js/scripts.js') }}
 </head>
 <body class="<?= $page_class ?? '' ?>">

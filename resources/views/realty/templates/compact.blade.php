@@ -18,7 +18,7 @@
                 <div class="realty-title"><a href="{{ get_realty_link($realty) }}">{{ $realty->title }}</a></div>
 
                 <div class="realty-compact-info">
-                    <span class="realty-city">{{ $realty->city }}</span> <span class="realty-price">{{ $realty->price }} {{ $realty->trade_type_id == 1 ? '₽/мес.' : '₽' }}</span>
+                    <span class="realty-city">{{ $realty->city }}</span> <span class="realty-price">@if ($realty->price) {{ $realty->price }} {{ $realty->trade_type_id == 1 ? '₽/мес.' : '₽' }} @else Цена договорная @endif</span>
                 </div>
 
                 <div class="realty-footer-info">

@@ -16,7 +16,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'last_name', 'first_name', 'email', 'password', 'phone', 'realty_type_id'
+        'last_name', 'first_name', 'birthdate', 'email', 'password', 'phone', 'realty_type_id'
     ];
 
     /**
@@ -46,7 +46,7 @@ class User extends Authenticatable
 
     public function realty_type()
     {
-        return $this->hasOne('App\Models\User\UserRealtyType', 'id', 'realty_type_id');
+        return $this->hasOne('App\Models\User\UserRealtyType', 'id', 'realty_type_id')->withDefault();
     }
 
     public function realty_comment_rating()

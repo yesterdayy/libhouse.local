@@ -1,12 +1,12 @@
 {{ Form::open(['route' => 'register', 'method' => 'post', 'class' => 'register-form']) }}
     <div class="form-group">
-        {!! Form::rawLabel('email', 'Email<span>*</span>', ['class' => 'm-light']) !!}
-        {{ Form::email('email', null, ['class' => 'form-control']) }}
+        {!! Form::rawLabel('register-email', 'Email<span>*</span>', ['class' => 'm-light']) !!}
+        {{ Form::email('email', null, ['class' => 'form-control', 'id' => 'register-email']) }}
     </div>
 
     <div class="form-group">
-        {!! Form::rawLabel('password', 'Пароль<span>*</span>', ['class' => 'm-light']) !!}
-        {{ Form::password('password', ['class' => 'form-control']) }}
+        {!! Form::rawLabel('register-pass', 'Пароль<span>*</span>', ['class' => 'm-light']) !!}
+        {{ Form::password('password', ['class' => 'form-control', 'id' => 'register-pass']) }}
     </div>
 
     <div class="form-group">

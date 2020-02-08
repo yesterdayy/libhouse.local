@@ -6,7 +6,7 @@
 
     <div class="realty-breadcrumbs-wrap row">
         <div class="col-md-9">
-            {!! get_breadcrumbs($realty) !!}
+            {!! get_realty_breadcrumbs($realty) !!}
         </div>
 
         <div class="col-md-3">
@@ -97,7 +97,7 @@
 
 @section('sidebar')
     <div class="realty-sidebar-info">
-        <div class="realty-sidebar-price">{{ $realty->price }} {{ $realty->trade_type_id == 1 ? '₽/мес.' : '₽' }}</div>
+        <div class="realty-sidebar-price">@if ($realty->price) {{ $realty->price }} {{ $realty->trade_type_id == 1 ? '₽/мес.' : '₽' }} @else Цена договорная @endif</div>
         @if (isset($realty_info['with_communal']))
             <div class="realty-sidebar-communal">Коммунальные услуги включены</div>
         @endif

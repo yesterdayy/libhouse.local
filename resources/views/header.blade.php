@@ -35,7 +35,7 @@
             @endforeach
         </div>
 
-        @if (!Cookie::has('city'))
+        @if (!Cookie::has('city') && !isset($light_header))
             <div class="city-question-popup" style="display: none;">
                 <div class="popup-question">Ваш город - <b>{{ $city }}</b></div>
                 <div class="popup-group-btn text-center">
@@ -43,32 +43,32 @@
                     <div class="btn btn-simple city-question-no">Выбрать другой</div>
                 </div>
             </div>
+
+            <script>
+                $(function () {
+                    $('.city-question-yes').click(function () {
+                        $(this).closest('.city-question-popup').remove();
+                        $.cookie('city', $(this).attr('data-val'));
+                    });
+
+                    $('.city-question-no').click(function () {
+                        $.cookie('city', 'none');
+                        $(this).closest('.city-question-popup').remove();
+                        let content = $('.city-pick-modal');
+                        content.removeClass('d-none');
+                        let modal = {
+                            title: 'Выберите регион или город',
+                            content: content[0],
+                        };
+                        show_modal(modal);
+                    });
+
+                    setTimeout(function () {
+                        $('.city-question-popup').fadeIn(300);
+                    }, 500);
+                });
+            </script>
         @endif
-
-        <script>
-            $(function () {
-                $('.city-question-yes').click(function () {
-                    $(this).closest('.city-question-popup').remove();
-                    $.cookie('city', $(this).attr('data-val'));
-                });
-
-                $('.city-question-no').click(function () {
-                    $.cookie('city', 'none');
-                    $(this).closest('.city-question-popup').remove();
-                    let content = $('.city-pick-modal');
-                    content.removeClass('d-none');
-                    let modal = {
-                        title: 'Выберите регион или город',
-                        content: content[0],
-                    };
-                    show_modal(modal);
-                });
-
-                setTimeout(function () {
-                    $('.city-question-popup').fadeIn(300);
-                }, 500);
-            });
-        </script>
     </div>
 
     <div class="row no-gutters header-middle-wrap">

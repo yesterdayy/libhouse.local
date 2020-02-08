@@ -27,7 +27,7 @@ class RealtyFormRequest extends FormRequest
             'term' => 'max:300|nullable',
             'user_realty_type' => 'required|integer',
             'trade_type' => 'required|integer',
-            'duration' => 'required|integer',
+            'duration' => 'integer',
             'dop_type' => 'required|integer',
             'rent_type' => 'required|integer',
             'type' => 'required|integer',

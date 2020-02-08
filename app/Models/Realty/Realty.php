@@ -7,6 +7,7 @@ use App\Models\User\UserRealtyFavorite;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Request;
 
@@ -266,8 +267,8 @@ class Realty extends Model
         return $result;
     }
 
-    public static function pick_filters($data) {
-        $filter = Input::toArray();
+    public static function pick_filters($data, $request = null) {
+        $filter = isset($request) ? $request : Input::toArray();
         $data['pick_filters'] = [];
 
 //        if ($filter['header_address_city']) {
@@ -362,7 +363,56 @@ class Realty extends Model
         return $counts;
     }
 
-    private static function get_realty_cities($realtys) {
+    // Дублю для обработки url-ов по категориям
+    public static function filter_middleware($request) {
+        $request['start'] = isset($request['start']) ? clear_string($request['start']) : 0;
+        $request['length'] = isset($request['length']) ? clear_string($request['length']) : 10;
+
+        $request['term'] = isset($request['term']) ? clear_string($request['term']) : null;
+        $request['address'] = isset($request['address']) ? clear_string($request['address']) : null;
+        $request['header_address_city'] = isset($request['header_address_city']) ? clear_numeric($request['header_address_city']) : null;
+        $request['header_address_street'] = isset($request['header_address_street']) ? clear_numeric($request['header_address_street']) : null;
+        $request['trade_type'] = isset($request['trade_type']) ? clear_numeric($request['trade_type']) : null;
+        $request['rent_duration'] = isset($request['rent_duration']) ? clear_numeric($request['rent_duration']) : null;
+        $request['dop_type'] = isset($request['dop_type']) ? clear_numeric($request['dop_type']) : null;
+        $request['price_start'] = isset($request['price_start']) ? clear_numeric($request['price_start']) : null;
+        $request['price_end'] = isset($request['price_end']) ? clear_numeric($request['price_end']) : null;
+        $request['city'] = isset($request['city']) ? clear_string($request['city']) : null;
+        $request['street'] = isset($request['street']) ? clear_string($request['street']) : null;
+
+        $request['type'] = isset($request['type']) ? explode(',', $request['type']) : null;
+        if ($request['type']) {
+            $request['type'] = array_filter(array_map(function ($type) {
+                return clear_numeric($type);
+            }, $request['type']));
+            if (empty($request['type'])) {
+                $request['type'] = false;
+            }
+        }
+
+        $request['room_type'] = isset($request['room_type']) ? explode(',', $request['room_type']) : null;
+        if ($request['room_type']) {
+            $request['room_type'] = array_filter(array_map(function ($room_type) {
+                return clear_numeric($room_type);
+            }, $request['room_type']));
+            if (empty($request['room_type'])) {
+                $request['room_type'] = false;
+            }
+        }
+
+        if (isset($request['sort'])) {
+            $request['sort'] = clear_string($request['sort']);
+            if (!$request['sort']) {
+                $request['sort'] = 'default';
+            }
+        } else {
+            $request['sort'] = 'default';
+        }
+
+        return $request;
+    }
+
+    public static function get_realty_cities($realtys) {
         $city_kladrs = [];
         foreach ($realtys as $realty) {
             if (isset($realty->city)) {
@@ -381,6 +431,75 @@ class Realty extends Model
         }
 
         return $realtys;
+    }
+
+    public static function route_cache() {
+        $routes = [
+            'trade_type' => RealtyTradeType::select('id', 'slug')->get()->pluck('id', 'slug'),
+            'type' => RealtyType::select('id', 'slug')->get()->pluck('id', 'slug'),
+            'room_type' => RealtyRoomType::select('id', 'slug')->get()->pluck('id', 'slug'),
+            'dop_type' => RealtyDopType::select('id', 'slug')->get()->pluck('id', 'slug'),
+            'rent_duration' => RealtyRentDuration::select('id', 'slug')->get()->pluck('id', 'slug'),
+        ];
+
+        Cache::forever('routes', $routes);
+        return $routes;
+    }
+
+    public static function getBreadCrumbs($realty) {
+        $breadcrumbs = [];
+
+        if (isset($realty->city) && $realty->city) {
+            $city = Kladr::get_city_by_kladr($realty->getOriginal('city'));
+
+            if (!empty($city)) {
+                $breadcrumbs[] = [
+                    'name' => $realty->city,
+                    'slug' => $city->SLUG,
+                ];
+            }
+        }
+
+        if (isset($realty->street) && $realty->street) {
+            $street = Kladr::get_street_by_kladr($realty->getOriginal('street'));
+
+            if (!empty($street)) {
+                $breadcrumbs[] = [
+                    'name' => $realty->street,
+                    'slug' => $street->SLUG,
+                ];
+            }
+        }
+
+        if (isset($realty->type->name) && $realty->type->name) {
+            $breadcrumbs[] = [
+                'name' => $realty->type->name,
+                'slug' => $realty->type->slug,
+            ];
+        }
+
+        if (isset($realty->trade_type->name_alt) && $realty->trade_type->name_alt) {
+            $breadcrumbs[] = [
+                'name' => $realty->trade_type->name_alt,
+                'slug' => $realty->trade_type->slug,
+            ];
+        }
+
+        if (isset($realty->room_type->name) && $realty->room_type->name) {
+            $breadcrumbs[] = [
+                'name' => $realty->room_type->name,
+                'slug' => $realty->room_type->slug,
+            ];
+        }
+
+        if (isset($realty->dop_type->name) && $realty->dop_type->name) {
+            $breadcrumbs[] = [
+                'name' => $realty->dop_type->name,
+                'slug' => $realty->dop_type->slug,
+            ];
+        }
+
+        return $breadcrumbs;
     }
 
     /*

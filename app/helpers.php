@@ -4,6 +4,7 @@ use App\Components\Shortcodes;
 use App\Models\Comment\Comment;
 use App\Models\Blog\Post;
 use App\Models\Kladr\Kladr;
+use App\Models\Realty\Realty;
 use Illuminate\Support\Facades\URL;
 use Jenssegers\Date\Date;
 use App\Models\Common\Settings;
@@ -404,13 +405,27 @@ if (! function_exists('get_realty_photos')) {
 }
 
 if (! function_exists('get_breadcrumbs')) {
-    function get_breadcrumbs($realty) {
-        return view('components.breadcrumbs', [
-            'realty_type' => $realty->type,
-            'realty_trade_type' => $realty->trade_type,
-            'realty_room_type' => $realty->room_type,
-            'realty_dop_type' => $realty->dop_type,
-        ])->render();
+    function get_breadcrumbs($breadcrumbs) {
+        if (!empty($breadcrumbs)) {
+            return view('components.breadcrumbs', compact('breadcrumbs'))->render();
+        } else {
+            return '';
+        }
+    }
+}
+
+if (! function_exists('get_realty_breadcrumbs')) {
+    function get_realty_breadcrumbs($realty) {
+        if (!empty($realty)) {
+            $breadcrumbs = Realty::getBreadCrumbs($realty);
+            if (!empty($breadcrumbs)) {
+                return view('components.breadcrumbs', compact('breadcrumbs'))->render();
+            } else {
+                return '';
+            }
+        } else {
+            return '';
+        }
     }
 }
 

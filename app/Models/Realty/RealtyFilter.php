@@ -40,6 +40,10 @@ class RealtyFilter extends Model
             $where[] = " `re`.`trade_type_id` = {$request['trade_type']} ";
         }
 
+        if ($request['rent_duration']) {
+            $where[] = " `re`.`rent_duration_id` = {$request['rent_duration']} ";
+        }
+
         if ($request['room_type']) {
             $where[] = " `re`.`room_type_id` IN (".implode(', ', $request['room_type']).") ";
         }
@@ -54,6 +58,14 @@ class RealtyFilter extends Model
 
         if ($request['price_end']) {
             $where[] = " `re`.`price` <= {$request['price_end']} ";
+        }
+
+        if ($request['city']) {
+            $where[] = " `re`.`city` = '{$request['city']}' ";
+        }
+
+        if ($request['street']) {
+            $where[] = " `re`.`street` = '{$request['street']}' ";
         }
 
         $sort = '';
@@ -85,6 +97,7 @@ class RealtyFilter extends Model
 
         $count = DB::select("SELECT COUNT(*) `count`
         FROM `realty_entry` `re`
+        LEFT JOIN `realty_entry_info` `rei` ON `rei`.realty_id = `re`.id AND `rei`.`field` = 'square_common'
         WHERE `re`.`status` = 'published' $where");
 
         $result = DB::select("SELECT `re`.*

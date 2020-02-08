@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Models\EmailHelpers\User\EmailUserRegister;
 use App\Models\User\User;
 use App\Http\Controllers\Controller;
 use App\Models\User\UserSubscribe;
@@ -213,6 +214,8 @@ class RegisterController extends Controller
               'message' => 'Вы авторизованы',
             ];
         } else {
+            EmailUserRegister::add_to_queue($user);
+
             $result = [
                 'status' => 'success',
                 'redirect' => self::redirectPath()

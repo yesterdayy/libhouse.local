@@ -19,7 +19,7 @@
             </div>
 
             <div class="cabinet-search cabinet-border-btm">
-                {{ Form::open(['url' => route('cabinet.search', ['id' => Auth::id()]), 'class' => 'cabinet-search']) }}
+                {{ Form::open(['url' => route('cabinet.search', ['id' => $user->id]), 'class' => 'cabinet-search']) }}
                     <div class="position-relative">
                         {{ Form::text('term', null, ['class' => 'form-control cabinet-search-input', 'id' => 'cabinet-search', 'placeholder' => 'Поиск']) }}
                         <div class="lh-icon lh-icon-search cabinet-search-btn"></div>
@@ -29,26 +29,34 @@
 
             <ul class="cabinet-menu cabinet-border-btm">
                 <li><a href="#realty">Объявления</a></li>
-                <li><a href="#favorite">Избранное</a></li>
+                @if ($is_my_page)
+                    <li><a href="#favorite">Избранное</a></li>
+                @endif
 {{--                <li><a href="#">Уведомления</a></li>--}}
 {{--                <li><a href="#">Сообщения</a></li>--}}
-                <li><a href="#">Настройки</a></li>
+                @if ($is_my_page)
+                    <li><a href="#settings">Настройки</a></li>
+                @endif
             </ul>
 
-            <ul class="cabinet-menu">
-                <li><a href="{{ route('logout') }}">Выйти</a></li>
-            </ul>
+            @if ($is_my_page)
+                <ul class="cabinet-menu">
+                    <li><a href="{{ route('logout') }}">Выйти</a></li>
+                </ul>
+            @endif
         </div>
 
         <div class="col-md-9 cabinet-tab-wrap">
             <div class="cabinet-tab-title"></div>
 
-            <ul class="realty-btn-filters" style="display: none;">
-                <li class="btn btn-default green" data-filter="active" tabindex="0">Активные<span class="btn-simple-badge">{{ $btn_filters_count['active'] }}</span></li>
-                <li class="btn btn-default gray" data-filter="no_active" tabindex="0">Неактивные<span class="btn-simple-badge">{{ $btn_filters_count['no_active'] }}</span></li>
-                <li class="btn btn-default red" data-filter="blocked" tabindex="0">Заблокированные<span class="btn-simple-badge">{{ $btn_filters_count['blocked'] }}</span></li>
-                <li class="btn btn-default blue" data-filter="draft" tabindex="0">На проверке<span class="btn-simple-badge">{{ $btn_filters_count['draft'] }}</span></li>
-            </ul>
+            @if ($is_my_page)
+                <ul class="realty-btn-filters" style="display: none;">
+                    <li class="btn btn-default green" data-filter="active" tabindex="0">Активные<span class="btn-simple-badge">{{ $btn_filters_count['active'] }}</span></li>
+                    <li class="btn btn-default gray" data-filter="no_active" tabindex="0">Неактивные<span class="btn-simple-badge">{{ $btn_filters_count['no_active'] }}</span></li>
+                    <li class="btn btn-default red" data-filter="blocked" tabindex="0">Заблокированные<span class="btn-simple-badge">{{ $btn_filters_count['blocked'] }}</span></li>
+                    <li class="btn btn-default blue" data-filter="draft" tabindex="0">На проверке<span class="btn-simple-badge">{{ $btn_filters_count['draft'] }}</span></li>
+                </ul>
+            @endif
 
             <div class="cabinet-tab-content"></div>
         </div>
@@ -69,7 +77,7 @@
             if (location.hash && $('[href="'+location.hash+'"]').length > 0) {
                 $('[href="'+location.hash+'"]').closest('li').click();
             } else {
-                tab_ajax();
+                $('.cabinet-menu li').eq(0).click();
             }
         });
 
@@ -99,37 +107,6 @@
             });
         }
 
-        $(document)
-        .off('click', '.realty-btn-filters > li')
-        .on('click', '.realty-btn-filters > li', function () {
-            if ($(this).hasClass('active')) {
-                $(this).closest('ul').find('li').removeClass('active');
-            } else {
-                $(this).closest('ul').find('li').removeClass('active');
-                $(this).addClass("active");
-            }
-            tab_ajax();
-        });
-
-        $('.cabinet-menu > li').click(function (e) {
-            // Скрываем / раскрываем фильтр по объявлениям
-            if ($('a', this).attr('href').substr(1) == 'realty') {
-                $('.cabinet-tab-wrap .realty-btn-filters').show();
-            } else {
-                $('.cabinet-tab-wrap .realty-btn-filters').hide();
-            }
-
-            $('.cabinet-tab-wrap .cabinet-tab-title').text($(this).text().trim() + ':');
-
-            if ($(this).hasClass('active')) {
-                return false;
-            } else {
-                $(this).closest('ul').find('li').removeClass('active');
-                $(this).addClass("active");
-            }
-            tab_ajax();
-        });
-
         $('.cabinet-search').submit(function (e) {
             e.preventDefault();
             e.stopPropagation();
@@ -157,5 +134,40 @@
                 window.cabinet_search = false;
             });
         })
+
+        $('.cabinet-menu > li').click(function (e) {
+            // Скрываем / раскрываем фильтр по объявлениям
+            if ($('a', this).attr('href').substr(1) == 'realty') {
+                $('.cabinet-tab-wrap .realty-btn-filters').show();
+            } else {
+                $('.cabinet-tab-wrap .realty-btn-filters').hide();
+            }
+
+            $('.cabinet-tab-wrap .cabinet-tab-title').text($(this).text().trim() + ':');
+
+            if ($(this).hasClass('active')) {
+                return false;
+            } else {
+                $(this).closest('ul').find('li').removeClass('active');
+                $(this).addClass("active");
+            }
+            tab_ajax();
+        });
     </script>
+
+    @if ($is_my_page)
+        <script>
+            $(document)
+                .off('click', '.realty-btn-filters > li')
+                .on('click', '.realty-btn-filters > li', function () {
+                    if ($(this).hasClass('active')) {
+                        $(this).closest('ul').find('li').removeClass('active');
+                    } else {
+                        $(this).closest('ul').find('li').removeClass('active');
+                        $(this).addClass("active");
+                    }
+                    tab_ajax();
+                });
+        </script>
+    @endif
 @endsection

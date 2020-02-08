@@ -31,14 +31,17 @@
     {{ Html::script('plugins/select2/single_select2.fix.min.js') }}
     {{ Html::style('plugins/select2/select2.min.css') }}
 
+    {{ Html::script('plugins/momentjs/moment-with-locales.min.js') }}
+
     {{ Html::script('plugins/slick/slick.min.js') }}
     {{ Html::style('plugins/slick/slick.min.css') }}
 
     {{ Html::script('plugins/autocomplete/jquery.autocomplete.min.js') }}
 
+    {{ Html::script('plugins/bootstrap-validate/bootstrap-validate.min.js') }}
+
     {{ Html::style('sass/style.min.css') }}
     {{ Html::style('plugins/bootstrap/bootstrap.min.css') }}
-    {{ Html::style('plugins/bootstrap/bootstrap.min.js') }}
     {{ Html::script('js/scripts.min.js') }}
 
 </head>
