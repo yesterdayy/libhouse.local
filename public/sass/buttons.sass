@@ -1,5 +1,5 @@
 .btn
-    padding: 10px 17px
+    padding: 18px 32px
     color: $lightish-blue
     vertical-align: middle
     line-height: 16px
@@ -13,8 +13,10 @@
     transition: .4s
     @include border-radius(4px)
 
-.btn:hover
+.btn:hover, .btn.active
     text-decoration: none
+    background: $warm-blue
+    color: $white-two
 
 .btn-primary, .btn.active
     background: $lightish-blue
@@ -24,9 +26,6 @@
     background-color: $toxic-green
     border-color: $toxic-green
     color: $white-two
-
-.btn.active:hover
-    background: $warm-blue
 
 .btn-disabled
     @extend .btn

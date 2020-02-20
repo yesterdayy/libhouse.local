@@ -159,11 +159,42 @@ $(function () {
     // Автовыбор 1-го результата, если его нет в выборке
     autocomplete_close_listener('.address-select');
 
-    // Сделать "Главным фото"
+    // Сделать Главным фото
     $(document).on('click', '.set-main-photo', function () {
         let index = $(this).closest('.dz-preview').index();
         $(this).closest('.dropzone-wrap').prepend($(this).closest('.dz-preview'));
         $(this).closest('.dropzone-wrap').find('.dz-default.dz-message').after($(this).closest('.dropzone-wrap').find('input[type=hidden]').eq(index));
+    });
+
+    // Повернуть фото
+    $(document).on('click', '.rotate-photo', function () {
+        var elem = $(this).closest('.dz-preview').find('.dz-image');
+        var rotate_param = '';
+        var index = $(this).closest('.dz-preview').index();
+
+        if (elem.hasClass('rotate-90')) {
+            elem.removeClass('rotate-90');
+            elem.addClass('rotate-180');
+            rotate_param = 180;
+        }
+        else if (elem.hasClass('rotate-180')) {
+            elem.removeClass('rotate-180');
+            elem.addClass('rotate-270');
+            rotate_param = 270;
+        }
+        else if (elem.hasClass('rotate-270')) {
+            elem.removeClass('rotate-270');
+        }
+        else {
+            elem.addClass('rotate-90');
+            rotate_param = 90;
+        }
+
+        if (rotate_param) {
+            $(this).closest('.dropzone-wrap').find('input[type=hidden]').eq(index).val(parseInt($(this).closest('.dropzone-wrap').find('input[type=hidden]').eq(index).val()) + '-' + rotate_param);
+        } else {
+            $(this).closest('.dropzone-wrap').find('input[type=hidden]').eq(index).val(parseInt($(this).closest('.dropzone-wrap').find('input[type=hidden]').eq(index).val()));
+        }
     });
 
     // Загрузка фото
@@ -171,7 +202,7 @@ $(function () {
         thumbnailWidth: 400,
         thumbnailHeight: 400,
         dictDefaultMessage: 'Добавить фото',
-        previewTemplate: "<div class=\"dz-preview dz-file-preview\">\n  <div class=\"dz-image\"><img data-dz-thumbnail /></div>\n  <ul class=\"dz-details\"><li class=\"set-main-photo\">Сделать главной</li></ul>\n</div>",
+        previewTemplate: "<div class=\"dz-preview dz-file-preview\">\n  <div class=\"dz-image\"><img data-dz-thumbnail /></div>\n  <ul class=\"dz-details\"><li class=\"set-main-photo\">Сделать главной</li><li class=\"rotate-photo\"><i class='lh-icon lh-icon-update'></i>Повернуть</li><li class=\"remove-photo\" data-dz-remove>Удалить</li></ul>\n</div>",
         url: "/upload/photo",
         maxFiles: 8,
         maxFilesize: 10,
@@ -209,6 +240,14 @@ $(function () {
 
                 $(this.element).append('<input type="hidden" name="' + $(this.element).attr('data-name') + '" value="' + file_id + '" />');
             }
+        },
+        removedfile: function addedfile(file) {
+            if (file.previewElement != null && file.previewElement.parentNode != null) {
+                let index = $(file.previewElement).index();
+                $(file.previewElement).closest('.dropzone-wrap').find('input[type=hidden]').eq(index).remove();
+                file.previewElement.parentNode.removeChild(file.previewElement);
+            }
+            return this._updateMaxFilesReachedClass();
         },
         addedfile: function addedfile(file) {
             var _this2 = this;

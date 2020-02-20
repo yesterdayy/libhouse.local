@@ -7,6 +7,8 @@
                         @if ($loop->iteration > 5) @break @endif
                         <div class="realty-img"><img data-lazy="{{ get_image_thumbnail_url($photo, 'thumb') }}" width="435px" height="348px" /></div>
                     @endforeach
+                @else
+                    <div class="realty-img"><img data-lazy="/img/no_photo.jpg" width="435px" height="348px" /></div>
                 @endif
             </div>
         </a>

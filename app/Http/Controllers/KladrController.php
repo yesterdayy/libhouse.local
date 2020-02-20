@@ -72,7 +72,9 @@ class KladrController extends Controller
                     'value' => $item->CITY_NAME . ', ' . ($item->STREET_SOCR ? $item->STREET_SOCR . '. ' : '') . $item->STREET_NAME,
                     'data' => [
                         'street_kladr' => $item->STREET_CODE,
+                        'street_name' => $item->STREET_NAME,
                         'city_kladr' => $item->CITY_CODE,
+                        'city_name' => $item->CITY_NAME,
                         'cat' => 'адреса'
                     ]
                 ];
@@ -83,6 +85,7 @@ class KladrController extends Controller
                     'value' => $item->CITY_NAME,
                     'data' => [
                         'city_kladr' => $item->CITY_CODE,
+                        'city_name' => $item->CITY_NAME,
                         'cat' => 'город'
                     ]
                 ];

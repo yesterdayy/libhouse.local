@@ -271,13 +271,13 @@ class Realty extends Model
         $filter = isset($request) ? $request : Input::toArray();
         $data['pick_filters'] = [];
 
-//        if ($filter['header_address_city']) {
-//            $data['pick_filters']['header_address_city'] = Kladr::get_city_by_kladr($filter['header_address_city']);
-//        }
-//
-//        if ($filter['header_address_street']) {
-//            $data['pick_filters']['header_address_street'] = Kladr::get_street_by_kladr($filter['header_address_street']);
-//        }
+        if ($filter['city']) {
+            $data['pick_filters']['city'] = $filter['city'];
+        }
+
+        if ($filter['street']) {
+            $data['pick_filters']['street'] = $filter['street'];
+        }
 
         if ($filter['trade_type']) {
             $filter['trade_name'] = RealtyTradeType::select('name')->find($filter['trade_type']);

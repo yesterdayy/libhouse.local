@@ -188,4 +188,34 @@ class Attachments extends Model
         return $model;
     }
 
+    public function rotate(int $degrees): bool
+    {
+        $disk = $this->getAttribute('disk');
+        if (Storage::disk($disk)->exists($this->physicalPath())) {
+            $disk_path = Storage::disk($disk)->getAdapter()->getPathPrefix();
+            $file =  $disk_path . $this->physicalPath();
+            if (Image::make($file)->rotate($degrees)->save()) {
+                $thumbs_urls = config('filesystems.thumbnails_size');
+
+                foreach ($thumbs_urls as $thumb) {
+                    if (Storage::disk($disk)->exists($this->physicalPath())) {
+                        $thumbname = $thumb['value'][0] . '_' . $thumb['value'][1];
+
+                        $file = $disk_path . mb_substr($this->physicalPath($thumbname), 0, -3) . 'jpg';
+                        Image::make($file)->rotate($degrees)->save();
+
+                        $file_preload = $disk_path . mb_substr($this->physicalPath($thumbname), 0, -4) . '_preload.jpg';
+                        Image::make($file_preload)->rotate($degrees)->save();
+                    }
+                }
+
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        return false;
+    }
+
 }

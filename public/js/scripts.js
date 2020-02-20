@@ -29,7 +29,7 @@ function init_header_filters() {
         container: '.adv-form-header',
         html: true,
         placement: 'bottom',
-        offset: '-5px 5px',
+        offset: '-5px 9px',
         sanitize: false,
     });
 
@@ -38,7 +38,7 @@ function init_header_filters() {
         container: '.adv-form-header',
         html: true,
         placement: 'bottom',
-        offset: '194px 5px',
+        offset: '194px 9px',
         sanitize: false,
     });
 
@@ -47,7 +47,7 @@ function init_header_filters() {
         container: '.adv-form-header',
         html: true,
         placement: 'bottom',
-        offset: '64px 5px',
+        offset: '64px 9px',
         sanitize: false,
     });
 
@@ -56,7 +56,7 @@ function init_header_filters() {
         container: '.adv-form-header',
         html: true,
         placement: 'bottom',
-        offset: '62px 5px',
+        offset: '62px 9px',
         sanitize: false,
     });
 
@@ -142,11 +142,11 @@ function init_header_filters() {
         minChars: 3,
         containerClass: 'autocomplete-suggestions header-address-autocomplete',
         onSelect: function (suggestion) {
-            $('input[name=header_address_city]').val(suggestion.data.city_kladr);
+            $('input[name=city]', '.adv-address-popup').val(suggestion.data.city_name);
             if ('street_kladr' in suggestion.data) {
-                $('input[name=header_address_street]').val(suggestion.data.street_kladr);
+                $('input[name=street]', '.adv-address-popup').val(suggestion.data.street_name);
             } else {
-                $('input[name=header_address_street]').val(null);
+                $('input[name=street]', '.adv-address-popup').val(null);
             }
         },
     });
@@ -161,7 +161,7 @@ function init_header_filters() {
         paramName: 'term',
         minChars: 3,
         onSelect: function (suggestion) {
-            $('input[name=header_address_city]').val(suggestion.data.city_kladr);
+            $('input[name=city]', '.adv-address-popup').val(suggestion.data.city_kladr);
             $.cookie('city', suggestion.value);
             $.cookie('city_kladr', suggestion.data.city_kladr);
             $('.current-city').text(suggestion.value);

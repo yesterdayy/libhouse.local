@@ -112,7 +112,7 @@ class Kladr extends Model
         return $result;
     }
 
-    public static function get_city_by_kladr($kladr) {
+    public static function get_city_by_kladr(string $kladr) {
         $result = DB::connection('kladr')->select("SELECT `CODE`, `NAME`, `SOCR`, `SLUG` FROM kladr WHERE `CODE` = '$kladr' LIMIT 1");
         if ($result) {
             $result = $result[0];
@@ -122,7 +122,7 @@ class Kladr extends Model
         return $result;
     }
 
-    public static function get_street_by_kladr($kladr) {
+    public static function get_street_by_kladr(string $kladr) {
         $result = DB::connection('kladr')->select("SELECT `CODE`, `NAME`, `SOCR`, `SLUG` FROM street WHERE `CODE` = '$kladr' LIMIT 1");
         if ($result) {
             $result = $result[0];
@@ -132,7 +132,27 @@ class Kladr extends Model
         return $result;
     }
 
-    public static function get_city_by_slug($slug) {
+    public static function get_city_by_name(string $name) {
+        $result = DB::connection('kladr')->select("SELECT `CODE`, `NAME`, `SOCR`, `SLUG` FROM kladr WHERE `NAME` = '$name' LIMIT 1");
+        if ($result) {
+            $result = $result[0];
+        } else {
+            $result = [];
+        }
+        return $result;
+    }
+
+    public static function get_street_by_name(string $city_code, string $name) {
+        $result = DB::connection('kladr')->select("SELECT `CODE`, `NAME`, `SOCR`, `SLUG` FROM street WHERE `NAME` = '$name' AND `CODE` LIKE '$city_code%' LIMIT 1");
+        if ($result) {
+            $result = $result[0];
+        } else {
+            $result = [];
+        }
+        return $result;
+    }
+
+    public static function get_city_by_slug(string $slug) {
         $result = DB::connection('kladr')->select("SELECT `CODE`, `NAME`, `SOCR`, `SLUG` FROM kladr WHERE `SLUG` = '$slug' LIMIT 1");
         if ($result) {
             $result = $result[0];
@@ -142,7 +162,7 @@ class Kladr extends Model
         return $result;
     }
 
-    public static function get_street_by_slug($city_code, $slug) {
+    public static function get_street_by_slug(string $city_code, string $slug) {
         $result = DB::connection('kladr')->select("SELECT `CODE`, `NAME`, `SOCR`, `SLUG` FROM street WHERE `SLUG` = '$slug' AND `CODE` LIKE '$city_code%' LIMIT 1");
         if ($result) {
             $result = $result[0];

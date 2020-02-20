@@ -2,6 +2,7 @@
 
 namespace App\Models\Realty;
 
+use App\Models\Kladr\Kladr;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
@@ -24,12 +25,18 @@ class RealtyFilter extends Model
             $where[] = " `re`.`title` LIKE '%{$request['term']}%' ";
         }
 
-        if ($request['header_address_city']) {
-            $where[] = " `re`.`city` = {$request['header_address_city']} ";
-        }
+        if ($request['city']) {
+            $city = Kladr::get_city_by_name($request['city']);
+            if (!empty($city)) {
+                $where[] = " `re`.`city` = {$city->CODE} ";
 
-        if ($request['header_address_street']) {
-            $where[] = " `re`.`street` = {$request['header_address_street']} ";
+                if ($request['street']) {
+                    $street = Kladr::get_street_by_name($city->CODE, $request['street']);
+                    if (!empty($street)) {
+                        $where[] = " `re`.`street` = {$street->CODE} ";
+                    }
+                }
+            }
         }
 
         if ($request['type']) {
@@ -58,14 +65,6 @@ class RealtyFilter extends Model
 
         if ($request['price_end']) {
             $where[] = " `re`.`price` <= {$request['price_end']} ";
-        }
-
-        if ($request['city']) {
-            $where[] = " `re`.`city` = '{$request['city']}' ";
-        }
-
-        if ($request['street']) {
-            $where[] = " `re`.`street` = '{$request['street']}' ";
         }
 
         $sort = '';

@@ -131,11 +131,17 @@ class RealtyController extends Controller
             $data['sort_variants'] = Realty::SORT_VARIANTS;
             $data['sort_by'] = $result['sort'];
 
+            if (!empty($breadcrumbs)) {
+                $page_title = array_pop($breadcrumbs);
+                $page_title = $page_title['name'];
+            }
+
             return view('realty.loops.cat_url', compact(
                 'realtys',
                 'filter',
                 'pick_filters',
-                'breadcrumbs'
+                'breadcrumbs',
+                'page_title'
             ));
         } else {
             abort(404);
@@ -444,10 +450,20 @@ class RealtyController extends Controller
         if (isset($input['photos'])) {
             $insert_photos= [];
             foreach ($input['photos'] as $k => $photo) {
-                if (!empty($photo)) {
+                $photo_id = clear_numeric($photo);
+                if (!empty($photo_id)) {
+                    if (strpos($photo, '-') !== false) {
+                        $rotate_degrees = explode('-', $photo);
+                        $rotate_degrees = clear_numeric($rotate_degrees[1]);
+                        if ($rotate_degrees) {
+                            $photo_info = Attachments::find($photo_id);
+                            dd($photo_info->rotate($rotate_degrees));
+                        }
+                    }
+
                     $insert_photos[] = [
                         'type' => 'photo',
-                        'attachment_id' => $photo,
+                        'attachment_id' => $photo_id,
                     ];
                 }
             }
@@ -457,6 +473,8 @@ class RealtyController extends Controller
 
         $counters = new RealtyCounters(['realty_id' => $realty->id, 'counter' => 0]);
         $realty->counters()->save($counters);
+
+        dd('test');
 
         return response()->redirectToRoute('realty.show', $realty->slug);
     }

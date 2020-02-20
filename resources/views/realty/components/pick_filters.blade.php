@@ -1,19 +1,21 @@
-<div class="pick-filter @if (count($pick_filters) == 0) no-filters @endif">
-    @if (count($pick_filters) > 0)
-        @foreach ($pick_filters as $field => $pick_filter)
+<div class="pick-filter @if (count($pick_filters) == 0) no-filters @endif row">
+    <div class="col-md-8">
+        @if (count($pick_filters) > 0)
+            @foreach ($pick_filters as $field => $pick_filter)
 
-            @if (is_array($pick_filter))
-                @foreach ($pick_filter as $pfilter)
-                    <div class="btn btn-gray btn-small" data-type="multiple" data-field="{{ $field }}" data-value="{{ $pfilter['id'] }}">{{ $pfilter['val'] }} <i class="lh-icon lh-icon-cross remove-filter"></i></div>
-                @endforeach
-            @else
-                <div class="btn btn-gray btn-small" data-field="{{ $field }}">{{ $pick_filter }} <i class="lh-icon lh-icon-cross remove-filter"></i></div>
-            @endif
+                @if (is_array($pick_filter))
+                    @foreach ($pick_filter as $pfilter)
+                        <div class="btn btn-gray btn-small" data-type="multiple" data-field="{{ $field }}" data-value="{{ $pfilter['id'] }}">{{ $pfilter['val'] }} <i class="lh-icon lh-icon-cross remove-filter"></i></div>
+                    @endforeach
+                @else
+                    <div class="btn btn-gray btn-small" data-field="{{ $field }}">{{ $pick_filter }} <i class="lh-icon lh-icon-cross remove-filter"></i></div>
+                @endif
 
-        @endforeach
-    @endif
+            @endforeach
+        @endif
+    </div>
 
-    <div class="filter-sort-wrap float-right">
+    <div class="filter-sort-wrap float-right col-md-4">
         {{ $realtys->total() }} предложений отсортированы <span class="filter-sort text-primary">{{ $sort_variants[$sort_by] }} <i class="lh-icon lh-icon-select-arrow"></i></span>
 
         <div class="filter-sort-pick-popover d-none">
