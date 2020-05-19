@@ -13,37 +13,6 @@
 @endif
 
 <div class="realty-create-form-block">
-    <div class="realty-create-main-lists">
-        <ul class="realty-create-object">
-            <li>Квартиры</li>
-            <li>Дома</li>
-            <li>Коммерческая недвижимость</li>
-            <li>Офисы</li>
-            <li>Земельные участки</li>
-            <li>Гаражи</li>
-        </ul>
-
-        <ul class="realty-create-subobject">
-            <li>Квартира</li>
-            <li>Комната</li>
-        </ul>
-
-        <ul class="realty-create-duration">
-            <li>Продажа</li>
-            <li>Долгосрочная аренда</li>
-            <li>Посуточная аренда</li>
-        </ul>
-    </div>
-</div>
-
-<script>
-    $('.realty-create-main-lists ul li').click(function () {
-        $(this).parent().find('li').removeClass('active');
-        $(this).addClass('active');
-    })
-</script>
-
-<div class="realty-create-form-block">
     <div class="form-group">
         {!! Form::rawLabel('user_realty_type', 'Тип аккаунта<span>*</span>') !!}
 
@@ -77,9 +46,9 @@
                     {{ Form::radio('duration', $rent_duration->id, (isset($old['duration']) && !empty($old['duration']) ? (boolean) ($old['duration'] == $rent_duration->id) : ($loop->first ? true : false)), ['id' => null]) }} {{ $rent_duration->name }}
                 </div>
             @endforeach
-                <div class="d-none">
-                    {{ Form::radio('duration', 0, false) }}
-                </div>
+            <div class="d-none">
+                {{ Form::radio('duration', 0, false) }}
+            </div>
         </div>
     </div>
 

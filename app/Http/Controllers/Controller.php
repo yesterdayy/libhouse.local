@@ -11,19 +11,19 @@ use App\Models\Realty\RealtyType;
 use App\Models\Kladr\Kladr;
 use App\Models\Modal\Modal;
 use Illuminate\Foundation\Bus\DispatchesJobs;
-use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Cookie;
-use Illuminate\Support\Str;
 use IPGeoBase;
 
-class Controller extends BaseController
+class Controller
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
     public function __construct()
     {
+        view()->share('page_title', $this->page_title[request()->route()->getActionMethod()] ?? '');
+
         $page_class = $this->getPageClass();
         view()->share('page_class', $page_class);
 

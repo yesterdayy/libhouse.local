@@ -5,6 +5,7 @@ use App\Models\Comment\Comment;
 use App\Models\Blog\Post;
 use App\Models\Kladr\Kladr;
 use App\Models\Realty\Realty;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\URL;
 use Jenssegers\Date\Date;
 use App\Models\Common\Settings;
@@ -404,13 +405,20 @@ if (! function_exists('get_realty_photos')) {
     }
 }
 
-if (! function_exists('get_breadcrumbs')) {
-    function get_breadcrumbs($breadcrumbs) {
-        if (!empty($breadcrumbs)) {
-            return view('components.breadcrumbs', compact('breadcrumbs'))->render();
-        } else {
-            return '';
-        }
+if (! function_exists('get_page_breadcrumbs')) {
+    function get_page_breadcrumbs($page_title) {
+        $breadcrumbs = [
+            [
+                'slug' => '/',
+                'name' => config('app.name'),
+            ],
+            [
+                'slug' => null,
+                'name' => $page_title,
+            ]
+        ];
+
+        return view('components.breadcrumbs', compact('breadcrumbs'))->render();
     }
 }
 

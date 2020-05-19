@@ -5,7 +5,7 @@
   ),
   'app' => 
   array (
-    'name' => 'Laravel',
+    'name' => 'Libhouse.su',
     'env' => 'local',
     'debug' => true,
     'url' => 'http://libhouse.local/',
@@ -226,7 +226,7 @@
         'connection' => 'cache',
       ),
     ),
-    'prefix' => 'laravel_cache',
+    'prefix' => 'libhousesu_cache',
   ),
   'database' => 
   array (
@@ -827,7 +827,7 @@
       0 => 2,
       1 => 100,
     ),
-    'cookie' => 'laravel_session',
+    'cookie' => 'libhousesu_session',
     'path' => '/',
     'domain' => NULL,
     'secure' => false,

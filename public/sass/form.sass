@@ -128,13 +128,12 @@ span.select2-selection.select2-selection--single, .select2-container--default .s
     border-top: 0
     @include border-radius(0 0 4px 4px)
 
-.realty-create-wrap
+.realty-form-wrap
     max-width: 1194px
     width: 100%
     margin: 0 auto
 
 .realty-create-form
-    max-width: 890px
     width: 100%
     margin: 50px auto
     padding: 0
@@ -388,3 +387,39 @@ h1 + form.realty-create-form
 
 .house-classes label
     margin-right: 15px
+
+.realty-create-main-lists > ul
+    max-width: 294px
+    width: 100%
+    float: left
+    margin: 0
+    padding: 0
+    box-sizing: content-box
+
+.realty-create-main-lists > ul:not(:last-child)
+    margin-right: 30px
+    padding-right: 30px
+    border-right: 1px solid #eee
+
+.realty-create-main-lists
+    width: 100%
+    display: inline-block
+
+.realty-create-main-lists > ul > li
+    list-style: none
+    margin-bottom: 10px
+    height: 38px
+    line-height: 38px
+    cursor: pointer
+    padding: 0 30px
+    @include border-radius(4px)
+
+.realty-create-main-lists > ul:not(:last-child) > li:hover , .realty-create-main-lists > ul:not(:last-child) > li.active
+    background: rgba(73, 90, 255, 0.15)
+    font-weight: bold
+    color: $lightish-blue
+
+.realty-create-main-lists > ul:last-child > li:hover, .realty-create-main-lists > ul:last-child > li.active
+    background: rgba(73, 198, 40, 0.15)
+    font-weight: bold
+    color: $lightish-blue

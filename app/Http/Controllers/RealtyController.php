@@ -29,6 +29,14 @@ use Illuminate\Support\Str;
 class RealtyController extends Controller
 {
 
+    /**
+     * @var array
+     * Массив Method => Page Title
+     */
+    public $page_title = [
+        'create' => 'Форма добавления объявления',
+    ];
+
     public function index() {
         return view('home');
     }

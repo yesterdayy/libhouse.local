@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Jenssegers\Date\Date;
 use Orchid\Platform\Dashboard;
@@ -19,6 +20,7 @@ class AppServiceProvider extends ServiceProvider
     {
         Date::setlocale(config('app.locale'));
         date_default_timezone_set('Europe/Moscow');
+
         Form::macro('rawLabel', function($name, $value = null, $options = array())
         {
             $label = Form::label($name, '%s', $options);

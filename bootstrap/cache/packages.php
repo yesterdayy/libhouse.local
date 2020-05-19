@@ -104,19 +104,6 @@
       0 => 'NunoMaduro\\Collision\\Adapters\\Laravel\\CollisionServiceProvider',
     ),
   ),
-  'orchid/platform' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'Orchid\\Platform\\Providers\\FoundationServiceProvider',
-    ),
-    'aliases' => 
-    array (
-      'Alert' => 'Orchid\\Support\\Facades\\Alert',
-      'Dashboard' => 'Orchid\\Support\\Facades\\Dashboard',
-      'Setting' => 'Orchid\\Support\\Facades\\Setting',
-    ),
-  ),
   'orchid/widget' => 
   array (
     'providers' => 
