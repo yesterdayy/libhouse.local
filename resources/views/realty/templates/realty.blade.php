@@ -1,4 +1,4 @@
-<article class="{{ $widget_class }}-article col-md-4">
+<article class="{{ $widget_class }}-article col-md-3">
     <div class="realty-border">
         <a href="{{ get_realty_link($realty) }}">
             <div class="realty-photos">

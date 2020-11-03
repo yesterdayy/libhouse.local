@@ -1,6 +1,18 @@
 .header
-    background: $dark-navy-blue
     width: 100%
+    line-height: 80px
+    position: fixed
+    top: 0
+    left: 0
+    right: 0
+    background: $white
+    z-index: 100
+
+.modal-open .header
+    margin-left: -8px
+
+div.header > .row
+    margin: 0 auto
 
 .header-top-wrap
     background: $black
@@ -35,7 +47,6 @@
     text-decoration: none
 
 .header-middle-wrap
-    padding: 0 50px 0 60px
     line-height: 90px
     vertical-align: middle
     display: inline-block
@@ -45,15 +56,20 @@
 .header-menu
     margin: 0
     padding: 0
+    display: inline-block
 
 .header-menu li
     float: left
     list-style: none
 
+.header-menu li:not(:last-child)
+    margin-right: 50px
+
 .header-menu li a
-    margin: 0 10px
-    padding: 10px
+    margin: 0
+    padding: 0
     color: $dark-navy-blue
+    line-height: 80px
 
 .header-additional-menu
     margin: 0
@@ -267,7 +283,7 @@
     width: 383px
 
 .logo
-    padding: 30px 60px 29px 0
+    padding-top: 25px
     box-sizing: content-box
 
 .light-header .header-middle-wrap
@@ -301,3 +317,9 @@ li.header-search.active
 
 .city-question-no:hover
     background: none
+
+.header-menu-wrap
+    width: 100%
+    display: inline-block
+    background: $pale-grey
+    text-align: center

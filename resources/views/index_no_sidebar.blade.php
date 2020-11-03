@@ -44,6 +44,7 @@
     {{ Html::style('plugins/bootstrap/bootstrap.min.css') }}
     {{ Html::script('js/scripts.min.js') }}
 
+    {{ Html::style('sass/plugins/animate.min.css') }}
 </head>
 <body class="<?= $page_class ?? '' ?>">
     @include('header')

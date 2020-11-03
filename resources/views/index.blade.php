@@ -45,6 +45,7 @@
     {{ Html::script('js/scripts.min.js') }}
     {{ Html::script('js/filter.min.js') }}
 
+    {{ Html::style('plugins/bootstrap/animate.min.css') }}
 </head>
 <body class="<?= $page_class ?? '' ?>">
     @include('header')
